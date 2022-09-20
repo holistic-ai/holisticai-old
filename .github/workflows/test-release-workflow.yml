@@ -4,7 +4,7 @@ on:
     branches: [ test ]
 
 jobs:
-  release:
+  test-release-pipeline:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
