@@ -1,12 +1,19 @@
 [tool.poetry]
 name = "holisticai"
 version = "0.1.0"
-description = ""
-authors = ["GBadila <gabriel.badila@holisticai.com>"]
+description = "Holistic AI Library"
+authors = ["Research Team"]
+maintainers = [
+    "Sara Zannone <sara.zannone@holisticai.com>",
+    "Giulio Filippi <giulio.filippi@holisticai.com>",
+]
 readme = "README.md"
 
 [tool.poetry.dependencies]
 python = ">=3.7,<3.11"
+scikit-learn = ">=1.0.2"
+numpy = ">=1.21.6"
+seaborn = ">=0.11.2"
 
 [tool.poetry.group.dev.dependencies]
 flake8 = "^5.0.4"
