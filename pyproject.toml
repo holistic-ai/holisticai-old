@@ -1,13 +1,9 @@
 [tool.poetry]
 name = "holisticai"
-version = "0.20.3"
+version = "0.20.4"
 description = "Holistic AI Library"
 authors = ["Research Team"]
-maintainers = [
-    "Sara Zannone <sara.zannone@holisticai.com>",
-    "Giulio Filippi <giulio.filippi@holisticai.com>",
-    "Cristian Munoz <cristian.munoz@holisticai.com>",
-]
+maintainers = ["Research Team <researchteam@holisticai.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
