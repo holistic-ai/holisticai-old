@@ -2,7 +2,7 @@ from typing import Optional, Union
 
 import numpy as np
 
-from holisticai.utils._bias_mitigation_validation import check_valid_y_proba
+from holisticai.utils._validation import _check_valid_y_proba
 from holisticai.utils.transformers._transformer_base import BMTransformerBase
 
 
@@ -29,7 +29,7 @@ class BMPostprocessing(BMTransformerBase):
         if "y_proba" in kargs:
             y_proba = np.array(kargs.get("y_proba"))
 
-            check_valid_y_proba(y_proba=y_proba)
+            _check_valid_y_proba(y_proba=y_proba)
 
             params.update({"y_proba": y_proba})
             favorable_index = 1
