@@ -4,7 +4,7 @@ on:
     branches: [ test ]
 
 jobs:
-  release:
+  test-release-pipeline:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -22,8 +22,8 @@ jobs:
           python -m pip install poetry
       - name: Configure Poetry
         env:
-          pypi_token: ${{ secrets.PYPI_USER }}
-          pypi_user: ${{ secrets.PYPI_TEST_TOKEN }}
+          pypi_token: ${{ secrets.PYPI_TEST_TOKEN }}
+          pypi_user: ${{ secrets.PYPI_USER }}
         run: |
           poetry config repositories.testpypi https://test.pypi.org/legacy/
           poetry config http-basic.testpypi $pypi_user $pypi_token
