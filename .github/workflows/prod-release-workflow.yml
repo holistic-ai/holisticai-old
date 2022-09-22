@@ -30,9 +30,8 @@ jobs:
       - name: Configure Poetry
         env:
           pypi_token: ${{ secrets.PYPI_PROD_TOKEN }}
-          pypi_user: ${{ secrets.PYPI_USER }}
         run: |
-          poetry config $pypi_user $pypi_token
+          poetry config pypi-token.pypi $pypi_token
       - name: Deploy to Prod PyPI
         run: |
           poetry publish --build
