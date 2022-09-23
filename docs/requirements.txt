@@ -4,3 +4,4 @@ myst_parser
 nbsphinx
 sphinxcontrib-napoleon
 sphinx-copybutton
+holisticai
