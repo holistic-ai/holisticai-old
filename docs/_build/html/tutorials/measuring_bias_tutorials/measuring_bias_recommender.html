@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Importing the data &mdash; holisticai  documentation</title>
+  <title>Measuring bias in recommender systems &mdash; holisticai  documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/copybutton.css" type="text/css" />
@@ -16,12 +16,13 @@
         <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
         <script src="../../_static/jquery.js"></script>
         <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../../_static/doctools.js"></script>
         <script src="../../_static/clipboard.min.js"></script>
         <script src="../../_static/copybutton.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
         <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -61,10 +62,13 @@
 <li class="toctree-l1 current"><a class="reference internal" href="../../measuring_bias.html">Measuring bias</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="measuring_bias_classification.html"><strong>Measuring Bias in classification</strong></a></li>
 <li class="toctree-l2"><a class="reference internal" href="measuring_bias_regression.html"><strong>Measuring Bias in regression</strong></a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Importing the data</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#Plotting-and-Data-Exploration">Plotting and Data Exploration</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#Evaluate-Fairness-of-Model">Evaluate Fairness of Model</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#Item-Fairness">Item Fairness</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Measuring bias in recommender systems</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#Importing-the-data">Importing the data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Plotting-and-Data-Exploration">Plotting and Data Exploration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Evaluate-Fairness-of-Model">Evaluate Fairness of Model</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Item-Fairness">Item Fairness</a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="#User-fairness---Equality-of-Outcome">User fairness - Equality of Outcome</a></li>
 </ul>
 </li>
@@ -90,7 +94,7 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
           <li><a href="../../measuring_bias.html">Measuring bias</a> &raquo;</li>
-      <li>Importing the data</li>
+      <li>Measuring bias in recommender systems</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../../_sources/tutorials/measuring_bias_tutorials/measuring_bias_recommender.ipynb.txt" rel="nofollow"> View page source</a>
       </li>
@@ -378,10 +382,12 @@ div.rendered_html tbody tr:hover {
     text-align: unset;
 }
 </style>
+<section id="Measuring-bias-in-recommender-systems">
+<h1>Measuring bias in recommender systems<a class="headerlink" href="#Measuring-bias-in-recommender-systems" title="Permalink to this heading"></a></h1>
 <p>This is an introduction to fairness in recommender systems. A recommender system aims to recommend the best item according to the user preference. In this tutorial, we will focus on the task of correctly predicting users’ music preference.</p>
 <p>A recommender system can be biased in multiple ways. For example, we may be concerned that the artists in our database will not get equal representation (item fairness). Alternative, our main concern may be that different groups of users (e.g. male/female users) will get different music recommendations (user fairness). In the following, we will show how to explore the data for fairness, and measure these various types of fairness using the holisticai library.</p>
 <section id="Importing-the-data">
-<h1>Importing the data<a class="headerlink" href="#Importing-the-data" title="Permalink to this headline"></a></h1>
+<h2>Importing the data<a class="headerlink" href="#Importing-the-data" title="Permalink to this heading"></a></h2>
 <p>We will start by importing the example dataset, which we host on our library. The <a class="reference external" href="https://www.kaggle.com/datasets/ravichaubey1506/lastfm">datatset</a> contains a set of artists that were downloaded by users. It includes personal information about the user, specifically sex and country of origin. A user can download more than one artist. We will use the column “score”, which contains only 1s for counting the interactions.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
@@ -526,7 +532,7 @@ div.rendered_html tbody tr:hover {
 </div>
 </section>
 <section id="Plotting-and-Data-Exploration">
-<h1>Plotting and Data Exploration<a class="headerlink" href="#Plotting-and-Data-Exploration" title="Permalink to this headline"></a></h1>
+<h2>Plotting and Data Exploration<a class="headerlink" href="#Plotting-and-Data-Exploration" title="Permalink to this heading"></a></h2>
 <p>We will now move to data exploration, using some of the functions for plotting available in our library.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
@@ -662,10 +668,10 @@ Number of Unique Artists : 1004
 <p>The above plots show that there are artists that are more than 5 times more popular amongst the female subgroup than male, and artists that are more than 20 times more popular amongst male rather than female users.</p>
 </section>
 <section id="Evaluate-Fairness-of-Model">
-<h1>Evaluate Fairness of Model<a class="headerlink" href="#Evaluate-Fairness-of-Model" title="Permalink to this headline"></a></h1>
+<h2>Evaluate Fairness of Model<a class="headerlink" href="#Evaluate-Fairness-of-Model" title="Permalink to this heading"></a></h2>
 <p>We will now show how we can calculate various metrics of fairness for recommender systems. In this example, we will cover both metrics for item fairness and for user fairness (equality of outcome).</p>
 <section id="Item-Fairness">
-<h2>Item Fairness<a class="headerlink" href="#Item-Fairness" title="Permalink to this headline"></a></h2>
+<h3>Item Fairness<a class="headerlink" href="#Item-Fairness" title="Permalink to this heading"></a></h3>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
@@ -782,8 +788,9 @@ Number of Unique Artists : 1004
 </div>
 <p>Above we have batch plotted all item_based metrics for recommender bias task. For instance observe the Average Recommendation Popularity is 522, meaning that on average a user will interact with an artist that has 522 total interactions.</p>
 </section>
+</section>
 <section id="User-fairness---Equality-of-Outcome">
-<h2>User fairness - Equality of Outcome<a class="headerlink" href="#User-fairness---Equality-of-Outcome" title="Permalink to this headline"></a></h2>
+<h2>User fairness - Equality of Outcome<a class="headerlink" href="#User-fairness---Equality-of-Outcome" title="Permalink to this heading"></a></h2>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>

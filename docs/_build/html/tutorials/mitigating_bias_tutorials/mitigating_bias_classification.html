@@ -16,12 +16,13 @@
         <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
         <script src="../../_static/jquery.js"></script>
         <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../../_static/doctools.js"></script>
         <script src="../../_static/clipboard.min.js"></script>
         <script src="../../_static/copybutton.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
         <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -393,7 +394,7 @@ div.rendered_html tbody tr:hover {
 }
 </style>
 <section id="Mitigation-Strategies-Tutorial">
-<h1>Mitigation Strategies Tutorial<a class="headerlink" href="#Mitigation-Strategies-Tutorial" title="Permalink to this headline"></a></h1>
+<h1>Mitigation Strategies Tutorial<a class="headerlink" href="#Mitigation-Strategies-Tutorial" title="Permalink to this heading"></a></h1>
 <p>This tutorial shows how we can use the holisticai library to implement bias mitigation strategies.</p>
 <p>Algorithms Covered:</p>
 <ul class="simple">
@@ -407,7 +408,7 @@ div.rendered_html tbody tr:hover {
 </ul>
 </section>
 <section id="Load-and-preprocess-Data">
-<h1>Load and preprocess Data<a class="headerlink" href="#Load-and-preprocess-Data" title="Permalink to this headline"></a></h1>
+<h1>Load and preprocess Data<a class="headerlink" href="#Load-and-preprocess-Data" title="Permalink to this heading"></a></h1>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
@@ -747,7 +748,7 @@ div.rendered_html tbody tr:hover {
 </div>
 </section>
 <section id="Baseline">
-<h1>Baseline<a class="headerlink" href="#Baseline" title="Permalink to this headline"></a></h1>
+<h1>Baseline<a class="headerlink" href="#Baseline" title="Permalink to this heading"></a></h1>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
@@ -939,9 +940,9 @@ div.rendered_html tbody tr:hover {
 <p>As expected, the results are quite biased, for instance we look at a disparate impact of 0.3. We will show how we can mitigate some of this bias without losing much efficacy.</p>
 </section>
 <section id="Preprocessing-Strategies">
-<h1>Preprocessing Strategies<a class="headerlink" href="#Preprocessing-Strategies" title="Permalink to this headline"></a></h1>
+<h1>Preprocessing Strategies<a class="headerlink" href="#Preprocessing-Strategies" title="Permalink to this heading"></a></h1>
 <section id="Reweighing">
-<h2>Reweighing<a class="headerlink" href="#Reweighing" title="Permalink to this headline"></a></h2>
+<h2>Reweighing<a class="headerlink" href="#Reweighing" title="Permalink to this heading"></a></h2>
 <p>References:</p>
 <p>Kamiran, Faisal, and Toon Calders. “Data preprocessing techniques for classification without discrimination.” Knowledge and information systems 33.1 (2012): 1-33.</p>
 <p><a class="reference external" href="https://towardsdatascience.com/reweighing-the-adult-dataset-to-make-it-discrimination-free-44668c9379e8">https://towardsdatascience.com/reweighing-the-adult-dataset-to-make-it-discrimination-free-44668c9379e8</a></p>
@@ -1178,7 +1179,7 @@ array([0.85374028, 1.09231797, 0.85374028, ..., 0.78794552, 0.85374028,
 <p>The results obtained are better in terms of bias, and efficacy didn’t decrease too much.</p>
 </section>
 <section id="Learning-Fair-Representations">
-<h2>Learning Fair Representations<a class="headerlink" href="#Learning-Fair-Representations" title="Permalink to this headline"></a></h2>
+<h2>Learning Fair Representations<a class="headerlink" href="#Learning-Fair-Representations" title="Permalink to this heading"></a></h2>
 <p>References:</p>
 <p>Zemel, Rich, et al. “Learning fair representations.” International conference on machine learning. PMLR, 2013.</p>
 <div class="nbinput nblast docutils container">
@@ -1415,9 +1416,9 @@ array([0.85374028, 1.09231797, 0.85374028, ..., 0.78794552, 0.85374028,
 </section>
 </section>
 <section id="Inprocessing-Strategies">
-<h1>Inprocessing Strategies<a class="headerlink" href="#Inprocessing-Strategies" title="Permalink to this headline"></a></h1>
+<h1>Inprocessing Strategies<a class="headerlink" href="#Inprocessing-Strategies" title="Permalink to this heading"></a></h1>
 <section id="Grid-Search-Reduction">
-<h2>Grid Search Reduction<a class="headerlink" href="#Grid-Search-Reduction" title="Permalink to this headline"></a></h2>
+<h2>Grid Search Reduction<a class="headerlink" href="#Grid-Search-Reduction" title="Permalink to this heading"></a></h2>
 <p>References:</p>
 <p>Agarwal, Alekh, et al. “A reductions approach to fair classification.” International Conference on Machine Learning. PMLR, 2018.</p>
 <p>Agarwal, Alekh, Miroslav Dudík, and Zhiwei Steven Wu. “Fair regression: Quantitative definitions and reduction-based algorithms.” International Conference on Machine Learning. PMLR, 2019.</p>
@@ -1644,7 +1645,7 @@ array([0.85374028, 1.09231797, 0.85374028, ..., 0.78794552, 0.85374028,
 <p>We have solved for equal demographic parity so statistical parity and Disparate Impact are perfect. We lose some recall but overall efficacy is not impacted too much.</p>
 </section>
 <section id="Exponentiated-Gradient-Reduction">
-<h2>Exponentiated Gradient Reduction<a class="headerlink" href="#Exponentiated-Gradient-Reduction" title="Permalink to this headline"></a></h2>
+<h2>Exponentiated Gradient Reduction<a class="headerlink" href="#Exponentiated-Gradient-Reduction" title="Permalink to this heading"></a></h2>
 <p>References:</p>
 <p>Agarwal, Alekh, et al. “A reductions approach to fair classification.” International Conference on Machine Learning. PMLR, 2018.</p>
 <div class="nbinput nblast docutils container">
@@ -1871,9 +1872,9 @@ array([0.85374028, 1.09231797, 0.85374028, ..., 0.78794552, 0.85374028,
 </section>
 </section>
 <section id="Postprocessing-Strategies">
-<h1>Postprocessing Strategies<a class="headerlink" href="#Postprocessing-Strategies" title="Permalink to this headline"></a></h1>
+<h1>Postprocessing Strategies<a class="headerlink" href="#Postprocessing-Strategies" title="Permalink to this heading"></a></h1>
 <section id="Calibrated-Equalized-Odds-mitigation-technique">
-<h2>Calibrated Equalized Odds mitigation technique<a class="headerlink" href="#Calibrated-Equalized-Odds-mitigation-technique" title="Permalink to this headline"></a></h2>
+<h2>Calibrated Equalized Odds mitigation technique<a class="headerlink" href="#Calibrated-Equalized-Odds-mitigation-technique" title="Permalink to this heading"></a></h2>
 <p>References:</p>
 <p>Pleiss, Geoff, et al. “On fairness and calibration.” Advances in neural information processing systems 30 (2017).</p>
 <div class="nbinput nblast docutils container">
@@ -2120,7 +2121,7 @@ array([0, 0, 1, ..., 0, 0, 0])
 <p>It seems this algorithm works best with fnr as an option (on Adult dataset). Both fpr and weighted give bad results.</p>
 </section>
 <section id="Equalized-Odds-mitigation-technique">
-<h2>Equalized Odds mitigation technique<a class="headerlink" href="#Equalized-Odds-mitigation-technique" title="Permalink to this headline"></a></h2>
+<h2>Equalized Odds mitigation technique<a class="headerlink" href="#Equalized-Odds-mitigation-technique" title="Permalink to this heading"></a></h2>
 <p>References:</p>
 <p>Pleiss, Geoff, et al. “On fairness and calibration.” Advances in neural information processing systems 30 (2017).</p>
 <p>Hardt, Moritz, Eric Price, and Nati Srebro. “Equality of opportunity in supervised learning.” Advances in neural information processing systems 29 (2016).</p>
@@ -2379,7 +2380,7 @@ array([0, 1, 1, ..., 1, 0, 0])
 <p>Each algorithm will mitigate in slightly different ways. Notice the average odds difference is very low.</p>
 </section>
 <section id="Reject-Option-Classification">
-<h2>Reject Option Classification<a class="headerlink" href="#Reject-Option-Classification" title="Permalink to this headline"></a></h2>
+<h2>Reject Option Classification<a class="headerlink" href="#Reject-Option-Classification" title="Permalink to this heading"></a></h2>
 <p>References:</p>
 <p>Kamiran, Faisal, Asim Karim, and Xiangliang Zhang. “Decision theory for discrimination-aware classification.” 2012 IEEE 12th International Conference on Data Mining. IEEE, 2012.</p>
 <div class="nbinput nblast docutils container">
