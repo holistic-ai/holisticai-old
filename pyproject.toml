@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "holisticai"
-version = "0.20.6"  # TEST
+version = "0.1.2"
 description = "Holistic AI Library"
 authors = ["Research Team"]
 maintainers = ["Research Team <researchteam@holisticai.com>"]
