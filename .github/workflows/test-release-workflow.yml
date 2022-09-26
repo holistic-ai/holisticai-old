@@ -23,7 +23,7 @@ jobs:
       - name: Configure Poetry
         env:
           pypi_token: ${{ secrets.PYPI_TEST_TOKEN }}
-          pypi_user: ${{ secrets.PYPI_USER }}
+          pypi_user: ${{ secrets.PYPI_TEST_USER }}
         run: |
           poetry config repositories.testpypi https://test.pypi.org/legacy/
           poetry config http-basic.testpypi $pypi_user $pypi_token

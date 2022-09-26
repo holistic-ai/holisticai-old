@@ -1,0 +1,1715 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Training Model for Binary Classification Problem with Bias Mitigators &mdash; holisticai  documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/copybutton.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/custom_style.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/clipboard.min.js"></script>
+        <script src="../../_static/copybutton.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+        <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="prev" title="Mitigation Strategies Tutorial" href="mitigating_bias_classification.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> holisticai
+            <img src="../../_static/holistic_ai.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../metrics.html">Metrics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../mitigation.html">Mitigation</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../plotting.html">Plotting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../datasets.html">Datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pipeline.html">Pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../utils.html">Utils</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../measuring_bias.html">Measuring bias</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../mitigating_bias.html">Mitigating bias</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="mitigating_bias_classification.html">Mitigation Strategies Tutorial</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mitigating_bias_classification.html#Load-and-preprocess-Data">Load and preprocess Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mitigating_bias_classification.html#Baseline">Baseline</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mitigating_bias_classification.html#Preprocessing-Strategies">Preprocessing Strategies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mitigating_bias_classification.html#Inprocessing-Strategies">Inprocessing Strategies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mitigating_bias_classification.html#Postprocessing-Strategies">Postprocessing Strategies</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Training Model for Binary Classification Problem with Bias Mitigators</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Baseline">Baseline</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Utils">Utils</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Pre-processing">Pre-processing</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#Run-Configurations">Run Configurations</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#Post-Processing">Post Processing</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id1">Run Configurations</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#Inprocessing">Inprocessing</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id2">Run Configurations</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">holisticai</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../../mitigating_bias.html">Mitigating bias</a> &raquo;</li>
+      <li>Training Model for Binary Classification Problem with Bias Mitigators</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/tutorials/mitigating_bias_tutorials/mitigating_bias_classification_pipeline.ipynb.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  
+<style>
+/* CSS for nbsphinx extension */
+
+/* remove conflicting styling from Sphinx themes */
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt *,
+div.nbinput.container div.input_area pre,
+div.nboutput.container div.output_area pre,
+div.nbinput.container div.input_area .highlight,
+div.nboutput.container div.output_area .highlight {
+    border: none;
+    padding: 0;
+    margin: 0;
+    box-shadow: none;
+}
+
+div.nbinput.container > div[class*=highlight],
+div.nboutput.container > div[class*=highlight] {
+    margin: 0;
+}
+
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt * {
+    background: none;
+}
+
+div.nboutput.container div.output_area .highlight,
+div.nboutput.container div.output_area pre {
+    background: unset;
+}
+
+div.nboutput.container div.output_area div.highlight {
+    color: unset;  /* override Pygments text color */
+}
+
+/* avoid gaps between output lines */
+div.nboutput.container div[class*=highlight] pre {
+    line-height: normal;
+}
+
+/* input/output containers */
+div.nbinput.container,
+div.nboutput.container {
+    display: -webkit-flex;
+    display: flex;
+    align-items: flex-start;
+    margin: 0;
+    width: 100%;
+}
+@media (max-width: 540px) {
+    div.nbinput.container,
+    div.nboutput.container {
+        flex-direction: column;
+    }
+}
+
+/* input container */
+div.nbinput.container {
+    padding-top: 5px;
+}
+
+/* last container */
+div.nblast.container {
+    padding-bottom: 5px;
+}
+
+/* input prompt */
+div.nbinput.container div.prompt pre {
+    color: #307FC1;
+}
+
+/* output prompt */
+div.nboutput.container div.prompt pre {
+    color: #BF5B3D;
+}
+
+/* all prompts */
+div.nbinput.container div.prompt,
+div.nboutput.container div.prompt {
+    width: 4.5ex;
+    padding-top: 5px;
+    position: relative;
+    user-select: none;
+}
+
+div.nbinput.container div.prompt > div,
+div.nboutput.container div.prompt > div {
+    position: absolute;
+    right: 0;
+    margin-right: 0.3ex;
+}
+
+@media (max-width: 540px) {
+    div.nbinput.container div.prompt,
+    div.nboutput.container div.prompt {
+        width: unset;
+        text-align: left;
+        padding: 0.4em;
+    }
+    div.nboutput.container div.prompt.empty {
+        padding: 0;
+    }
+
+    div.nbinput.container div.prompt > div,
+    div.nboutput.container div.prompt > div {
+        position: unset;
+    }
+}
+
+/* disable scrollbars on prompts */
+div.nbinput.container div.prompt pre,
+div.nboutput.container div.prompt pre {
+    overflow: hidden;
+}
+
+/* input/output area */
+div.nbinput.container div.input_area,
+div.nboutput.container div.output_area {
+    -webkit-flex: 1;
+    flex: 1;
+    overflow: auto;
+}
+@media (max-width: 540px) {
+    div.nbinput.container div.input_area,
+    div.nboutput.container div.output_area {
+        width: 100%;
+    }
+}
+
+/* input area */
+div.nbinput.container div.input_area {
+    border: 1px solid #e0e0e0;
+    border-radius: 2px;
+    /*background: #f5f5f5;*/
+}
+
+/* override MathJax center alignment in output cells */
+div.nboutput.container div[class*=MathJax] {
+    text-align: left !important;
+}
+
+/* override sphinx.ext.imgmath center alignment in output cells */
+div.nboutput.container div.math p {
+    text-align: left;
+}
+
+/* standard error */
+div.nboutput.container div.output_area.stderr {
+    background: #fdd;
+}
+
+/* ANSI colors */
+.ansi-black-fg { color: #3E424D; }
+.ansi-black-bg { background-color: #3E424D; }
+.ansi-black-intense-fg { color: #282C36; }
+.ansi-black-intense-bg { background-color: #282C36; }
+.ansi-red-fg { color: #E75C58; }
+.ansi-red-bg { background-color: #E75C58; }
+.ansi-red-intense-fg { color: #B22B31; }
+.ansi-red-intense-bg { background-color: #B22B31; }
+.ansi-green-fg { color: #00A250; }
+.ansi-green-bg { background-color: #00A250; }
+.ansi-green-intense-fg { color: #007427; }
+.ansi-green-intense-bg { background-color: #007427; }
+.ansi-yellow-fg { color: #DDB62B; }
+.ansi-yellow-bg { background-color: #DDB62B; }
+.ansi-yellow-intense-fg { color: #B27D12; }
+.ansi-yellow-intense-bg { background-color: #B27D12; }
+.ansi-blue-fg { color: #208FFB; }
+.ansi-blue-bg { background-color: #208FFB; }
+.ansi-blue-intense-fg { color: #0065CA; }
+.ansi-blue-intense-bg { background-color: #0065CA; }
+.ansi-magenta-fg { color: #D160C4; }
+.ansi-magenta-bg { background-color: #D160C4; }
+.ansi-magenta-intense-fg { color: #A03196; }
+.ansi-magenta-intense-bg { background-color: #A03196; }
+.ansi-cyan-fg { color: #60C6C8; }
+.ansi-cyan-bg { background-color: #60C6C8; }
+.ansi-cyan-intense-fg { color: #258F8F; }
+.ansi-cyan-intense-bg { background-color: #258F8F; }
+.ansi-white-fg { color: #C5C1B4; }
+.ansi-white-bg { background-color: #C5C1B4; }
+.ansi-white-intense-fg { color: #A1A6B2; }
+.ansi-white-intense-bg { background-color: #A1A6B2; }
+
+.ansi-default-inverse-fg { color: #FFFFFF; }
+.ansi-default-inverse-bg { background-color: #000000; }
+
+.ansi-bold { font-weight: bold; }
+.ansi-underline { text-decoration: underline; }
+
+
+div.nbinput.container div.input_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight].math,
+div.nboutput.container div.output_area.rendered_html,
+div.nboutput.container div.output_area > div.output_javascript,
+div.nboutput.container div.output_area:not(.rendered_html) > img{
+    padding: 5px;
+    margin: 0;
+}
+
+/* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
+div.nbinput.container div.input_area > div[class^='highlight'],
+div.nboutput.container div.output_area > div[class^='highlight']{
+    overflow-y: hidden;
+}
+
+/* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
+.prompt .copybtn {
+    display: none;
+}
+
+/* Some additional styling taken form the Jupyter notebook CSS */
+.jp-RenderedHTMLCommon table,
+div.rendered_html table {
+  border: none;
+  border-collapse: collapse;
+  border-spacing: 0;
+  color: black;
+  font-size: 12px;
+  table-layout: fixed;
+}
+.jp-RenderedHTMLCommon thead,
+div.rendered_html thead {
+  border-bottom: 1px solid black;
+  vertical-align: bottom;
+}
+.jp-RenderedHTMLCommon tr,
+.jp-RenderedHTMLCommon th,
+.jp-RenderedHTMLCommon td,
+div.rendered_html tr,
+div.rendered_html th,
+div.rendered_html td {
+  text-align: right;
+  vertical-align: middle;
+  padding: 0.5em 0.5em;
+  line-height: normal;
+  white-space: normal;
+  max-width: none;
+  border: none;
+}
+.jp-RenderedHTMLCommon th,
+div.rendered_html th {
+  font-weight: bold;
+}
+.jp-RenderedHTMLCommon tbody tr:nth-child(odd),
+div.rendered_html tbody tr:nth-child(odd) {
+  background: #f5f5f5;
+}
+.jp-RenderedHTMLCommon tbody tr:hover,
+div.rendered_html tbody tr:hover {
+  background: rgba(66, 165, 245, 0.2);
+}
+
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<section id="Training-Model-for-Binary-Classification-Problem-with-Bias-Mitigators">
+<h1>Training Model for Binary Classification Problem with Bias Mitigators<a class="headerlink" href="#Training-Model-for-Binary-Classification-Problem-with-Bias-Mitigators" title="Permalink to this headline"></a></h1>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># sys path</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;../../&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Imports</span>
+<span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">train_test_split</span>
+<span class="kn">from</span> <span class="nn">holisticai.pipeline</span> <span class="kn">import</span> <span class="n">Pipeline</span>
+<span class="kn">from</span> <span class="nn">holisticai.datasets</span> <span class="kn">import</span> <span class="n">load_adult</span>
+<span class="kn">from</span> <span class="nn">holisticai.bias.metrics</span> <span class="kn">import</span> <span class="n">classification_bias_metrics</span>
+<span class="kn">from</span> <span class="nn">sklearn.linear_model</span> <span class="kn">import</span> <span class="n">LogisticRegression</span>
+<span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="kn">import</span> <span class="n">StandardScaler</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+<span class="c1"># Settings</span>
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Dataset</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">load_adult</span><span class="p">()</span>
+
+<span class="c1"># Dataframe</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">],</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;target&quot;</span><span class="p">]],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">protected_variables</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;sex&quot;</span><span class="p">,</span> <span class="s2">&quot;race&quot;</span><span class="p">]</span>
+<span class="n">output_variable</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;class&quot;</span><span class="p">]</span>
+
+<span class="c1"># Simple preprocessing</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">output_variable</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">({</span><span class="s2">&quot;&gt;50K&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;&lt;=50K&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">})</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">get_dummies</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">protected_variables</span> <span class="o">+</span> <span class="n">output_variable</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+<span class="n">group</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;sex&quot;</span><span class="p">]</span>
+<span class="n">group_a</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">group</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Female&quot;</span>
+<span class="n">group_b</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">group</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Male&quot;</span>
+<span class="n">data_</span> <span class="o">=</span> <span class="p">[</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">group_a</span><span class="p">,</span> <span class="n">group_b</span><span class="p">]</span>
+
+<span class="c1"># Train test split</span>
+<span class="n">dataset</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="o">*</span><span class="n">data_</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">train_data</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[::</span><span class="mi">2</span><span class="p">]</span>
+<span class="n">test_data</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="mi">1</span><span class="p">::</span><span class="mi">2</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># the dataframe</span>
+<span class="n">data</span><span class="p">[</span><span class="s1">&#39;frame&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>age</th>
+      <th>workclass</th>
+      <th>fnlwgt</th>
+      <th>education</th>
+      <th>education-num</th>
+      <th>marital-status</th>
+      <th>occupation</th>
+      <th>relationship</th>
+      <th>race</th>
+      <th>sex</th>
+      <th>capital-gain</th>
+      <th>capital-loss</th>
+      <th>hours-per-week</th>
+      <th>native-country</th>
+      <th>class</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>25.0</td>
+      <td>Private</td>
+      <td>226802.0</td>
+      <td>11th</td>
+      <td>7.0</td>
+      <td>Never-married</td>
+      <td>Machine-op-inspct</td>
+      <td>Own-child</td>
+      <td>Black</td>
+      <td>Male</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>40.0</td>
+      <td>United-States</td>
+      <td>&lt;=50K</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>38.0</td>
+      <td>Private</td>
+      <td>89814.0</td>
+      <td>HS-grad</td>
+      <td>9.0</td>
+      <td>Married-civ-spouse</td>
+      <td>Farming-fishing</td>
+      <td>Husband</td>
+      <td>White</td>
+      <td>Male</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>50.0</td>
+      <td>United-States</td>
+      <td>&lt;=50K</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>28.0</td>
+      <td>Local-gov</td>
+      <td>336951.0</td>
+      <td>Assoc-acdm</td>
+      <td>12.0</td>
+      <td>Married-civ-spouse</td>
+      <td>Protective-serv</td>
+      <td>Husband</td>
+      <td>White</td>
+      <td>Male</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>40.0</td>
+      <td>United-States</td>
+      <td>&gt;50K</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>44.0</td>
+      <td>Private</td>
+      <td>160323.0</td>
+      <td>Some-college</td>
+      <td>10.0</td>
+      <td>Married-civ-spouse</td>
+      <td>Machine-op-inspct</td>
+      <td>Husband</td>
+      <td>Black</td>
+      <td>Male</td>
+      <td>7688.0</td>
+      <td>0.0</td>
+      <td>40.0</td>
+      <td>United-States</td>
+      <td>&gt;50K</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>18.0</td>
+      <td>NaN</td>
+      <td>103497.0</td>
+      <td>Some-college</td>
+      <td>10.0</td>
+      <td>Never-married</td>
+      <td>NaN</td>
+      <td>Own-child</td>
+      <td>White</td>
+      <td>Female</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>30.0</td>
+      <td>United-States</td>
+      <td>&lt;=50K</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>48837</th>
+      <td>27.0</td>
+      <td>Private</td>
+      <td>257302.0</td>
+      <td>Assoc-acdm</td>
+      <td>12.0</td>
+      <td>Married-civ-spouse</td>
+      <td>Tech-support</td>
+      <td>Wife</td>
+      <td>White</td>
+      <td>Female</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>38.0</td>
+      <td>United-States</td>
+      <td>&lt;=50K</td>
+    </tr>
+    <tr>
+      <th>48838</th>
+      <td>40.0</td>
+      <td>Private</td>
+      <td>154374.0</td>
+      <td>HS-grad</td>
+      <td>9.0</td>
+      <td>Married-civ-spouse</td>
+      <td>Machine-op-inspct</td>
+      <td>Husband</td>
+      <td>White</td>
+      <td>Male</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>40.0</td>
+      <td>United-States</td>
+      <td>&gt;50K</td>
+    </tr>
+    <tr>
+      <th>48839</th>
+      <td>58.0</td>
+      <td>Private</td>
+      <td>151910.0</td>
+      <td>HS-grad</td>
+      <td>9.0</td>
+      <td>Widowed</td>
+      <td>Adm-clerical</td>
+      <td>Unmarried</td>
+      <td>White</td>
+      <td>Female</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>40.0</td>
+      <td>United-States</td>
+      <td>&lt;=50K</td>
+    </tr>
+    <tr>
+      <th>48840</th>
+      <td>22.0</td>
+      <td>Private</td>
+      <td>201490.0</td>
+      <td>HS-grad</td>
+      <td>9.0</td>
+      <td>Never-married</td>
+      <td>Adm-clerical</td>
+      <td>Own-child</td>
+      <td>White</td>
+      <td>Male</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>20.0</td>
+      <td>United-States</td>
+      <td>&lt;=50K</td>
+    </tr>
+    <tr>
+      <th>48841</th>
+      <td>52.0</td>
+      <td>Self-emp-inc</td>
+      <td>287927.0</td>
+      <td>HS-grad</td>
+      <td>9.0</td>
+      <td>Married-civ-spouse</td>
+      <td>Exec-managerial</td>
+      <td>Wife</td>
+      <td>White</td>
+      <td>Female</td>
+      <td>15024.0</td>
+      <td>0.0</td>
+      <td>40.0</td>
+      <td>United-States</td>
+      <td>&gt;50K</td>
+    </tr>
+  </tbody>
+</table>
+<p>48842 rows × 15 columns</p>
+</div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># efficacy metrics from sklearn</span>
+<span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">metrics</span>
+
+<span class="c1"># dictionnary of metrics</span>
+<span class="n">metrics_dict</span><span class="o">=</span><span class="p">{</span>
+        <span class="s2">&quot;Accuracy&quot;</span><span class="p">:</span> <span class="n">metrics</span><span class="o">.</span><span class="n">accuracy_score</span><span class="p">,</span>
+        <span class="s2">&quot;Balanced accuracy&quot;</span><span class="p">:</span> <span class="n">metrics</span><span class="o">.</span><span class="n">balanced_accuracy_score</span><span class="p">,</span>
+        <span class="s2">&quot;Precision&quot;</span><span class="p">:</span> <span class="n">metrics</span><span class="o">.</span><span class="n">precision_score</span><span class="p">,</span>
+        <span class="s2">&quot;Recall&quot;</span><span class="p">:</span> <span class="n">metrics</span><span class="o">.</span><span class="n">recall_score</span><span class="p">,</span>
+        <span class="s2">&quot;F1-Score&quot;</span><span class="p">:</span> <span class="n">metrics</span><span class="o">.</span><span class="n">f1_score</span><span class="p">}</span>
+
+<span class="c1"># efficacy metrics dataframe helper tool</span>
+<span class="k">def</span> <span class="nf">metrics_dataframe</span><span class="p">(</span><span class="n">y_pred</span><span class="p">,</span> <span class="n">y_true</span><span class="p">,</span> <span class="n">metrics_dict</span><span class="o">=</span><span class="n">metrics_dict</span><span class="p">):</span>
+    <span class="n">metric_list</span> <span class="o">=</span> <span class="p">[[</span><span class="n">pf</span><span class="p">,</span> <span class="n">fn</span><span class="p">(</span><span class="n">y_true</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">)]</span> <span class="k">for</span> <span class="n">pf</span><span class="p">,</span> <span class="n">fn</span> <span class="ow">in</span> <span class="n">metrics_dict</span><span class="o">.</span><span class="n">items</span><span class="p">()]</span>
+    <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">metric_list</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Metric&quot;</span><span class="p">,</span> <span class="s2">&quot;Value&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s2">&quot;Metric&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Baseline">
+<h1>Baseline<a class="headerlink" href="#Baseline" title="Permalink to this headline"></a></h1>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pipeline</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">(</span><span class="n">steps</span><span class="o">=</span><span class="p">[</span>
+    <span class="p">(</span><span class="s1">&#39;scaler&#39;</span><span class="p">,</span> <span class="n">StandardScaler</span><span class="p">()),</span>
+    <span class="p">(</span><span class="s1">&#39;classifier&#39;</span><span class="p">,</span> <span class="n">LogisticRegression</span><span class="p">()),</span>
+    <span class="p">])</span>
+
+<span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">group_a</span><span class="p">,</span> <span class="n">group_b</span> <span class="o">=</span> <span class="n">train_data</span>
+<span class="n">pipeline</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+
+<span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">group_a</span><span class="p">,</span> <span class="n">group_b</span> <span class="o">=</span> <span class="n">test_data</span>
+<span class="n">y_pred</span> <span class="o">=</span> <span class="n">pipeline</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="n">df_baseline</span> <span class="o">=</span> <span class="n">classification_bias_metrics</span><span class="p">(</span><span class="n">group_b</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span><span class="o">.</span><span class="n">ravel</span><span class="p">(),</span>
+                            <span class="n">group_a</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span><span class="o">.</span><span class="n">ravel</span><span class="p">(),</span>
+                            <span class="n">y_pred</span><span class="o">.</span><span class="n">ravel</span><span class="p">(),</span>
+                            <span class="n">y</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span><span class="o">.</span><span class="n">ravel</span><span class="p">(),</span> <span class="n">metric_type</span><span class="o">=</span><span class="s1">&#39;both&#39;</span><span class="p">)</span>
+
+<span class="n">df_eff_baseline</span> <span class="o">=</span> <span class="n">metrics_dataframe</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df_baseline</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Value</th>
+      <th>Reference</th>
+    </tr>
+    <tr>
+      <th>Metric</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>Statistical Parity</th>
+      <td>0.178353</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>Disparate Impact</th>
+      <td>3.235544</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>Four Fifths Rule</th>
+      <td>0.309067</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>Cohen D</th>
+      <td>0.457755</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>Equality of Opportunity Difference</th>
+      <td>0.059581</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>False Positive Rate Difference</th>
+      <td>0.082695</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>Average Odds Difference</th>
+      <td>0.071138</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>Accuracy Difference</th>
+      <td>-0.122388</td>
+      <td>0</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df_eff_baseline</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Value</th>
+    </tr>
+    <tr>
+      <th>Metric</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>Accuracy</th>
+      <td>0.850241</td>
+    </tr>
+    <tr>
+      <th>Balanced accuracy</th>
+      <td>0.804536</td>
+    </tr>
+    <tr>
+      <th>Precision</th>
+      <td>0.600681</td>
+    </tr>
+    <tr>
+      <th>Recall</th>
+      <td>0.728822</td>
+    </tr>
+    <tr>
+      <th>F1-Score</th>
+      <td>0.658576</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+</section>
+<section id="Utils">
+<h1>Utils<a class="headerlink" href="#Utils" title="Permalink to this headline"></a></h1>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">fit_and_evaluate_pipeline</span><span class="p">(</span><span class="n">pipeline</span><span class="p">,</span> <span class="n">data_cls</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+    <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">group_a</span><span class="p">,</span> <span class="n">group_b</span> <span class="o">=</span> <span class="n">train_data</span>
+    <span class="n">fit_params</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;bm__group_a&#39;</span><span class="p">:</span> <span class="n">group_a</span><span class="p">,</span>
+        <span class="s1">&#39;bm__group_b&#39;</span><span class="p">:</span> <span class="n">group_b</span>
+    <span class="p">}</span>
+    <span class="n">pipeline</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="o">**</span><span class="n">fit_params</span><span class="p">)</span>
+
+    <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">group_a</span><span class="p">,</span> <span class="n">group_b</span> <span class="o">=</span> <span class="n">test_data</span>
+    <span class="n">predict_params</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;bm__group_a&#39;</span><span class="p">:</span> <span class="n">group_a</span><span class="p">,</span>
+        <span class="s1">&#39;bm__group_b&#39;</span><span class="p">:</span> <span class="n">group_b</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="n">y_pred</span> <span class="o">=</span> <span class="n">pipeline</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="o">**</span><span class="n">predict_params</span><span class="p">)</span>
+
+    <span class="n">df</span> <span class="o">=</span> <span class="n">classification_bias_metrics</span><span class="p">(</span><span class="n">group_b</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span><span class="o">.</span><span class="n">ravel</span><span class="p">(),</span>
+                                <span class="n">group_a</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span><span class="o">.</span><span class="n">ravel</span><span class="p">(),</span>
+                                <span class="n">y_pred</span><span class="o">.</span><span class="n">ravel</span><span class="p">(),</span>
+                                <span class="n">y</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span><span class="o">.</span><span class="n">ravel</span><span class="p">(),</span> <span class="n">metric_type</span><span class="o">=</span><span class="s1">&#39;both&#39;</span><span class="p">)</span>
+    <span class="n">df_eff</span> <span class="o">=</span> <span class="n">metrics_dataframe</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">df</span><span class="p">,</span><span class="n">df_eff</span>
+
+<span class="k">def</span> <span class="nf">format_result_colum</span><span class="p">(</span><span class="n">name</span><span class="p">,</span><span class="n">df</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">df</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;Value&#39;</span><span class="p">:</span><span class="n">name</span><span class="p">})</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span>
+
+<span class="k">def</span> <span class="nf">show_bias_result_table</span><span class="p">(</span><span class="n">configurations</span><span class="p">,</span> <span class="n">df_baseline</span><span class="p">):</span>
+    <span class="n">table</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">df_baseline</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]]</span> <span class="o">+</span> <span class="p">[</span><span class="n">format_result_colum</span><span class="p">(</span><span class="n">name</span><span class="p">,</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;result&#39;</span><span class="p">][</span><span class="s1">&#39;bias&#39;</span><span class="p">])</span>
+            <span class="k">for</span> <span class="n">name</span><span class="p">,</span><span class="n">config</span> <span class="ow">in</span> <span class="n">configurations</span><span class="o">.</span><span class="n">items</span><span class="p">()]</span> <span class="o">+</span> <span class="p">[</span><span class="n">df_baseline</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span><span class="mi">1</span><span class="p">]],</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">table</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;Value&#39;</span><span class="p">:</span><span class="s1">&#39;Baseline&#39;</span><span class="p">})</span>
+
+<span class="k">def</span> <span class="nf">show_efficacy_result_table</span><span class="p">(</span><span class="n">configurations</span><span class="p">,</span> <span class="n">df_baseline</span><span class="p">):</span>
+    <span class="n">table</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">df_baseline</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]]</span> <span class="o">+</span> <span class="p">[</span><span class="n">format_result_colum</span><span class="p">(</span><span class="n">name</span><span class="p">,</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;result&#39;</span><span class="p">][</span><span class="s1">&#39;efficacy&#39;</span><span class="p">])</span>
+            <span class="k">for</span> <span class="n">name</span><span class="p">,</span><span class="n">config</span> <span class="ow">in</span> <span class="n">configurations</span><span class="o">.</span><span class="n">items</span><span class="p">()],</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">table</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;Value&#39;</span><span class="p">:</span><span class="s1">&#39;Baseline&#39;</span><span class="p">})</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Pre-processing">
+<h1>Pre-processing<a class="headerlink" href="#Pre-processing" title="Permalink to this headline"></a></h1>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">defaultdict</span>
+<span class="n">configurations</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">dict</span><span class="p">)</span>
+
+<span class="kn">from</span> <span class="nn">holisticai.bias.mitigation</span> <span class="kn">import</span> <span class="n">Reweighing</span>
+<span class="n">configurations</span><span class="p">[</span><span class="s1">&#39;Reweighing&#39;</span><span class="p">][</span><span class="s1">&#39;pipeline&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">(</span><span class="n">steps</span><span class="o">=</span><span class="p">[</span>
+    <span class="p">(</span><span class="s1">&#39;scaler&#39;</span><span class="p">,</span> <span class="n">StandardScaler</span><span class="p">()),</span>
+    <span class="p">(</span><span class="s1">&#39;bm_preprocessing&#39;</span><span class="p">,</span> <span class="n">Reweighing</span><span class="p">()),</span>
+    <span class="p">(</span><span class="s1">&#39;classifier&#39;</span><span class="p">,</span> <span class="n">LogisticRegression</span><span class="p">()),</span>
+    <span class="p">])</span>
+
+<span class="kn">from</span> <span class="nn">holisticai.bias.mitigation</span> <span class="kn">import</span> <span class="n">LearningFairRepresentation</span>
+<span class="n">configurations</span><span class="p">[</span><span class="s1">&#39;Learning Fair Representation&#39;</span><span class="p">][</span><span class="s1">&#39;pipeline&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">(</span><span class="n">steps</span><span class="o">=</span><span class="p">[</span>
+    <span class="p">(</span><span class="s1">&#39;scaler&#39;</span><span class="p">,</span> <span class="n">StandardScaler</span><span class="p">()),</span>
+    <span class="p">(</span><span class="s1">&#39;bm_preprocessing&#39;</span><span class="p">,</span> <span class="n">LearningFairRepresentation</span><span class="p">(</span><span class="n">k</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">Ax</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">Ay</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">Az</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">print_interval</span><span class="o">=</span><span class="mi">250</span><span class="p">)),</span>
+    <span class="p">(</span><span class="s1">&#39;classifier&#39;</span><span class="p">,</span> <span class="n">LogisticRegression</span><span class="p">()),</span>
+    <span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<section id="Run-Configurations">
+<h2>Run Configurations<a class="headerlink" href="#Run-Configurations" title="Permalink to this headline"></a></h2>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">config_name</span><span class="p">,</span><span class="n">config</span> <span class="ow">in</span> <span class="n">configurations</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="n">bias_metrics</span><span class="p">,</span><span class="n">eff_metrics</span> <span class="o">=</span> <span class="n">fit_and_evaluate_pipeline</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;pipeline&#39;</span><span class="p">])</span>
+    <span class="n">config</span><span class="p">[</span><span class="s1">&#39;result&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;bias&#39;</span><span class="p">:</span><span class="n">bias_metrics</span><span class="p">,</span> <span class="s1">&#39;efficacy&#39;</span><span class="p">:</span><span class="n">eff_metrics</span><span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+step: 250       loss: 0.8824    L_x: 2.5230     L_y: 0.6244     L_z: 0.0029
+step: 500       loss: 0.8824    L_x: 2.5230     L_y: 0.6244     L_z: 0.0029
+step: 750       loss: 0.8824    L_x: 2.5230     L_y: 0.6244     L_z: 0.0029
+step: 1000      loss: 0.8284    L_x: 2.5220     L_y: 0.5707     L_z: 0.0028
+step: 1250      loss: 0.8284    L_x: 2.5220     L_y: 0.5707     L_z: 0.0028
+step: 1500      loss: 0.8284    L_x: 2.5220     L_y: 0.5707     L_z: 0.0028
+step: 1750      loss: 0.8284    L_x: 2.5220     L_y: 0.5707     L_z: 0.0028
+step: 2000      loss: 0.7961    L_x: 2.5188     L_y: 0.5389     L_z: 0.0026
+step: 2250      loss: 0.7961    L_x: 2.5188     L_y: 0.5389     L_z: 0.0026
+step: 2500      loss: 0.7961    L_x: 2.5188     L_y: 0.5389     L_z: 0.0026
+step: 2750      loss: 0.7961    L_x: 2.5188     L_y: 0.5389     L_z: 0.0026
+step: 3000      loss: 0.7943    L_x: 2.5173     L_y: 0.5375     L_z: 0.0026
+step: 3250      loss: 0.7943    L_x: 2.5173     L_y: 0.5375     L_z: 0.0026
+step: 3500      loss: 0.7943    L_x: 2.5173     L_y: 0.5375     L_z: 0.0026
+step: 3750      loss: 0.7943    L_x: 2.5173     L_y: 0.5375     L_z: 0.0026
+step: 4000      loss: 0.7724    L_x: 2.4854     L_y: 0.5189     L_z: 0.0025
+step: 4250      loss: 0.7724    L_x: 2.4854     L_y: 0.5189     L_z: 0.0025
+step: 4500      loss: 0.7724    L_x: 2.4854     L_y: 0.5189     L_z: 0.0025
+step: 4750      loss: 0.7724    L_x: 2.4854     L_y: 0.5189     L_z: 0.0025
+step: 5000      loss: 0.7674    L_x: 2.4780     L_y: 0.5144     L_z: 0.0026
+step: 5250      loss: 0.7674    L_x: 2.4780     L_y: 0.5144     L_z: 0.0026
+step: 5500      loss: 0.7674    L_x: 2.4780     L_y: 0.5144     L_z: 0.0026
+step: 5750      loss: 0.7674    L_x: 2.4780     L_y: 0.5144     L_z: 0.0026
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">show_bias_result_table</span><span class="p">(</span><span class="n">configurations</span><span class="p">,</span> <span class="n">df_baseline</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Baseline</th>
+      <th>Reweighing</th>
+      <th>Learning Fair Representation</th>
+      <th>Reference</th>
+    </tr>
+    <tr>
+      <th>Metric</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>Statistical Parity</th>
+      <td>0.178353</td>
+      <td>0.096208</td>
+      <td>0.075485</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>Disparate Impact</th>
+      <td>3.235544</td>
+      <td>1.805986</td>
+      <td>1.735582</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>Four Fifths Rule</th>
+      <td>0.309067</td>
+      <td>0.553714</td>
+      <td>0.576175</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>Cohen D</th>
+      <td>0.457755</td>
+      <td>0.250423</td>
+      <td>0.210877</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>Equality of Opportunity Difference</th>
+      <td>0.059581</td>
+      <td>-0.165055</td>
+      <td>0.023775</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>False Positive Rate Difference</th>
+      <td>0.082695</td>
+      <td>0.030316</td>
+      <td>0.008878</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>Average Odds Difference</th>
+      <td>0.071138</td>
+      <td>-0.067370</td>
+      <td>0.016327</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>Accuracy Difference</th>
+      <td>-0.122388</td>
+      <td>-0.121556</td>
+      <td>-0.104798</td>
+      <td>0</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">show_efficacy_result_table</span><span class="p">(</span><span class="n">configurations</span><span class="p">,</span> <span class="n">df_eff_baseline</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Baseline</th>
+      <th>Reweighing</th>
+      <th>Learning Fair Representation</th>
+    </tr>
+    <tr>
+      <th>Metric</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>Accuracy</th>
+      <td>0.850241</td>
+      <td>0.843484</td>
+      <td>0.802539</td>
+    </tr>
+    <tr>
+      <th>Balanced accuracy</th>
+      <td>0.804536</td>
+      <td>0.799103</td>
+      <td>0.736226</td>
+    </tr>
+    <tr>
+      <th>Precision</th>
+      <td>0.600681</td>
+      <td>0.555556</td>
+      <td>0.406982</td>
+    </tr>
+    <tr>
+      <th>Recall</th>
+      <td>0.728822</td>
+      <td>0.729050</td>
+      <td>0.640751</td>
+    </tr>
+    <tr>
+      <th>F1-Score</th>
+      <td>0.658576</td>
+      <td>0.630587</td>
+      <td>0.497787</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+</section>
+</section>
+<section id="Post-Processing">
+<h1>Post Processing<a class="headerlink" href="#Post-Processing" title="Permalink to this headline"></a></h1>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">defaultdict</span>
+<span class="n">configurations</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">dict</span><span class="p">)</span>
+
+<span class="kn">from</span> <span class="nn">holisticai.bias.mitigation</span> <span class="kn">import</span> <span class="n">EqualizedOdds</span>
+<span class="n">configurations</span><span class="p">[</span><span class="s1">&#39;Equalized Odds&#39;</span><span class="p">][</span><span class="s1">&#39;pipeline&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">(</span><span class="n">steps</span><span class="o">=</span><span class="p">[</span>
+    <span class="p">(</span><span class="s1">&#39;scaler&#39;</span><span class="p">,</span> <span class="n">StandardScaler</span><span class="p">()),</span>
+    <span class="p">(</span><span class="s1">&#39;classifier&#39;</span><span class="p">,</span> <span class="n">LogisticRegression</span><span class="p">()),</span>
+    <span class="p">(</span><span class="s1">&#39;bm_postprocessing&#39;</span><span class="p">,</span> <span class="n">EqualizedOdds</span><span class="p">()),</span>
+    <span class="p">])</span>
+
+<span class="kn">from</span> <span class="nn">holisticai.bias.mitigation</span> <span class="kn">import</span> <span class="n">CalibratedEqualizedOdds</span>
+<span class="n">configurations</span><span class="p">[</span><span class="s1">&#39;Calibrated Equalized Odds&#39;</span><span class="p">][</span><span class="s1">&#39;pipeline&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">(</span><span class="n">steps</span><span class="o">=</span><span class="p">[</span>
+    <span class="p">(</span><span class="s1">&#39;scaler&#39;</span><span class="p">,</span> <span class="n">StandardScaler</span><span class="p">()),</span>
+    <span class="p">(</span><span class="s1">&#39;classifier&#39;</span><span class="p">,</span> <span class="n">LogisticRegression</span><span class="p">()),</span>
+    <span class="p">(</span><span class="s1">&#39;bm_postprocessing&#39;</span><span class="p">,</span> <span class="n">CalibratedEqualizedOdds</span><span class="p">()),</span>
+    <span class="p">])</span>
+
+<span class="kn">from</span> <span class="nn">holisticai.bias.mitigation</span> <span class="kn">import</span> <span class="n">RejectOptionClassification</span>
+<span class="n">configurations</span><span class="p">[</span><span class="s1">&#39;Reject Option Classification&#39;</span><span class="p">][</span><span class="s1">&#39;pipeline&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">(</span><span class="n">steps</span><span class="o">=</span><span class="p">[</span>
+    <span class="p">(</span><span class="s1">&#39;scaler&#39;</span><span class="p">,</span> <span class="n">StandardScaler</span><span class="p">()),</span>
+    <span class="p">(</span><span class="s1">&#39;classifier&#39;</span><span class="p">,</span> <span class="n">LogisticRegression</span><span class="p">()),</span>
+    <span class="p">(</span><span class="s1">&#39;bm_postprocessing&#39;</span><span class="p">,</span> <span class="n">RejectOptionClassification</span><span class="p">(</span><span class="n">metric_name</span><span class="o">=</span><span class="s2">&quot;Statistical parity difference&quot;</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">1</span><span class="p">)),</span>
+    <span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<section id="id1">
+<h2>Run Configurations<a class="headerlink" href="#id1" title="Permalink to this headline"></a></h2>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">config_name</span><span class="p">,</span><span class="n">config</span> <span class="ow">in</span> <span class="n">configurations</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="n">bias_metrics</span><span class="p">,</span><span class="n">eff_metrics</span> <span class="o">=</span> <span class="n">fit_and_evaluate_pipeline</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;pipeline&#39;</span><span class="p">])</span>
+    <span class="n">config</span><span class="p">[</span><span class="s1">&#39;result&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;bias&#39;</span><span class="p">:</span><span class="n">bias_metrics</span><span class="p">,</span> <span class="s1">&#39;efficacy&#39;</span><span class="p">:</span><span class="n">eff_metrics</span><span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Progress: 100/100
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">show_bias_result_table</span><span class="p">(</span><span class="n">configurations</span><span class="p">,</span> <span class="n">df_baseline</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Baseline</th>
+      <th>Equalized Odds</th>
+      <th>Calibrated Equalized Odds</th>
+      <th>Reject Option Classification</th>
+      <th>Reference</th>
+    </tr>
+    <tr>
+      <th>Metric</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>Statistical Parity</th>
+      <td>0.178353</td>
+      <td>0.095813</td>
+      <td>0.108962</td>
+      <td>0.059864</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>Disparate Impact</th>
+      <td>3.235544</td>
+      <td>1.700780</td>
+      <td>2.365774</td>
+      <td>1.182539</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>Four Fifths Rule</th>
+      <td>0.309067</td>
+      <td>0.587965</td>
+      <td>0.422695</td>
+      <td>0.845638</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>Cohen D</th>
+      <td>0.457755</td>
+      <td>0.240930</td>
+      <td>0.306568</td>
+      <td>0.124368</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>Equality of Opportunity Difference</th>
+      <td>0.059581</td>
+      <td>-0.020744</td>
+      <td>-0.109945</td>
+      <td>-0.148833</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>False Positive Rate Difference</th>
+      <td>0.082695</td>
+      <td>0.010227</td>
+      <td>0.057379</td>
+      <td>-0.038114</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>Average Odds Difference</th>
+      <td>0.071138</td>
+      <td>-0.005258</td>
+      <td>-0.026283</td>
+      <td>-0.093473</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>Accuracy Difference</th>
+      <td>-0.122388</td>
+      <td>-0.080495</td>
+      <td>-0.156621</td>
+      <td>0.016622</td>
+      <td>0</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">show_efficacy_result_table</span><span class="p">(</span><span class="n">configurations</span><span class="p">,</span> <span class="n">df_eff_baseline</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Baseline</th>
+      <th>Equalized Odds</th>
+      <th>Calibrated Equalized Odds</th>
+      <th>Reject Option Classification</th>
+    </tr>
+    <tr>
+      <th>Metric</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>Accuracy</th>
+      <td>0.850241</td>
+      <td>0.825980</td>
+      <td>0.827516</td>
+      <td>0.779609</td>
+    </tr>
+    <tr>
+      <th>Balanced accuracy</th>
+      <td>0.804536</td>
+      <td>0.765959</td>
+      <td>0.784805</td>
+      <td>0.726811</td>
+    </tr>
+    <tr>
+      <th>Precision</th>
+      <td>0.600681</td>
+      <td>0.554704</td>
+      <td>0.457642</td>
+      <td>0.806301</td>
+    </tr>
+    <tr>
+      <th>Recall</th>
+      <td>0.728822</td>
+      <td>0.665815</td>
+      <td>0.723419</td>
+      <td>0.527283</td>
+    </tr>
+    <tr>
+      <th>F1-Score</th>
+      <td>0.658576</td>
+      <td>0.605202</td>
+      <td>0.560626</td>
+      <td>0.637603</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+</section>
+</section>
+<section id="Inprocessing">
+<h1>Inprocessing<a class="headerlink" href="#Inprocessing" title="Permalink to this headline"></a></h1>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[33]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">defaultdict</span>
+<span class="n">configurations</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">dict</span><span class="p">)</span>
+
+<span class="kn">from</span> <span class="nn">holisticai.bias.mitigation</span> <span class="kn">import</span> <span class="n">GridSearchReduction</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">LogisticRegression</span><span class="p">()</span>
+<span class="n">inprocessing_model</span> <span class="o">=</span> <span class="n">GridSearchReduction</span><span class="p">(</span><span class="n">constraints</span><span class="o">=</span><span class="s2">&quot;DemographicParity&quot;</span><span class="p">,</span> <span class="n">grid_size</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">transform_estimator</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+
+<span class="n">configurations</span><span class="p">[</span><span class="s1">&#39;GridSearch Reduction&#39;</span><span class="p">][</span><span class="s1">&#39;pipeline&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">(</span><span class="n">steps</span><span class="o">=</span><span class="p">[</span>
+    <span class="p">(</span><span class="s1">&#39;scaler&#39;</span><span class="p">,</span> <span class="n">StandardScaler</span><span class="p">()),</span>
+    <span class="p">(</span><span class="s1">&#39;bm_inprocessing&#39;</span><span class="p">,</span> <span class="n">inprocessing_model</span><span class="p">),</span>
+    <span class="p">])</span>
+
+<span class="kn">from</span> <span class="nn">holisticai.bias.mitigation</span> <span class="kn">import</span> <span class="n">ExponentiatedGradientReduction</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">LogisticRegression</span><span class="p">()</span>
+<span class="n">inprocessing_model</span> <span class="o">=</span> <span class="n">ExponentiatedGradientReduction</span><span class="p">(</span><span class="n">constraints</span><span class="o">=</span><span class="s2">&quot;DemographicParity&quot;</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">transform_estimator</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+
+<span class="n">configurations</span><span class="p">[</span><span class="s1">&#39;ExponentiatedGradient Reduction&#39;</span><span class="p">][</span><span class="s1">&#39;pipeline&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">(</span><span class="n">steps</span><span class="o">=</span><span class="p">[</span>
+    <span class="p">(</span><span class="s1">&#39;scaler&#39;</span><span class="p">,</span> <span class="n">StandardScaler</span><span class="p">()),</span>
+    <span class="p">(</span><span class="s1">&#39;bm_inprocessing&#39;</span><span class="p">,</span> <span class="n">inprocessing_model</span><span class="p">),</span>
+    <span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<section id="id2">
+<h2>Run Configurations<a class="headerlink" href="#id2" title="Permalink to this headline"></a></h2>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[34]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">config_name</span><span class="p">,</span><span class="n">config</span> <span class="ow">in</span> <span class="n">configurations</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="n">bias_metrics</span><span class="p">,</span><span class="n">eff_metrics</span> <span class="o">=</span> <span class="n">fit_and_evaluate_pipeline</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;pipeline&#39;</span><span class="p">])</span>
+    <span class="n">config</span><span class="p">[</span><span class="s1">&#39;result&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;bias&#39;</span><span class="p">:</span><span class="n">bias_metrics</span><span class="p">,</span> <span class="s1">&#39;efficacy&#39;</span><span class="p">:</span><span class="n">eff_metrics</span><span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+steps: 5        Best gap:6.41039
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[35]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">show_bias_result_table</span><span class="p">(</span><span class="n">configurations</span><span class="p">,</span> <span class="n">df_baseline</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[35]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Baseline</th>
+      <th>GridSearch Reduction</th>
+      <th>ExponentiatedGradient Reduction</th>
+      <th>Reference</th>
+    </tr>
+    <tr>
+      <th>Metric</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>Statistical Parity</th>
+      <td>0.178353</td>
+      <td>0.005191</td>
+      <td>0.010549</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>Disparate Impact</th>
+      <td>3.235544</td>
+      <td>1.034025</td>
+      <td>1.070555</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>Four Fifths Rule</th>
+      <td>0.309067</td>
+      <td>0.967095</td>
+      <td>0.934095</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>Cohen D</th>
+      <td>0.457755</td>
+      <td>0.014306</td>
+      <td>0.029036</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>Equality of Opportunity Difference</th>
+      <td>0.059581</td>
+      <td>-0.341247</td>
+      <td>-0.324293</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>False Positive Rate Difference</th>
+      <td>0.082695</td>
+      <td>-0.032478</td>
+      <td>-0.029755</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>Average Odds Difference</th>
+      <td>0.071138</td>
+      <td>-0.186862</td>
+      <td>-0.177024</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>Accuracy Difference</th>
+      <td>-0.122388</td>
+      <td>-0.113938</td>
+      <td>-0.113159</td>
+      <td>0</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[36]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">show_efficacy_result_table</span><span class="p">(</span><span class="n">configurations</span><span class="p">,</span> <span class="n">df_eff_baseline</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[36]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Baseline</th>
+      <th>GridSearch Reduction</th>
+      <th>ExponentiatedGradient Reduction</th>
+    </tr>
+    <tr>
+      <th>Metric</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>Accuracy</th>
+      <td>0.850241</td>
+      <td>0.829358</td>
+      <td>0.830484</td>
+    </tr>
+    <tr>
+      <th>Balanced accuracy</th>
+      <td>0.804536</td>
+      <td>0.786316</td>
+      <td>0.788188</td>
+    </tr>
+    <tr>
+      <th>Precision</th>
+      <td>0.600681</td>
+      <td>0.469562</td>
+      <td>0.472967</td>
+    </tr>
+    <tr>
+      <th>Recall</th>
+      <td>0.728822</td>
+      <td>0.723753</td>
+      <td>0.726619</td>
+    </tr>
+    <tr>
+      <th>F1-Score</th>
+      <td>0.658576</td>
+      <td>0.569584</td>
+      <td>0.572976</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="mitigating_bias_classification.html" class="btn btn-neutral float-left" title="Mitigation Strategies Tutorial" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Holistic AI.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

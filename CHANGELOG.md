@@ -1,3 +1,11 @@
+## 0.1.2 (2022-09-26)
+
+### Docs
+
+- Updated ReadMe file
+- Added docs folder
+- Added support of Read the docs
+
 ## 0.1.1 (2022-09-21)
 
 ### Patch
