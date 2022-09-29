@@ -3,7 +3,13 @@ The :mod:`holisticai.bias.mitigation` module includes preprocessing, inprocessin
 """
 
 # inprocessing algorithm classes
-from .inprocessing import ExponentiatedGradientReduction, GridSearchReduction
+from .inprocessing import (
+    AdversarialDebiasing,
+    ExponentiatedGradientReduction,
+    GridSearchReduction,
+    MetaFairClassifier,
+    PrejudiceRemover,
+)
 
 # postprocessing algorithm classes
 from .postprocessing import (
@@ -24,4 +30,7 @@ __all__ = [
     "CalibratedEqualizedOdds",
     "EqualizedOdds",
     "RejectOptionClassification",
+    "PrejudiceRemover",
+    "MetaFairClassifier",
+    "AdversarialDebiasing",
 ]
