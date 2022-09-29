@@ -1,5 +1,3 @@
 from ._logger import Logging
 
-__all__=[
-    "Logging"
-]
+__all__ = ["Logging"]
