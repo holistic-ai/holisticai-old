@@ -1,19 +1,19 @@
 import pandas as pd
 
-from ._conventions import EVENT, GROUP_ID, LABEL, SIGNED
+from ._conventions import _EVENT, _GROUP_ID, _LABEL, _SIGNED
 
 
 def get_index_format(event_ids, group_values):
     index = (
         pd.DataFrame(
             [
-                {SIGNED: signed, EVENT: e, GROUP_ID: g}
+                {_SIGNED: signed, _EVENT: e, _GROUP_ID: g}
                 for e in event_ids
                 for g in group_values
                 for signed in ["+", "-"]
             ]
         )
-        .set_index([SIGNED, EVENT, GROUP_ID])
+        .set_index([_SIGNED, _EVENT, _GROUP_ID])
         .index
     )
     return index
@@ -42,8 +42,8 @@ class BaseMoment:
 
     def load_data(self, X, y, sensitive_features):
         self.tags = pd.DataFrame()
-        self.tags[LABEL] = y
-        self.tags[GROUP_ID] = merge_columns(sensitive_features)
+        self.tags[_LABEL] = y
+        self.tags[_GROUP_ID] = merge_columns(sensitive_features)
         self.save_params(X, y, sensitive_features)
 
     @property
@@ -73,7 +73,7 @@ class BaseMoment:
             lambda_projected = pd.concat(
                 [lambda_pos, lambda_neg],
                 keys=["+", "-"],
-                names=[SIGNED, EVENT, GROUP_ID],
+                names=[_SIGNED, _EVENT, _GROUP_ID],
             )
             return lambda_projected
         return lambda_vec

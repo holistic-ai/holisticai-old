@@ -4,13 +4,13 @@ import numpy as np
 import pandas as pd
 
 from ._conventions import (
-    ALL,
-    EVENT,
-    GROUP_ID,
-    LABEL,
-    LOWER_BOUND_DIFF,
-    PRED,
-    UPPER_BOUND_DIFF,
+    _ALL,
+    _EVENT,
+    _GROUP_ID,
+    _LABEL,
+    _LOWER_BOUND_DIFF,
+    _PRED,
+    _UPPER_BOUND_DIFF,
 )
 from ._moments_utils import BaseMoment, get_index_format
 from ._objectives import ErrorRate
@@ -77,16 +77,16 @@ class ClassificationConstraint(BaseMoment):
         - adds a column `event` to the `tags` field.
         - fill in the information about the basis
         """
-        self.tags[EVENT] = event
+        self.tags[_EVENT] = event
 
         # Events
-        self.event_ids = np.sort(self.tags[EVENT].dropna().unique())
-        self.event_prob = self.tags[EVENT].dropna().value_counts() / len(self.tags)
+        self.event_ids = np.sort(self.tags[_EVENT].dropna().unique())
+        self.event_prob = self.tags[_EVENT].dropna().value_counts() / len(self.tags)
 
         # Groups and Events
-        self.group_values = np.sort(self.tags[GROUP_ID].unique())
+        self.group_values = np.sort(self.tags[_GROUP_ID].unique())
         self.group_event_prob = (
-            self.tags.dropna(subset=[EVENT]).groupby([EVENT, GROUP_ID]).count()
+            self.tags.dropna(subset=[_EVENT]).groupby([_EVENT, _GROUP_ID]).count()
             / len(self.tags)
         ).iloc[:, 0]
 
@@ -112,7 +112,7 @@ class ClassificationConstraint(BaseMoment):
         """
 
         lambda_event = (lambda_vec["+"] - self.ratio * lambda_vec["-"]).sum(
-            level=EVENT
+            level=_EVENT
         ) / self.event_prob
 
         lambda_group_event = (
@@ -122,10 +122,10 @@ class ClassificationConstraint(BaseMoment):
         adjust = lambda_event - lambda_group_event
 
         def get_signed_weight(row):
-            if pd.isna(row[EVENT]):
+            if pd.isna(row[_EVENT]):
                 return 0
             else:
-                return adjust[row[EVENT], row[GROUP_ID]]
+                return adjust[row[_EVENT], row[_GROUP_ID]]
 
         signed_weights = self.tags.apply(get_signed_weight, axis=1)
         utility_diff = self.utilities[:, 1] - self.utilities[:, 0]
@@ -145,22 +145,22 @@ class ClassificationConstraint(BaseMoment):
         return self._gamma_signed(pred)
 
     def _gamma_signed(self, pred):
-        self.tags[PRED] = pred
-        expect_event = self.tags.groupby(EVENT).mean()
-        expect_group_event = self.tags.groupby([EVENT, GROUP_ID]).mean()
-        expect_group_event[UPPER_BOUND_DIFF] = (
-            self.ratio * expect_group_event[PRED] - expect_event[PRED]
+        self.tags[_PRED] = pred
+        expect_event = self.tags.groupby(_EVENT).mean()
+        expect_group_event = self.tags.groupby([_EVENT, _GROUP_ID]).mean()
+        expect_group_event[_UPPER_BOUND_DIFF] = (
+            self.ratio * expect_group_event[_PRED] - expect_event[_PRED]
         )
-        expect_group_event[LOWER_BOUND_DIFF] = (
-            -expect_group_event[PRED] + self.ratio * expect_event[PRED]
+        expect_group_event[_LOWER_BOUND_DIFF] = (
+            -expect_group_event[_PRED] + self.ratio * expect_event[_PRED]
         )
         gamma_signed = pd.concat(
             [
-                expect_group_event[UPPER_BOUND_DIFF],
-                expect_group_event[LOWER_BOUND_DIFF],
+                expect_group_event[_UPPER_BOUND_DIFF],
+                expect_group_event[_LOWER_BOUND_DIFF],
             ],
             keys=["+", "-"],
-            names=["signed", EVENT, GROUP_ID],
+            names=["signed", _EVENT, _GROUP_ID],
         )
         return gamma_signed
 
@@ -183,7 +183,7 @@ class DemographicParity(ClassificationConstraint):
         """Load the specified data into the object."""
         params = format_data(y=y)
         y = params["y"]
-        base_event = pd.Series(data=ALL, index=y.index)
+        base_event = pd.Series(data=_ALL, index=y.index)
         super().load_data(X, y, sensitive_features, base_event)
 
 
@@ -206,7 +206,7 @@ class EqualizedOdds(ClassificationConstraint):
         """Load the specified data into the object."""
         params = format_data(y=y)
         y = params["y"]
-        base_event = y.apply(lambda v: LABEL + "=" + str(v))
+        base_event = y.apply(lambda v: _LABEL + "=" + str(v))
         super().load_data(X, y, sensitive_features, base_event)
 
 
@@ -228,7 +228,7 @@ class TruePositiveRateParity(ClassificationConstraint):
         """Load the specified data into the object."""
         params = format_data(y=y)
         y = params["y"]
-        base_event = y.apply(lambda l: f"{LABEL}={l}").where(y == 1)
+        base_event = y.apply(lambda l: f"{_LABEL}={l}").where(y == 1)
         super().load_data(X, y, sensitive_features, base_event)
 
 
@@ -250,7 +250,7 @@ class FalsePositiveRateParity(ClassificationConstraint):
         """Load the specified data into the object."""
         params = format_data(y=y)
         y = params["y"]
-        base_event = y.apply(lambda v: LABEL + "=" + str(v)).where(y == 0)
+        base_event = y.apply(lambda v: _LABEL + "=" + str(v)).where(y == 0)
         super().load_data(X, y, sensitive_features, base_event)
 
 
@@ -274,5 +274,5 @@ class ErrorRateParity(ClassificationConstraint):
         params = format_data(y=y)
         y = params["y"]
         utilities = np.vstack([y, 1 - y]).T
-        base_event = pd.Series(data=ALL, index=y.index)
+        base_event = pd.Series(data=_ALL, index=y.index)
         super().load_data(X, y, sensitive_features, base_event, utilities=utilities)
