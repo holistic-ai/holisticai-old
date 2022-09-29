@@ -1,18 +1,20 @@
 from holisticai.bias.mitigation.inprocessing.commons import Logging
 
+
 class ObjectiveFunction:
     """objective function of logistic regression with prejudice remover
     Loss Function type 4: Weights for logistic regression are prepared for each
     value of S. Penalty for enhancing is defined as mutual information between
     Y and S.
     """
+
     def __init__(self, estimator, loss_fn):
         self.loss_fn = loss_fn
         self.nb_group_values = estimator.nb_group_values
         self.nb_features = estimator.nb_features
 
         self.estimator = estimator
-        
+
     def loss(self, coef_, X, y, groups):
         """loss function: negative log - likelihood with l2 regularizer
         To suppress the warnings at np.log, do "np.seterr(all='ignore')"
@@ -34,9 +36,9 @@ class ObjectiveFunction:
         coef = coef_.reshape(self.nb_group_values, self.nb_features)
         X = self.estimator._preprocessing_data(X)
         sigma = self.estimator.sigmoid(X=X, groups=groups, coef=coef)
-        loss =  self.loss_fn(y=y, sigma=sigma, groups=groups, coef=coef)
+        loss = self.loss_fn(y=y, sigma=sigma, groups=groups, coef=coef)
         return loss
-        
+
     def grad_loss(self, coef_, X, y, groups):
         """first derivative of loss function
         Parameters
@@ -58,7 +60,8 @@ class ObjectiveFunction:
         X = self.estimator._preprocessing_data(X)
         sigma = self.estimator.sigmoid(X=X, groups=groups, coef=coef)
         return self.loss_fn.gradient(X=X, y=y, sigma=sigma, groups=groups, coef=coef)
-                
+
+
 class PRLogger:
     def __init__(self, total_iterations, verbose, print_interval, func):
         self.step = 0
@@ -67,26 +70,29 @@ class PRLogger:
         self.total_iterations = total_iterations
         self.func = func
         self.log_params = [
-            ('iteration', int),
+            ("iteration", int),
         ]
         self.fn_params = {}
-        self.logger = Logging(log_params = self.log_params, 
-                        total_iterations=self.total_iterations,
-                        logger_format='iteration')
-        
+        self.logger = Logging(
+            log_params=self.log_params,
+            total_iterations=self.total_iterations,
+            logger_format="iteration",
+        )
+
     def set_log_fn(self, type, **kargs):
-        for param_name,param_fn in kargs.items():
-            self.log_params.append((param_name,type))
+        for param_name, param_fn in kargs.items():
+            self.log_params.append((param_name, type))
             self.fn_params[param_name] = param_fn
-        
+
     def callback(self, x):
-        self.step+=1
+        self.step += 1
         if self.verbose > 0:
-            if (self.step % self.print_interval) == 0 or \
-                (self.step % self.total_iterations) == 0:
-                    args = [self.fn_params[pn](x) for pn,_ in self.log_params[1:]]
-                    self.logger.update(self.step, **args)
-        
+            if (self.step % self.print_interval) == 0 or (
+                self.step % self.total_iterations
+            ) == 0:
+                args = [self.fn_params[pn](x) for pn, _ in self.log_params[1:]]
+                self.logger.update(self.step, **args)
+
     def info(self, message):
         if self.verbose > 0:
             self.logger.info(message)

@@ -1,9 +1,12 @@
 import numpy as np
 import pandas as pd
 from sklearn.linear_model import LogisticRegression
+
 from .losses import PRBinaryCrossEntropy
+
 EPSILON = 1.0e-10
 SIGMOID_RANGE = np.log((1.0 - EPSILON) / EPSILON)
+
 
 class PRLogiticRegression:
     def __init__(self, loss, initializer, fit_intercept=False):
@@ -11,22 +14,24 @@ class PRLogiticRegression:
         self.nb_clases = 2
         self.loss = loss
         self.initializer = initializer
-        
+
     def init_params(self, X, y, groups):
         # set instance variables
         X = self._preprocessing_data(X)
         self.nb_features = X.shape[1]
         self.nb_group_values = len(np.unique(groups))
-        self.coef = self.initializer.initialize(X,y, groups, self.nb_group_values, self.nb_features)
-    
+        self.coef = self.initializer.initialize(
+            X, y, groups, self.nb_group_values, self.nb_features
+        )
+
     def set_params(self, coef):
         self.coef = np.reshape(coef, [self.nb_group_values, self.nb_features])
-        
+
     def _preprocessing_data(self, X):
         if self.fit_intercept:
-            X = np.concatenate([X, np.ones((X.shape[0],1))],axis=1)
+            X = np.concatenate([X, np.ones((X.shape[0], 1))], axis=1)
         return X
-    
+
     def predict(self, X, groups):
         return np.argmax(self.predict_proba(X, groups), 1)
 
@@ -40,25 +45,25 @@ class PRLogiticRegression:
     def predict_score(self, X, groups, coef=None):
         X = self._preprocessing_data(X)
         return self.sigmoid(X=X, groups=groups, coef=coef)
-    
+
     def sigmoid(self, X, groups, coef=None):
         if coef is None:
             coef = self.coef
         w = coef[groups, :]
-        s = np.sum(w*X, axis=1)
+        s = np.sum(w * X, axis=1)
         s = np.clip(s, -SIGMOID_RANGE, SIGMOID_RANGE)
         return 1.0 / (1.0 + np.exp(-s))
-    
-    
+
+
 class PRParamInitializer:
-    def __init__(self, init_type='Zero', **kargs):
+    def __init__(self, init_type="Zero", **kargs):
         self.init_type = init_type
-        if init_type.startswith('StandarLR'):
-            self.C = kargs['C']
-            self.penalty = kargs['penalty']
-            self.fit_intercept = kargs['fit_intercept']
-        
-    def initialize(self, X, y, groups, nb_group_values , nb_features):
+        if init_type.startswith("StandarLR"):
+            self.C = kargs["C"]
+            self.penalty = kargs["penalty"]
+            self.fit_intercept = kargs["fit_intercept"]
+
+    def initialize(self, X, y, groups, nb_group_values, nb_features):
         """set initial weight
         initialization methods are specified by `itype`
         * 0: cleared by 0
@@ -78,34 +83,38 @@ class PRParamInitializer:
             values of sensitive features
         """
 
-        if self.init_type == 'Zero':
+        if self.init_type == "Zero":
             # clear by zeros
             coef = np.zeros(nb_group_values * nb_features, dtype=np.float)
-        
-        elif self.init_type == 'Random':
+
+        elif self.init_type == "Random":
             # at random
             coef = np.random.randn(nb_group_values * nb_features)
 
-        elif self.init_type == 'StandarLR':
+        elif self.init_type == "StandarLR":
             # learned by standard LR
             coef = np.empty(nb_group_values * nb_features, dtype=np.float)
             coef = coef.reshape(nb_group_values, nb_features)
 
-            clr = LogisticRegression(C=self.C, penalty=self.penalty, fit_intercept=self.fit_intercept)
+            clr = LogisticRegression(
+                C=self.C, penalty=self.penalty, fit_intercept=self.fit_intercept
+            )
             clr.fit(X, y)
 
             coef[:, :] = clr.coef_
-            
-        elif self.init_type == 'StandarLRbyGroup':
+
+        elif self.init_type == "StandarLRbyGroup":
             # learned by standard LR
             coef = np.empty(nb_group_values * nb_features, dtype=np.float)
             coef = coef.reshape(nb_group_values, nb_features)
 
             for i in range(nb_group_values):
-                clr = LogisticRegression(C=self.C, penalty=self.penalty, fit_intercept=self.fit_intercept)
+                clr = LogisticRegression(
+                    C=self.C, penalty=self.penalty, fit_intercept=self.fit_intercept
+                )
                 clr.fit(X[groups == i, :], y[groups == i])
                 coef[i, :] = clr.coef_
         else:
             raise TypeError
-        
+
         return coef
