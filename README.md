@@ -1,6 +1,6 @@
 <h1 align="center">
 <img src="docs/holistic_ai.png" width="100">
-<br>Holistic Ai
+<br>Holistic AI
 </h1>
 
 The Holistic AI library is an open-source tool to assess and improve the trustworthiness of AI systems.  
