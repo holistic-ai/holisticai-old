@@ -10,9 +10,6 @@ class ObjectiveFunction:
 
     def __init__(self, estimator, loss_fn):
         self.loss_fn = loss_fn
-        self.nb_group_values = estimator.nb_group_values
-        self.nb_features = estimator.nb_features
-
         self.estimator = estimator
 
     def loss(self, coef_, X, y, groups):
@@ -33,7 +30,7 @@ class ObjectiveFunction:
         loss : float
             loss function value
         """
-        coef = coef_.reshape(self.nb_group_values, self.nb_features)
+        coef = coef_.reshape(self.estimator.nb_group_values, self.estimator.nb_features)
         X = self.estimator._preprocessing_data(X)
         sigma = self.estimator.sigmoid(X=X, groups=groups, coef=coef)
         loss = self.loss_fn(y=y, sigma=sigma, groups=groups, coef=coef)
@@ -56,19 +53,18 @@ class ObjectiveFunction:
             first derivative of loss function
         """
 
-        coef = coef_.reshape(self.nb_group_values, self.nb_features)
+        coef = coef_.reshape(self.estimator.nb_group_values, self.estimator.nb_features)
         X = self.estimator._preprocessing_data(X)
         sigma = self.estimator.sigmoid(X=X, groups=groups, coef=coef)
         return self.loss_fn.gradient(X=X, y=y, sigma=sigma, groups=groups, coef=coef)
 
 
 class PRLogger:
-    def __init__(self, total_iterations, verbose, print_interval, func):
+    def __init__(self, total_iterations, verbose, print_interval):
         self.step = 0
         self.verbose = verbose
         self.print_interval = print_interval
         self.total_iterations = total_iterations
-        self.func = func
         self.log_params = [
             ("iteration", int),
         ]
@@ -91,7 +87,7 @@ class PRLogger:
                 self.step % self.total_iterations
             ) == 0:
                 args = [self.fn_params[pn](x) for pn, _ in self.log_params[1:]]
-                self.logger.update(self.step, **args)
+                self.logger.update(self.step, *args)
 
     def info(self, message):
         if self.verbose > 0:

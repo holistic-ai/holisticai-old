@@ -113,7 +113,10 @@ class PrejudiceRemover(BaseEstimator, ClassifierMixin, BMImp):
 
         # Algorithm class
         algorithm = PrejudiceRemoverAlgorithm(
-            estimator=self.estimator, logger=logger_, objective_fn=objective_fn_
+            estimator=self.estimator,
+            logger=logger_,
+            objective_fn=objective_fn_,
+            maxiter=self.maxiter,
         )
 
         return algorithm

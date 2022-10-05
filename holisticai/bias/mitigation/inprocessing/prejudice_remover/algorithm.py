@@ -1,27 +1,35 @@
 import numpy as np
 from scipy.optimize import fmin_cg
 
+from holisticai.bias.mitigation.inprocessing.commons._group_utils import GroupUtils
+
 
 class PrejudiceRemoverAlgorithm:
     """Two class LogisticRegression with Prejudice Remover"""
 
-    def __init__(self, estimator, objetive_fn, logger):
+    def __init__(self, estimator, objective_fn, logger, maxiter=None):
         """
         Parameters
         ----------
         estimator : estimator object
             Prejudice Remover Model
 
-        objetive_fn : object
+        objective_fn : object
             Objective class with loss and grad_loss function
 
         logger : object
             Support for print information
+
+        maxiter: int
+            Maximum number of iterations for nonlinear conjugate gradient algorithm. Default is ``200 * len(x0)``.
+
         """
 
         self.estimator = estimator
         self.logger = logger
-        self.objetive_fn = objetive_fn
+        self.objective_fn = objective_fn
+        self.maxiter = maxiter
+        self.gutil = GroupUtils()
 
     def fit(self, X: np.ndarray, y: np.ndarray, sensitive_features: np.ndarray):
         """
@@ -44,13 +52,13 @@ class PrejudiceRemoverAlgorithm:
         groups_num = self.gutil.create_groups(sensitive_features, convert_numeric=True)
         self.estimator.init_params(X, y, groups_num)
         self.logger.set_log_fn(
-            loss=lambda coef: self.obj.loss(coef, X, y, groups_num), type=float
+            loss=lambda coef: self.objective_fn.loss(coef, X, y, groups_num), type=float
         )
 
         self.coef = fmin_cg(
-            self.objetive_fn.loss,
+            self.objective_fn.loss,
             self.estimator.coef,
-            fprime=self.objetive_fn.grad_loss,
+            fprime=self.objective_fn.grad_loss,
             args=(X, y, groups_num),
             maxiter=self.maxiter,
             disp=False,
@@ -58,7 +66,7 @@ class PrejudiceRemoverAlgorithm:
         )
         self.estimator.set_params(self.coef)
 
-        self.f_loss_ = self.objetive_fn.loss(self.coef, X, y, groups_num)
+        self.f_loss_ = self.objective_fn.loss(self.coef, X, y, groups_num)
         self.logger.info(f"Best Loss : {self.f_loss_:.4f}")
         return self
 
