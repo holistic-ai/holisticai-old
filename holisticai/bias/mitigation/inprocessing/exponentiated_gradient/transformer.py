@@ -5,7 +5,7 @@ from sklearn.base import BaseEstimator, ClassifierMixin, clone
 
 from holisticai.utils.transformers.bias import BMInprocessing as BMImp
 
-from ..commons import _constraints as con
+from ..commons.classification import _constraints as con
 from .algorithm import ExponentiatedGradientAlgorithm
 
 
