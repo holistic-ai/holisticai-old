@@ -4,17 +4,20 @@ import sys
 sys.path.append(os.getcwd())
 
 from sklearn.preprocessing import StandardScaler
+
 from holisticai.bias.mitigation import CorrelationRemover
 from holisticai.pipeline import Pipeline
-from tests.testing_utils._tests_utils import check_results, load_preprocessed_adult_v2
 from tests.testing_utils._tests_data_utils import load_us_crime
+from tests.testing_utils._tests_utils import check_results, load_preprocessed_adult_v2
 
 seed = 42
 
+
 def running_without_pipeline():
-    from holisticai.bias.metrics import regression_bias_metrics
     from sklearn.linear_model import LinearRegression
-    
+
+    from holisticai.bias.metrics import regression_bias_metrics
+
     train_data, test_data = load_us_crime()
     X, y, group_a, group_b = train_data
 
@@ -22,13 +25,13 @@ def running_without_pipeline():
     Xt = scaler.fit_transform(X)
 
     prep = CorrelationRemover()
-    
+
     fit_params = {"group_a": group_a, "group_b": group_b}
-    
+
     Xt = prep.fit_transform(Xt, **fit_params)
-    
+
     model = LinearRegression()
-    
+
     model.fit(Xt, y)
 
     # Test
@@ -36,7 +39,7 @@ def running_without_pipeline():
     transform_params = {"group_a": group_a, "group_b": group_b}
     Xt = scaler.transform(X)
     Xt = prep.transform(Xt, **transform_params)
-    
+
     y_pred = model.predict(Xt)
 
     df = regression_bias_metrics(
@@ -50,16 +53,17 @@ def running_without_pipeline():
 
 
 def running_with_pipeline():
-    from holisticai.bias.metrics import regression_bias_metrics
     from sklearn.linear_model import LinearRegression
-    
+
+    from holisticai.bias.metrics import regression_bias_metrics
+
     train_data, test_data = load_us_crime()
     model = LinearRegression()
 
     pipeline = Pipeline(
         steps=[
             ("scaler", StandardScaler()),
-            ('bm_preprocessing', CorrelationRemover()),
+            ("bm_preprocessing", CorrelationRemover()),
             ("model", model),
         ]
     )
@@ -84,9 +88,11 @@ def running_with_pipeline():
     )
     return df
 
+
 def test_reproducibility_with_and_without_pipeline():
     df1 = running_without_pipeline()
     df2 = running_with_pipeline()
     check_results(df1, df2)
-    
-#test_reproducibility_with_and_without_pipeline()
+
+
+# test_reproducibility_with_and_without_pipeline()
