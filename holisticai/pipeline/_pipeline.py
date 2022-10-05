@@ -160,38 +160,3 @@ class Pipeline(SKLPipeline, PipelineHelper):
         """
         Xt = self._transform_without_final(X)
         return self._transform_post_estimator_transformers(Xt, **params)
-
-    @available_if(_fulfill_conditions("score"))
-    def score(self, X, y=None, sample_weight=None):
-        """Transform the data, and apply `score` with the final estimator.
-
-        Call `transform` of each transformer in the pipeline. The transformed
-        data are finally passed to the final estimator that calls
-        `score` method. Only valid if the final estimator implements `score`.
-
-        Parameters
-        ----------
-        X : iterable
-            Data to predict on. Must fulfill input requirements of first step
-            of the pipeline.
-
-        y : iterable, default=None
-            Targets used for scoring. Must fulfill label requirements for all
-            steps of the pipeline.
-
-        sample_weight : array-like, default=None
-            If not None, this argument is passed as ``sample_weight`` keyword
-            argument to the ``score`` method of the final estimator.
-
-        Returns
-        -------
-        score : float
-            Result of calling `score` on the final estimator.
-        """
-
-        score_params = {}
-        if sample_weight is not None:
-            score_params["sample_weight"] = sample_weight
-        y_pred = self.predictions(X, y, **score_params)["y_pred"]
-
-        return self.steps[-1][1].predictions(Xt, y, **score_params)
