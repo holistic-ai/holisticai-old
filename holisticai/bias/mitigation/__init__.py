@@ -35,7 +35,8 @@ __all__ = [
 ]
 
 import importlib
+
 torch_spec = importlib.util.find_spec("torch")
 if torch_spec is not None:
-    from .inprocessing import AdversarialDebiasing    
-__all__+=["AdversarialDebiasing"]
+    from .inprocessing import AdversarialDebiasing
+__all__ += ["AdversarialDebiasing"]
