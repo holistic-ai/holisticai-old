@@ -1,55 +1,76 @@
 import os
 import sys
-
 sys.path.append(os.getcwd())
 
-from sklearn.linear_model import LogisticRegression
 from sklearn.preprocessing import StandardScaler
-
 from holisticai.bias.metrics import classification_bias_metrics
-from holisticai.bias.mitigation import GridSearchReduction
+from tests.testing_utils._tests_utils import (
+    check_results,
+    load_preprocessed_adult_v2,
+)
 from holisticai.pipeline import Pipeline
-from tests.testing_utils._tests_utils import check_results, load_preprocessed_adult_v2
+import pytest
+
 
 seed = 42
 train_data, test_data = load_preprocessed_adult_v2()
 
 
 def running_without_pipeline():
+    from holisticai.bias.mitigation import AdversarialDebiasing
+
     X, y, group_a, group_b = train_data
 
     scaler = StandardScaler()
     Xt = scaler.fit_transform(X)
 
-    model = LogisticRegression()
-    inprocessing_model = GridSearchReduction(
-        constraints="ErrorRateParity", grid_size=20
-    ).transform_estimator(model)
-
-    fit_params = {"group_a": group_a, "group_b": group_b}
+    inprocessing_model = AdversarialDebiasing(
+        features_dim=X.shape[1],
+        epochs=1,
+        batch_size=32,
+        hidden_size=64,
+        adversary_loss_weight=0.1,
+        verbose=1,
+        use_debias=True,
+        seed=seed
+    ).transform_estimator()
+    
+    fit_params = {
+        "group_a": group_a,
+        "group_b": group_b
+    }
     inprocessing_model.fit(Xt, y, **fit_params)
 
-    # Test
     X, y, group_a, group_b = test_data
     Xt = scaler.transform(X)
 
     y_pred = inprocessing_model.predict(Xt)
 
     df = classification_bias_metrics(
-        group_b.to_numpy().ravel(),
-        group_a.to_numpy().ravel(),
+        group_a,
+        group_b,
         y_pred,
-        y.to_numpy().ravel(),
-        metric_type="both",
+        y,
+        metric_type='both'
     )
     return df
 
 
 def running_with_pipeline():
-    model = LogisticRegression()
-    inprocessing_model = GridSearchReduction(
-        constraints="ErrorRateParity", grid_size=20
-    ).transform_estimator(model)
+    from holisticai.bias.mitigation import AdversarialDebiasing
+
+    X, y, group_a, group_b = train_data
+
+    inprocessing_model = AdversarialDebiasing(
+        features_dim=X.shape[1],
+        epochs=2,
+        batch_size=16,
+        hidden_size=64,
+        adversary_loss_weight=0.1,
+        verbose=1,
+        use_debias=True,
+        seed=seed,
+    ).transform_estimator()
 
     pipeline = Pipeline(
         steps=[
@@ -58,8 +79,10 @@ def running_with_pipeline():
         ]
     )
 
-    X, y, group_a, group_b = train_data
-    fit_params = {"bm__group_a": group_a, "bm__group_b": group_b}
+    fit_params = {
+        "bm__group_a": group_a,
+        "bm__group_b": group_b
+    }
 
     pipeline.fit(X, y, **fit_params)
 
@@ -70,19 +93,17 @@ def running_with_pipeline():
     }
     y_pred = pipeline.predict(X, **predict_params)
     df = classification_bias_metrics(
-        group_b.to_numpy().ravel(),
-        group_a.to_numpy().ravel(),
+        group_a,
+        group_b,
         y_pred,
-        y.to_numpy().ravel(),
-        metric_type="both",
+        y,
+        metric_type='both'
     )
     return df
 
 
+@pytest.mark.skip(reason="pytorch not installed")
 def test_reproducibility_with_and_without_pipeline():
     df1 = running_without_pipeline()
     df2 = running_with_pipeline()
     check_results(df1, df2)
-
-
-test_reproducibility_with_and_without_pipeline()

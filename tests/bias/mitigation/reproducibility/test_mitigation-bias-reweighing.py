@@ -15,7 +15,7 @@ from holisticai.bias.metrics import classification_bias_metrics
 from holisticai.bias.mitigation import Reweighing
 from holisticai.pipeline import Pipeline
 from holisticai.utils import extract_columns
-from tests.testing_utils._tests_data_utils import check_results, load_preprocessed_adult
+from tests.testing_utils._tests_utils import check_results, load_preprocessed_adult
 
 warnings.filterwarnings("ignore")
 
