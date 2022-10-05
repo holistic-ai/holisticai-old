@@ -58,7 +58,7 @@ class BMTransformerBase(ABC, TransformerBase):
         value = np.array(kargs[value_name])
         return value.ravel() if ravel else value
 
-    def _load_data_pipeline(self, kargs):
+    def _load_data_pipeline(self):
 
         if not hasattr(self, "params_hdl"):
             return {}
@@ -81,24 +81,6 @@ class BMTransformerBase(ABC, TransformerBase):
             if es_param_name in self.params_hdl.estimator:
                 params[param_name] = self.params_hdl.estimator[es_param_name]
 
-        from ..transformers.bias import BMPostprocessing
-
-        if (
-            isinstance(self, BMPostprocessing)
-            and hasattr(self.params_hdl, "estimator_model")
-            and "X" in kargs
-        ):
-            estimator = self.params_hdl.estimator_model
-
-            # PREDICTIONS
-            X = kargs.get("X")
-            y_pred = estimator.predict(X)
-            params["y_pred"] = y_pred
-
-            ## SCORES
-            if hasattr(estimator, "predict_proba"):
-                y_proba = estimator.predict_proba(X)
-                params["y_proba"] = y_proba
         return params
 
     def reformat_function(self, func):
@@ -108,7 +90,7 @@ class BMTransformerBase(ABC, TransformerBase):
             fun_varnames = func.__code__.co_varnames[1:]
             params = dict(zip(fun_varnames, args))
             kargs.update(params)
-            kargs.update(self._load_data_pipeline(kargs))
+            kargs.update(self._load_data_pipeline())
             params = {v: kargs[v] for v in fun_varnames if v in kargs}
             return func(**params)
 
