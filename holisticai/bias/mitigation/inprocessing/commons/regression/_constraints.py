@@ -2,10 +2,10 @@ import numpy as np
 import pandas as pd
 
 from .._conventions import _ALL, _EVENT, _GROUP_ID, _LABEL, _LOSS, _PREDICTION, _SIGNED
-from .._moments_utils import BaseMoment
+from .._moments_utils import BaseMoment, format_data
 
 
-class RregressionConstraint(BaseMoment):
+class RegressionConstraint(BaseMoment):
     """Constrain the mean loss or the worst-case loss by a group"""
 
     PROBLEM_TYPE = "regression"
@@ -35,6 +35,8 @@ class RregressionConstraint(BaseMoment):
         return MeanLoss(self.reduction_loss)
 
     def load_data(self, X, y, sensitive_features):
+        params = format_data(y=y)
+        y = params["y"]
 
         if self.no_groups:
             sensitive_features == np.zeros_like(y)
@@ -100,7 +102,7 @@ class RregressionConstraint(BaseMoment):
         return self.tags.apply(lambda row: adjust[row[_GROUP_ID]], axis=1)
 
 
-class MeanLoss(RregressionConstraint):
+class MeanLoss(RegressionConstraint):
     """
     Moment for evaluating the mean loss.
     """
@@ -109,7 +111,7 @@ class MeanLoss(RregressionConstraint):
         super().__init__(loss, upper_bound=None, no_groups=True)
 
 
-class BoundedGroupLoss(RregressionConstraint):
+class BoundedGroupLoss(RegressionConstraint):
     """
     Moment for constraining the worst-case loss by a group.
     """

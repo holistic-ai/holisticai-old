@@ -1,3 +1,4 @@
+import numpy as np
 import pandas as pd
 
 from ._conventions import _EVENT, _GROUP_ID, _LABEL, _SIGNED
@@ -7,6 +8,11 @@ def merge_columns(feature_columns):
     return pd.DataFrame(feature_columns).apply(
         lambda row: ",".join([str(r) for r in row.values]), axis=1
     )
+
+
+def format_data(y=None):
+    new_y = pd.Series(np.array(y).reshape(-1))
+    return {"y": new_y}
 
 
 class BaseMoment:

@@ -64,6 +64,7 @@ class GridSearchReduction(BaseEstimator, BMImp):
                 - "TruePositiveRateParity",
                 - "FalsePositiveRateParity",
                 - "ErrorRateParity"
+                - "BoundedGroupLoss"
 
         constraint_weight : float
             Specifies the relative weight put on the constraint violation when selecting the

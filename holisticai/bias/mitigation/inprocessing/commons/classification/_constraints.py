@@ -13,13 +13,8 @@ from .._conventions import (
     _SIGNED,
     _UPPER_BOUND_DIFF,
 )
-from .._moments_utils import BaseMoment
+from .._moments_utils import BaseMoment, format_data
 from ._objectives import ErrorRate
-
-
-def format_data(y=None):
-    new_y = pd.Series(np.array(y).reshape(-1))
-    return {"y": new_y}
 
 
 class ClassificationConstraint(BaseMoment):
