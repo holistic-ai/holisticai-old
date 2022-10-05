@@ -3,6 +3,7 @@ from typing import Optional
 
 import numpy as np
 import pandas as pd
+from sklearn.utils import check_random_state
 
 from ..commons._conventions import *
 from ._lagrangian import Lagrangian
@@ -27,6 +28,7 @@ class ExponentiatedGradientAlgorithm:
         nu: Optional[float] = None,
         eta0: Optional[float] = 2.0,
         verbose: Optional[int] = 0,
+        seed: Optional[int] = None,
     ):
         """
         Initialize Exponentiated Gradient Reduction Algorithm
@@ -71,6 +73,7 @@ class ExponentiatedGradientAlgorithm:
         self.max_iter = max_iter
         self.nu = nu
         self.eta0 = eta0
+        self.seed = seed
         self.monitor = Monitor(verbose=verbose)
         self.eg_helper = Helper()
 
@@ -169,10 +172,21 @@ class ExponentiatedGradientAlgorithm:
             The prediction. If `X` represents the data for a single example
             the result will be a scalar. Otherwise the result will be a vector
         """
-        positive_probs = self._pmf_predict(X)[:, 1]
-        return (positive_probs >= np.random.rand(len(positive_probs))) * 1
+        random_state = check_random_state(self.seed)
 
-    def _pmf_predict(self, X):
+        if self.constraints.PROBLEM_TYPE == "classification":
+            positive_probs = self.predict_proba(X)[:, 1]
+            return (positive_probs >= random_state.rand(len(positive_probs))) * 1
+        else:
+            pred = self._forward(X)
+            randomized_pred = np.zeros(pred.shape[0])
+            for i in range(pred.shape[0]):
+                randomized_pred[i] = random_state.choice(
+                    pred.iloc[i, :], p=self.weights_
+                )
+            return randomized_pred
+
+    def predict_proba(self, X):
         """
         Probability mass function for the given input data.
 
@@ -191,15 +205,18 @@ class ExponentiatedGradientAlgorithm:
         pandas.DataFrame
             Array of tuples with the probabilities of predicting 0 and 1.
         """
+        pred = self._forward(X)
+        positive_probs = pred[self.weights_.index].dot(self.weights_).to_frame()
+        return np.concatenate((1 - positive_probs, positive_probs), axis=1)
+
+    def _forward(self, X):
         pred = pd.DataFrame()
         for t in range(len(self._hs)):
             if self.weights_[t] == 0:
                 pred[t] = np.zeros(len(X))
             else:
                 pred[t] = self._hs[t](X)
-
-        positive_probs = pred[self.weights_.index].dot(self.weights_).to_frame()
-        return np.concatenate((1 - positive_probs, positive_probs), axis=1)
+        return pred
 
 
 class Helper:
@@ -272,11 +289,6 @@ class Monitor:
                 report["weights_"].at[h_idx] = 0.0
 
         report["predictors_"] = lagrangian.predictors
-        report["n_oracle_calls_"] = lagrangian.n_oracle_calls
-        report[
-            "n_oracle_calls_dummy_returned_"
-        ] = lagrangian.n_oracle_calls_dummy_returned
-        report["oracle_execution_times_"] = lagrangian.oracle_execution_times
         report["lambda_vecs_"] = lagrangian.lambdas
 
         return report

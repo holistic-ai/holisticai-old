@@ -56,9 +56,6 @@ class Lagrangian:
         self.errors = pd.Series(dtype="float64")
         self.gammas = pd.DataFrame()
         self.lambdas = pd.DataFrame()
-        self.n_oracle_calls = 0
-        self.oracle_execution_times = []
-        self.n_oracle_calls_dummy_returned = 0
         self.last_linprog_n_hs = 0
         self.last_linprog_result = None
 
@@ -156,17 +153,16 @@ class Lagrangian:
         signed_weights = self.obj.signed_weights() + self.constraints.signed_weights(
             lambda_vec
         )
-        redY = 1 * (signed_weights > 0)
+        if self.constraints.PROBLEM_TYPE == "classification":
+            y = 1 * (signed_weights > 0)
+        else:
+            y = self.constraints._y_as_series
+
         w = signed_weights.abs()
         sample_weight = self.constraints.total_samples * w / w.sum()
 
         estimator = clone(estimator=self.estimator, safe=False)
-
-        oracle_call_start_time = time()
-        estimator.fit(self.constraints.X, redY, **{"sample_weight": sample_weight})
-        self.oracle_execution_times.append(time() - oracle_call_start_time)
-        self.n_oracle_calls += 1
-
+        estimator.fit(self.constraints.X, y, **{"sample_weight": sample_weight})
         return estimator
 
     def best_h(self, lambda_vec):
