@@ -240,3 +240,54 @@ class Dclass:
         train_data = dataset[::2]
         test_data = dataset[1::2]
         return train_data, test_data
+
+
+def load_us_crime(return_X_y=False, as_frame=True):
+    from sklearn.datasets import fetch_openml
+    from sklearn.preprocessing import StandardScaler
+
+    dataset = fetch_openml(
+        name="us_crime",
+        return_X_y=return_X_y,
+        as_frame=as_frame,
+    )
+
+    df = pd.concat([dataset["data"], dataset["target"]], axis=1)
+    df_clean = df.iloc[
+        :, [i for i, n in enumerate(df.isna().sum(axis=0).T.values) if n < 1000]
+    ]
+    df_clean = df_clean.dropna()
+
+    group_a = df_clean["racePctWhite"].apply(lambda x: x > 0.5)
+    group_b = 1 - group_a
+    xor_groups = group_a ^ group_b
+
+    # Remove sensitive groups from dataset
+    cols = [
+        c
+        for c in df_clean.columns
+        if (not c.startswith("race")) and (not c.startswith("age"))
+    ]
+    df_clean = df_clean[cols].iloc[:, 3:]
+    df_clean = df_clean[xor_groups]
+    group_a = group_a[xor_groups]
+    group_b = group_b[xor_groups]
+
+    scalar = StandardScaler()
+    df_t = scalar.fit_transform(df_clean)
+    X = df_t[:, :-1]
+    y = df_t[:, -1]
+
+    (
+        X_train,
+        X_test,
+        y_train,
+        y_test,
+        group_a_tr,
+        group_a_ts,
+        group_b_tr,
+        group_b_ts,
+    ) = train_test_split(X, y, group_a, group_b, test_size=0.2)
+    train_data = X_train, y_train, group_a_tr, group_b_tr
+    test_data = X_test, y_test, group_a_ts, group_b_ts
+    return train_data, test_data
