@@ -18,10 +18,11 @@ from .postprocessing import (
 )
 
 # preprocessing algorithm classes
-from .preprocessing import LearningFairRepresentation, Reweighing
+from .preprocessing import CorrelationRemover, LearningFairRepresentation, Reweighing
 
 # all
 __all__ = [
+    "CorrelationRemover",
     "Reweighing",
     "LearningFairRepresentation",
     "ExponentiatedGradientReduction",
