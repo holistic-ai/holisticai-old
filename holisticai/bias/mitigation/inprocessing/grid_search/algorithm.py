@@ -24,7 +24,7 @@ class GridSearchAlgorithm:
         self,
         estimator,
         generator: GridGenerator,
-        constraints,
+        constraint,
         constraint_weight: Optional[float] = 0.5,
         verbose: Optional[int] = 0,
     ):
@@ -44,8 +44,8 @@ class GridSearchAlgorithm:
         generator : float
             grid generator utility
 
-        constraints : ClassificationContraint
-            The disparity constraints
+        constraint : ClassificationContraint
+            The disparity constraint
 
         constraint_weight : float
             Specifies the relative weight put on the constraint violation when selecting the
@@ -55,9 +55,9 @@ class GridSearchAlgorithm:
             If >0, will show progress percentage.
         """
 
-        self.constraints = constraints
+        self.constraint = constraint
         self.estimator = estimator
-        self.objective = constraints.default_objective()
+        self.objective = constraint.default_objective()
         self.generator = generator
         self.monitor = Monitor(constraint_weight=constraint_weight, verbose=verbose)
 
@@ -81,18 +81,21 @@ class GridSearchAlgorithm:
         -------
         the same object
         """
-        self.constraints.load_data(X, y, sensitive_features)
+        self.constraint.load_data(X, y, sensitive_features)
         self.objective.load_data(X, y, sensitive_features)
-        grid = self.generator.generate_grid(self.constraints)
+        grid = self.generator.generate_grid(self.constraint)
         self.monitor.total_steps = grid.shape[1]
         for (_, lambda_vec) in grid.iteritems():
 
             weights = (
-                self.constraints.signed_weights(lambda_vec)
+                self.constraint.signed_weights(lambda_vec)
                 + self.objective.signed_weights()
             )
 
-            y_reduction = 1 * (weights > 0)
+            if self.constraint.PROBLEM_TYPE == "classification":
+                y_reduction = 1 * (weights > 0)
+            else:
+                y_reduction = self.constraint._y_as_series
 
             weights = weights.abs()
 
@@ -102,7 +105,7 @@ class GridSearchAlgorithm:
 
             predict_fn = lambda X: current_estimator.predict(X)
             objective_ = self.objective.gamma(predict_fn)[0]
-            gamma_ = self.constraints.gamma(predict_fn)
+            gamma_ = self.constraint.gamma(predict_fn)
 
             self.monitor.save(lambda_vec, current_estimator, objective_, gamma_)
             self.monitor.log_progress()

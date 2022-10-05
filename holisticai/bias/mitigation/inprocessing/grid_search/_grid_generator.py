@@ -37,12 +37,12 @@ class GridGenerator:
         self.neg_values = neg_values
 
     def generate_grid(self, constraint):
-        # Get pos and neg basis from constraint
-        basis = self._get_basis(constraint)
         # Generate lambda vectors for each event
         coefs = self._generate_coefs(nb_events=len(constraint.event_ids))
         # Convert the grid of basis coefficients into a grid of lambda vectors
-        grid = basis["+"].dot(coefs["+"]) + basis["-"].dot(coefs["-"])
+        grid = constraint.basis["+"].dot(coefs["+"]) + constraint.basis["-"].dot(
+            coefs["-"]
+        )
         return grid
 
     def _build_grid(self, nb_events):
@@ -68,18 +68,3 @@ class GridGenerator:
         neg_grid_values[grid_values < 0] = 0
         lambda_vector = {"+": pos_grid_values, "-": neg_grid_values}
         return lambda_vector
-
-    def _get_basis(self, constraint):
-        pos_basis = pd.DataFrame()
-        neg_basis = pd.DataFrame()
-
-        zero_vec = pd.Series(0.0, constraint.index)
-        i = 0
-        for event_val in constraint.event_ids:
-            for group in constraint.group_values[:-1]:
-                pos_basis[i] = zero_vec
-                neg_basis[i] = zero_vec
-                pos_basis[i]["+", event_val, group] = 1
-                neg_basis[i]["-", event_val, group] = 1
-                i += 1
-        return {"+": pos_basis, "-": neg_basis}

@@ -2,16 +2,18 @@ from typing import Optional
 
 import numpy as np
 import pandas as pd
-from sklearn.base import BaseEstimator, ClassifierMixin, clone
+from sklearn.base import BaseEstimator, ClassifierMixin, RegressorMixin, clone
 
 from holisticai.utils.transformers.bias import BMInprocessing as BMImp
 
-from ..commons import _constraints as con
+from ..commons.classification import _constraints as cc
+from ..commons.regression import _constraints as rc
+from ..commons.regression import _losses as rl
 from ._grid_generator import GridGenerator
 from .algorithm import GridSearchAlgorithm
 
 
-class GridSearchReduction(BaseEstimator, ClassifierMixin, BMImp):
+class GridSearchReduction(BaseEstimator, BMImp):
     """
     Grid search technique can be used for fair classification or fair regression.
     - For classification it reduces fair classification to a sequence of cost-sensitive classification problems,
@@ -35,12 +37,16 @@ class GridSearchReduction(BaseEstimator, ClassifierMixin, BMImp):
         "TruePositiveRateParity",
         "FalsePositiveRateParity",
         "ErrorRateParity",
+        "BoundedGroupLoss",
     ]
 
     def __init__(
         self,
         constraints: str = "EqualizedOdds",
         constraint_weight: Optional[float] = 0.5,
+        loss: str = "ZeroOne",
+        min_val: float = None,
+        max_val: float = None,
         grid_size: Optional[int] = 10,
         grid_limit: Optional[float] = 2.0,
         verbose: Optional[int] = 0.0,
@@ -63,6 +69,15 @@ class GridSearchReduction(BaseEstimator, ClassifierMixin, BMImp):
             Specifies the relative weight put on the constraint violation when selecting the
             best model. The weight placed on the error rate will be :code:`1-constraint_weight`
 
+        loss : str
+            String identifying loss function for constraints. Options include "ZeroOne", "Square", and "Absolute."
+
+        min_val : float
+            Loss function parameter for "Square" and "Absolute," typically the minimum of the range of y values.
+
+        max_val: float
+            Loss function parameter for "Square" and "Absolute," typically the maximum of the range of y values.
+
         grid_size : int
             The number of Lagrange multipliers to generate in the grid
 
@@ -77,6 +92,9 @@ class GridSearchReduction(BaseEstimator, ClassifierMixin, BMImp):
         """
         self.constraints = constraints
         self.constraint_weight = constraint_weight
+        self.loss = loss
+        self.min_val = min_val
+        self.max_val = max_val
         self.grid_size = grid_size
         self.grid_limit = grid_limit
         self.verbose = verbose
@@ -118,31 +136,28 @@ class GridSearchReduction(BaseEstimator, ClassifierMixin, BMImp):
         X = params["X"]
         y_true = params["y_true"]
 
-        # Support onlyt binary classification with labels 1 and 0
-        assert set(np.unique(y_true)) == {
-            0,
-            1,
-        }, "Grid Search only supports binary classification with labels 0 and 1"
-
         sensitive_features = np.stack([group_a, group_b], axis=1)
 
         self.estimator_ = clone(self.estimator)
 
-        moments = {
-            "DemographicParity": con.DemographicParity,
-            "EqualizedOdds": con.EqualizedOdds,
-            "TruePositiveRateParity": con.TruePositiveRateParity,
-            "FalsePositiveRateParity": con.FalsePositiveRateParity,
-            "ErrorRateParity": con.ErrorRateParity,
+        constraints_catalog = {
+            "DemographicParity": cc.DemographicParity,
+            "EqualizedOdds": cc.EqualizedOdds,
+            "TruePositiveRateParity": cc.TruePositiveRateParity,
+            "FalsePositiveRateParity": cc.FalsePositiveRateParity,
+            "ErrorRateParity": cc.ErrorRateParity,
+            "BoundedGroupLoss": rc.BoundedGroupLoss,
         }
-        self.moment_ = moments[self.constraints]()
+
+        constraint_kargs = self._constraint_parameters()
+        self.constraint_ = constraints_catalog[self.constraints](**constraint_kargs)
 
         self.generator_ = GridGenerator(
             grid_size=self.grid_size, grid_limit=self.grid_limit
         )
 
         self.model_ = GridSearchAlgorithm(
-            constraints=self.moment_,
+            constraint=self.constraint_,
             estimator=self.estimator_,
             generator=self.generator_,
             constraint_weight=self.constraint_weight,
@@ -152,6 +167,21 @@ class GridSearchReduction(BaseEstimator, ClassifierMixin, BMImp):
         self.model_.fit(X, y_true, sensitive_features=sensitive_features)
 
         return self
+
+    def _constraint_parameters(self):
+        kargs = {}
+        if self.constraints == "BoundedGroupLoss":
+            losses = {
+                "ZeroOne": rl.ZeroOneLoss,
+                "Square": rl.SquareLoss,
+                "Absolute": rl.AbsoluteLoss,
+            }
+            if self.loss == "ZeroOne":
+                self.loss_ = losses[self.loss]()
+            else:
+                self.loss_ = losses[self.loss](self.min_val, self.max_val)
+            kargs.update({"loss": self.loss_})
+        return kargs
 
     def predict(self, X):
         """
