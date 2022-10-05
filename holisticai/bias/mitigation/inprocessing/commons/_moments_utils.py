@@ -3,22 +3,6 @@ import pandas as pd
 from ._conventions import _EVENT, _GROUP_ID, _LABEL, _SIGNED
 
 
-def get_index_format(event_ids, group_values):
-    index = (
-        pd.DataFrame(
-            [
-                {_SIGNED: signed, _EVENT: e, _GROUP_ID: g}
-                for e in event_ids
-                for g in group_values
-                for signed in ["+", "-"]
-            ]
-        )
-        .set_index([_SIGNED, _EVENT, _GROUP_ID])
-        .index
-    )
-    return index
-
-
 def merge_columns(feature_columns):
     return pd.DataFrame(feature_columns).apply(
         lambda row: ",".join([str(r) for r in row.values]), axis=1

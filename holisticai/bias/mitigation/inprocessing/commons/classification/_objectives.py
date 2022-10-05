@@ -1,8 +1,8 @@
 import numpy as np
 import pandas as pd
 
-from ._conventions import _ALL, _LABEL
-from ._moments_utils import BaseMoment
+from .._conventions import _ALL, _LABEL
+from .._moments_utils import BaseMoment
 
 
 class ErrorRate(BaseMoment):

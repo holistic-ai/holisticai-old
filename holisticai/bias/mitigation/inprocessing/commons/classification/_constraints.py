@@ -3,7 +3,7 @@ from typing import Optional
 import numpy as np
 import pandas as pd
 
-from ._conventions import (
+from .._conventions import (
     _ALL,
     _EVENT,
     _GROUP_ID,
@@ -11,8 +11,9 @@ from ._conventions import (
     _LOWER_BOUND_DIFF,
     _PRED,
     _UPPER_BOUND_DIFF,
+    _SIGNED
 )
-from ._moments_utils import BaseMoment, get_index_format
+from .._moments_utils import BaseMoment
 from ._objectives import ErrorRate
 
 
@@ -23,7 +24,9 @@ def format_data(y=None):
 
 class ClassificationConstraint(BaseMoment):
     """Extend Base Moment for problem that can be expressed as weighted classification error."""
-
+    
+    PROBLEM_TYPE='classification'
+    
     def __init__(self, ratio_bound: Optional[float] = 1.0):
         """
         Initialize with the ratio value.
@@ -90,7 +93,8 @@ class ClassificationConstraint(BaseMoment):
             / len(self.tags)
         ).iloc[:, 0]
 
-        self.index = get_index_format(self.event_ids, self.group_values)
+        self.index = self._get_index_format()
+        self.basis = self._get_basis()
 
     def signed_weights(self, lambda_vec):
         """
@@ -164,6 +168,35 @@ class ClassificationConstraint(BaseMoment):
         )
         return gamma_signed
 
+    def _get_basis(self):
+        pos_basis = pd.DataFrame()
+        neg_basis = pd.DataFrame()
+
+        zero_vec = pd.Series(0.0, self.index)
+        i = 0
+        for event_val in self.event_ids:
+            for group in self.group_values[:-1]:
+                pos_basis[i] = zero_vec
+                neg_basis[i] = zero_vec
+                pos_basis[i]["+", event_val, group] = 1
+                neg_basis[i]["-", event_val, group] = 1
+                i += 1
+        return {"+": pos_basis, "-": neg_basis}
+    
+    def _get_index_format(self):
+        index = (
+            pd.DataFrame(
+                [
+                    {_SIGNED: signed, _EVENT: e, _GROUP_ID: g}
+                    for e in self.event_ids
+                    for g in self.group_values
+                    for signed in ["+", "-"]
+                ]
+            )
+            .set_index([_SIGNED, _EVENT, _GROUP_ID])
+            .index
+        )
+        return index
 
 class DemographicParity(ClassificationConstraint):
     """
@@ -276,3 +309,5 @@ class ErrorRateParity(ClassificationConstraint):
         utilities = np.vstack([y, 1 - y]).T
         base_event = pd.Series(data=_ALL, index=y.index)
         super().load_data(X, y, sensitive_features, base_event, utilities=utilities)
+
+

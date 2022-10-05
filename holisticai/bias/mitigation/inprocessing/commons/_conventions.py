@@ -8,7 +8,8 @@ _GROUP_NUM = "group_num"
 _ALL = "all"
 _PRED = "pred"
 _SIGNED = "signed"
-
+_LOSS = "loss"
+_PREDICTION = "prediction"
 
 # Constant values defined for exponentiated gradient reductions
 SHRINK_ETA = 0.8
