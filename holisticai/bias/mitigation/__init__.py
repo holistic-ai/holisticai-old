@@ -31,7 +31,6 @@ __all__ = [
     "RejectOptionClassification",
     "PrejudiceRemover",
     "MetaFairClassifier",
-    "AdversarialDebiasing",
 ]
 
 import importlib
