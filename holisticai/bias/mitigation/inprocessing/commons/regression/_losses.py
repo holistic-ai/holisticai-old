@@ -1,5 +1,6 @@
 import numpy as np
 
+
 class SquareLoss:
     """Class to evaluate the square loss.
     Read more in the :ref:`User Guide <constraints_regression>`.
@@ -33,7 +34,7 @@ class AbsoluteLoss:
         """Evaluate the absolute loss for the given set of true and predicted values."""
         y_true = np.clip(y_true, self.min_val, self.max_val)
         y_pred = np.clip(y_pred, self.min_val, self.max_val)
-        return np.abs(y_true -  y_pred)
+        return np.abs(y_true - y_pred)
 
 
 class ZeroOneLoss(AbsoluteLoss):

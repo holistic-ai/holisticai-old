@@ -1,14 +1,15 @@
 import numpy as np
 import pandas as pd
 
-from .._conventions import _ALL, _GROUP_ID, _LABEL, _LOSS, _PREDICTION,_SIGNED,_EVENT
+from .._conventions import _ALL, _EVENT, _GROUP_ID, _LABEL, _LOSS, _PREDICTION, _SIGNED
 from .._moments_utils import BaseMoment
 
-   
+
 class RregressionConstraint(BaseMoment):
     """Constrain the mean loss or the worst-case loss by a group"""
-    
-    PROBLEM_TYPE='regression'
+
+    PROBLEM_TYPE = "regression"
+
     def __init__(self, loss, upper_bound=None, no_groups=False):
         """
         Parameters
@@ -33,14 +34,10 @@ class RregressionConstraint(BaseMoment):
         """Return a default objective."""
         return MeanLoss(self.reduction_loss)
 
-    def load_data(
-        self, 
-        X, 
-        y, 
-        sensitive_features):
+    def load_data(self, X, y, sensitive_features):
 
         if self.no_groups:
-            sensitive_features==np.zeros_like(y)
+            sensitive_features == np.zeros_like(y)
 
         # The following uses X and not X_train so that the estimators get X untouched
         super().load_data(X, y, sensitive_features=sensitive_features)
@@ -48,15 +45,15 @@ class RregressionConstraint(BaseMoment):
         self.tags[_EVENT] = event
         self.event_ids = np.sort(self.tags[_EVENT].dropna().unique())
         self.event_prob = self.tags[_EVENT].dropna().value_counts() / len(self.tags)
-        
+
         self.group_prob = self.tags[_GROUP_ID].dropna().value_counts() / len(self.tags)
         self.group_values = np.sort(self.tags[_GROUP_ID].unique())
-        
+
         self.index = self.group_prob.index
         self.default_objective_lambda_vec = self.group_prob
 
         self.basis = self._get_basis()
-            
+
     def _get_basis(self):
         pos_basis = pd.DataFrame()
         neg_basis = pd.DataFrame()
@@ -69,7 +66,7 @@ class RregressionConstraint(BaseMoment):
             pos_basis[i][group] = 1
             i += 1
         return {"+": pos_basis, "-": neg_basis}
-    
+
     def gamma(self, predictor):
         """Calculate the degree to which constraints are currently violated by the predictor."""
         self.tags[_PREDICTION] = predictor(self.X)
@@ -102,7 +99,7 @@ class RregressionConstraint(BaseMoment):
             adjust = lambda_vec / self.group_prob
         return self.tags.apply(lambda row: adjust[row[_GROUP_ID]], axis=1)
 
-   
+
 class MeanLoss(RregressionConstraint):
     """
     Moment for evaluating the mean loss.

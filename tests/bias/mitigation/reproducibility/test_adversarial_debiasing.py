@@ -1,16 +1,14 @@
 import os
 import sys
+
 sys.path.append(os.getcwd())
 
-from sklearn.preprocessing import StandardScaler
-from holisticai.bias.metrics import classification_bias_metrics
-from tests.testing_utils._tests_utils import (
-    check_results,
-    load_preprocessed_adult_v2,
-)
-from holisticai.pipeline import Pipeline
 import pytest
+from sklearn.preprocessing import StandardScaler
 
+from holisticai.bias.metrics import classification_bias_metrics
+from holisticai.pipeline import Pipeline
+from tests.testing_utils._tests_utils import check_results, load_preprocessed_adult_v2
 
 seed = 42
 train_data, test_data = load_preprocessed_adult_v2()
@@ -32,13 +30,10 @@ def running_without_pipeline():
         adversary_loss_weight=0.1,
         verbose=1,
         use_debias=True,
-        seed=seed
+        seed=seed,
     ).transform_estimator()
-    
-    fit_params = {
-        "group_a": group_a,
-        "group_b": group_b
-    }
+
+    fit_params = {"group_a": group_a, "group_b": group_b}
     inprocessing_model.fit(Xt, y, **fit_params)
 
     X, y, group_a, group_b = test_data
@@ -46,13 +41,7 @@ def running_without_pipeline():
 
     y_pred = inprocessing_model.predict(Xt)
 
-    df = classification_bias_metrics(
-        group_a,
-        group_b,
-        y_pred,
-        y,
-        metric_type='both'
-    )
+    df = classification_bias_metrics(group_a, group_b, y_pred, y, metric_type="both")
     return df
 
 
@@ -79,10 +68,7 @@ def running_with_pipeline():
         ]
     )
 
-    fit_params = {
-        "bm__group_a": group_a,
-        "bm__group_b": group_b
-    }
+    fit_params = {"bm__group_a": group_a, "bm__group_b": group_b}
 
     pipeline.fit(X, y, **fit_params)
 
@@ -92,13 +78,7 @@ def running_with_pipeline():
         "bm__group_b": group_b,
     }
     y_pred = pipeline.predict(X, **predict_params)
-    df = classification_bias_metrics(
-        group_a,
-        group_b,
-        y_pred,
-        y,
-        metric_type='both'
-    )
+    df = classification_bias_metrics(group_a, group_b, y_pred, y, metric_type="both")
     return df
 
 

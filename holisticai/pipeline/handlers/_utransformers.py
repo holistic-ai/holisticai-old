@@ -1,4 +1,5 @@
 from xml.dom import NotSupportedErr
+
 from holisticai.utils.transformers.bias import (
     BIAS_TAGS,
     BMInprocessing,
@@ -137,7 +138,7 @@ class UTransformersHandler:
         ----------
         y_pred : list
             predicted label vector
-        
+
         y_proba : list
             predicted probability vector
 
@@ -146,6 +147,6 @@ class UTransformersHandler:
         dict
             Dictionaty with post-processed prediction vectors
         """
-        step = self.pos_processing_steps[0]                
+        step = self.pos_processing_steps[0]
         yt = step[1].transform(**kargs)
         return yt

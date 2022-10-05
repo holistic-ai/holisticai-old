@@ -10,8 +10,8 @@ from .._conventions import (
     _LABEL,
     _LOWER_BOUND_DIFF,
     _PRED,
+    _SIGNED,
     _UPPER_BOUND_DIFF,
-    _SIGNED
 )
 from .._moments_utils import BaseMoment
 from ._objectives import ErrorRate
@@ -24,9 +24,9 @@ def format_data(y=None):
 
 class ClassificationConstraint(BaseMoment):
     """Extend Base Moment for problem that can be expressed as weighted classification error."""
-    
-    PROBLEM_TYPE='classification'
-    
+
+    PROBLEM_TYPE = "classification"
+
     def __init__(self, ratio_bound: Optional[float] = 1.0):
         """
         Initialize with the ratio value.
@@ -182,7 +182,7 @@ class ClassificationConstraint(BaseMoment):
                 neg_basis[i]["-", event_val, group] = 1
                 i += 1
         return {"+": pos_basis, "-": neg_basis}
-    
+
     def _get_index_format(self):
         index = (
             pd.DataFrame(
@@ -197,6 +197,7 @@ class ClassificationConstraint(BaseMoment):
             .index
         )
         return index
+
 
 class DemographicParity(ClassificationConstraint):
     """
@@ -309,5 +310,3 @@ class ErrorRateParity(ClassificationConstraint):
         utilities = np.vstack([y, 1 - y]).T
         base_event = pd.Series(data=_ALL, index=y.index)
         super().load_data(X, y, sensitive_features, base_event, utilities=utilities)
-
-
