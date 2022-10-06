@@ -17,9 +17,9 @@ class AdversarialDebiasing(BMImp):
     Adversarial debiasing learns a classifier to maximize prediction accuracy and simultaneously reduce an
     adversary's ability to determine the protected attribute from the predictions. This approach leads to a fair classifier as the
     predictions cannot carry any group discrimination information that the adversary can exploit.
-    
+
     Obs: Pytorch must be installed in order to use this techinique (pytorch = ">=1.12.1").
-    
+
     References:
         B. H. Zhang, B. Lemoine, and M. Mitchell, "Mitigating Unwanted
         Biases with Adversarial Learning," AAAI/ACM Conference on Artificial
