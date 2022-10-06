@@ -7,7 +7,7 @@ from sklearn.preprocessing import StandardScaler
 
 from holisticai.bias.mitigation import CorrelationRemover
 from holisticai.pipeline import Pipeline
-from tests.testing_utils._tests_data_utils import load_us_crime
+from tests.testing_utils._tests_data_utils import load_preprocessed_us_crime
 from tests.testing_utils._tests_utils import check_results, load_preprocessed_adult_v2
 
 seed = 42
@@ -18,7 +18,7 @@ def running_without_pipeline():
 
     from holisticai.bias.metrics import regression_bias_metrics
 
-    train_data, test_data = load_us_crime()
+    train_data, test_data = load_preprocessed_us_crime()
     X, y, group_a, group_b = train_data
 
     scaler = StandardScaler()
@@ -57,7 +57,7 @@ def running_with_pipeline():
 
     from holisticai.bias.metrics import regression_bias_metrics
 
-    train_data, test_data = load_us_crime()
+    train_data, test_data = load_preprocessed_us_crime()
     model = LinearRegression()
 
     pipeline = Pipeline(

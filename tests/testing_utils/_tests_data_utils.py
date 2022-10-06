@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 from sklearn.model_selection import train_test_split
 
-from holisticai.datasets import load_adult
+from holisticai.datasets import load_adult, load_us_crime
 
 
 def load_preprocessed_adult():
@@ -242,15 +242,10 @@ class Dclass:
         return train_data, test_data
 
 
-def load_us_crime(return_X_y=False, as_frame=True):
-    from sklearn.datasets import fetch_openml
+def load_preprocessed_us_crime(return_X_y=False, as_frame=True):
     from sklearn.preprocessing import StandardScaler
 
-    dataset = fetch_openml(
-        name="us_crime",
-        return_X_y=return_X_y,
-        as_frame=as_frame,
-    )
+    dataset = load_us_crime()
 
     df = pd.concat([dataset["data"], dataset["target"]], axis=1)
     df_clean = df.iloc[
