@@ -23,9 +23,10 @@ class GridSearchAlgorithm:
     def __init__(
         self,
         estimator,
-        generator: GridGenerator,
-        constraints,
+        constraint,
         constraint_weight: Optional[float] = 0.5,
+        grid_size: Optional[int] = 20,
+        grid_limit: Optional[int] = 2,
         verbose: Optional[int] = 0,
     ):
         """
@@ -44,21 +45,28 @@ class GridSearchAlgorithm:
         generator : float
             grid generator utility
 
-        constraints : ClassificationContraint
-            The disparity constraints
+        constraint : ClassificationContraint
+            The disparity constraint
 
         constraint_weight : float
             Specifies the relative weight put on the constraint violation when selecting the
             best model. The weight placed on the error rate will be :code:`1-constraint_weight`
 
+        grid_size: int
+            number of columns to be generated in the grid.
+
+        grid_limit : float
+            range of the values in the grid generated.
+
         verbose : int
             If >0, will show progress percentage.
         """
 
-        self.constraints = constraints
+        self.constraint = constraint
         self.estimator = estimator
-        self.objective = constraints.default_objective()
-        self.generator = generator
+        self.objective = constraint.default_objective()
+        self.grid_limit = grid_limit
+        self.grid_size = grid_size
         self.monitor = Monitor(constraint_weight=constraint_weight, verbose=verbose)
 
     def fit(self, X, y, sensitive_features):
@@ -81,20 +89,32 @@ class GridSearchAlgorithm:
         -------
         the same object
         """
-        self.constraints.load_data(X, y, sensitive_features)
+        self.constraint.load_data(X, y, sensitive_features)
         self.objective.load_data(X, y, sensitive_features)
-        grid = self.generator.generate_grid(self.constraints)
+
+        neg_allowed = self.constraint.neg_basis_present
+        objective_in_the_span = self.constraint.default_objective_lambda_vec is not None
+
+        self.generator = GridGenerator(
+            grid_size=self.grid_size,
+            grid_limit=self.grid_limit,
+            neg_allowed=neg_allowed,
+            force_L1_norm=objective_in_the_span,
+        )
+
+        grid = self.generator.generate_grid(self.constraint)
         self.monitor.total_steps = grid.shape[1]
         for (_, lambda_vec) in grid.iteritems():
 
-            weights = (
-                self.constraints.signed_weights(lambda_vec)
-                + self.objective.signed_weights()
-            )
+            weights = self.constraint.signed_weights(lambda_vec)
+            if not objective_in_the_span:
+                weights += self.objective.signed_weights()
 
-            y_reduction = 1 * (weights > 0)
-
-            weights = weights.abs()
+            if self.constraint.PROBLEM_TYPE == "classification":
+                y_reduction = 1 * (weights > 0)
+                weights = weights.abs()
+            else:
+                y_reduction = self.constraint._y_as_series
 
             current_estimator = copy.deepcopy(self.estimator)
 
@@ -102,7 +122,7 @@ class GridSearchAlgorithm:
 
             predict_fn = lambda X: current_estimator.predict(X)
             objective_ = self.objective.gamma(predict_fn)[0]
-            gamma_ = self.constraints.gamma(predict_fn)
+            gamma_ = self.constraint.gamma(predict_fn)
 
             self.monitor.save(lambda_vec, current_estimator, objective_, gamma_)
             self.monitor.log_progress()
