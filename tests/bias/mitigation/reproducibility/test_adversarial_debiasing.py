@@ -3,11 +3,10 @@ import sys
 
 sys.path.append(os.getcwd())
 
-from sklearn.linear_model import LogisticRegression
+import pytest
 from sklearn.preprocessing import StandardScaler
 
 from holisticai.bias.metrics import classification_bias_metrics
-from holisticai.bias.mitigation import RejectOptionClassification
 from holisticai.pipeline import Pipeline
 from tests.testing_utils._tests_utils import check_results, load_preprocessed_adult_v2
 
@@ -16,48 +15,59 @@ train_data, test_data = load_preprocessed_adult_v2()
 
 
 def running_without_pipeline():
+    from holisticai.bias.mitigation import AdversarialDebiasing
+
     X, y, group_a, group_b = train_data
 
     scaler = StandardScaler()
     Xt = scaler.fit_transform(X)
 
-    model = LogisticRegression()
-    model.fit(Xt, y)
-
-    y_proba = model.predict_proba(Xt)
+    inprocessing_model = AdversarialDebiasing(
+        features_dim=X.shape[1],
+        epochs=1,
+        batch_size=32,
+        hidden_size=64,
+        adversary_loss_weight=0.1,
+        verbose=1,
+        use_debias=True,
+        seed=seed,
+    ).transform_estimator()
 
     fit_params = {"group_a": group_a, "group_b": group_b}
-    post = RejectOptionClassification()
-    post.fit(y, y_proba, **fit_params)
+    inprocessing_model.fit(Xt, y, **fit_params)
 
     X, y, group_a, group_b = test_data
     Xt = scaler.transform(X)
-    transform_params = {"group_a": group_a, "group_b": group_b}
 
-    y_pred = model.predict(Xt)
-    y_proba = model.predict_proba(Xt)
+    y_pred = inprocessing_model.predict(Xt)
 
-    y_pred = post.transform(y_pred, y_proba, **transform_params)["y_pred"]
-
-    df = classification_bias_metrics(
-        group_b.to_numpy().ravel(),
-        group_a.to_numpy().ravel(),
-        y_pred,
-        y.to_numpy().ravel(),
-    )
+    df = classification_bias_metrics(group_a, group_b, y_pred, y, metric_type="both")
     return df
 
 
 def running_with_pipeline():
+    from holisticai.bias.mitigation import AdversarialDebiasing
+
+    X, y, group_a, group_b = train_data
+
+    inprocessing_model = AdversarialDebiasing(
+        features_dim=X.shape[1],
+        epochs=2,
+        batch_size=16,
+        hidden_size=64,
+        adversary_loss_weight=0.1,
+        verbose=1,
+        use_debias=True,
+        seed=seed,
+    ).transform_estimator()
+
     pipeline = Pipeline(
         steps=[
             ("scaler", StandardScaler()),
-            ("estimator", LogisticRegression()),
-            ("bm_posprocessing", RejectOptionClassification()),
+            ("bm_inprocessing", inprocessing_model),
         ]
     )
 
-    X, y, group_a, group_b = train_data
     fit_params = {"bm__group_a": group_a, "bm__group_b": group_b}
 
     pipeline.fit(X, y, **fit_params)
@@ -68,20 +78,12 @@ def running_with_pipeline():
         "bm__group_b": group_b,
     }
     y_pred = pipeline.predict(X, **predict_params)
-    df = classification_bias_metrics(
-        group_b.to_numpy().ravel(),
-        group_a.to_numpy().ravel(),
-        y_pred,
-        y.to_numpy().ravel(),
-    )
+    df = classification_bias_metrics(group_a, group_b, y_pred, y, metric_type="both")
     return df
 
 
+@pytest.mark.skip(reason="pytorch not installed")
 def test_reproducibility_with_and_without_pipeline():
-    import numpy as np
-
-    np.random.seed(seed)
     df1 = running_without_pipeline()
-    np.random.seed(seed)
     df2 = running_with_pipeline()
     check_results(df1, df2)

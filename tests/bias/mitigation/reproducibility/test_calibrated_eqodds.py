@@ -10,10 +10,7 @@ from sklearn.preprocessing import StandardScaler
 from holisticai.bias.metrics import classification_bias_metrics
 from holisticai.bias.mitigation import CalibratedEqualizedOdds
 from holisticai.pipeline import Pipeline
-from tests.testing_utils._tests_data_utils import (
-    check_results,
-    load_preprocessed_adult_v2,
-)
+from tests.testing_utils._tests_utils import check_results, load_preprocessed_adult_v2
 
 warnings.filterwarnings("ignore")
 
