@@ -39,7 +39,7 @@ class RegressionConstraint(BaseMoment):
         y = params["y"]
 
         if self.no_groups:
-            sensitive_features == np.zeros_like(y)
+            sensitive_features = np.zeros_like(y)
 
         # The following uses X and not X_train so that the estimators get X untouched
         super().load_data(X, y, sensitive_features=sensitive_features)
@@ -48,26 +48,32 @@ class RegressionConstraint(BaseMoment):
         self.event_ids = np.sort(self.tags[_EVENT].dropna().unique())
         self.event_prob = self.tags[_EVENT].dropna().value_counts() / len(self.tags)
 
-        self.group_prob = self.tags[_GROUP_ID].dropna().value_counts() / len(self.tags)
+        self.group_prob = (
+            self.tags.groupby(_GROUP_ID).size() / self.total_samples
+        )  # self.tags[_GROUP_ID].dropna().value_counts() / len(self.tags)
         self.group_values = np.sort(self.tags[_GROUP_ID].unique())
 
         self.index = self.group_prob.index
         self.default_objective_lambda_vec = self.group_prob
 
-        self.basis = self._get_basis()
+        self._get_basis()
 
     def _get_basis(self):
         pos_basis = pd.DataFrame()
         neg_basis = pd.DataFrame()
-
+        neg_basis_present = pd.Series(dtype="float64")
         zero_vec = pd.Series(0.0, self.index)
         i = 0
-        for group in self.group_values[:-1]:
+        for group in self.group_values:
             pos_basis[i] = zero_vec
             neg_basis[i] = zero_vec
             pos_basis[i][group] = 1
+            neg_basis_present.at[i] = False
             i += 1
-        return {"+": pos_basis, "-": neg_basis}
+
+        self.neg_basis_present = neg_basis_present
+        self.basis = {"+": pos_basis, "-": neg_basis}
+        self.default_objective_lambda_vec = self.group_prob
 
     def gamma(self, predictor):
         """Calculate the degree to which constraints are currently violated by the predictor."""

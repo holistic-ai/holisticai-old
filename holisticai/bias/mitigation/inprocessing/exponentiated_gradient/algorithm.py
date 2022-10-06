@@ -104,6 +104,7 @@ class ExponentiatedGradientAlgorithm:
 
         eta = self.eta0 / B
         gap_LP = np.PINF
+        Q_LP = None
         nu = self.nu
         last_regret_checked = REGRET_CHECK_START_T
         last_gap = np.PINF
@@ -120,8 +121,9 @@ class ExponentiatedGradientAlgorithm:
             gap_EG = result_EG.gap()
             gamma = lagrangian.gammas[h_idx]
 
-            Q_LP, result_LP = self.eg_helper.compute_LP(t, lagrangian, nu)
-            gap_LP = result_LP.gap()
+            if t > 0:
+                Q_LP, result_LP = self.eg_helper.compute_LP(t, lagrangian, nu)
+                gap_LP = result_LP.gap()
 
             # keep values from exponentiated gradient or linear programming
             self.monitor.update(gap_EG, Q_EG, gap_LP, Q_LP)
@@ -255,13 +257,11 @@ class Monitor:
         self.gaps = []
         self.Qs = []
         self.gaps_EG = []
-        self.gaps_LP = []
         self.verbose = verbose
         self.step = 0
 
     def update(self, gap_EG, Q_EG, gap_LP, Q_LP):
         self.gaps_EG.append(gap_EG)
-        self.gaps_LP.append(gap_LP)
 
         if gap_EG < gap_LP:
             self.Qs.append(Q_EG)

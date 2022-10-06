@@ -15,7 +15,8 @@ class GridGenerator:
         self,
         grid_size: Optional[int] = 5,
         grid_limit: Optional[int] = 2.0,
-        neg_values: Optional[bool] = True,
+        neg_allowed: Optional[pd.DataFrame] = None,
+        force_L1_norm: Optional[bool] = True,
     ):
         """
         Initialize Grid Generator
@@ -34,21 +35,44 @@ class GridGenerator:
         """
         self.grid_size = grid_size
         self.grid_limit = grid_limit
-        self.neg_values = neg_values
+        self.neg_allowed = neg_allowed
+        self.force_L1_norm = force_L1_norm
 
     def generate_grid(self, constraint):
         # Generate lambda vectors for each event
-        coefs = self._generate_coefs(nb_events=len(constraint.event_ids))
+        self.dim = len(constraint.basis["+"].columns)
+        coefs = self._generate_coefs()
         # Convert the grid of basis coefficients into a grid of lambda vectors
         grid = constraint.basis["+"].dot(coefs["+"]) + constraint.basis["-"].dot(
             coefs["-"]
         )
         return grid
 
-    def _build_grid(self, nb_events):
+    def _get_true_dim(self):
+        if self.force_L1_norm:
+            true_dim = self.dim - 1
+        else:
+            true_dim = self.dim
+
+        n_units = (float(self.grid_size) / (2.0 ** self.neg_allowed.sum())) ** (
+            1.0 / true_dim
+        ) - 1
+        n_units = int(np.floor(n_units))
+        if n_units < 0:
+            n_units = 0
+
+        return n_units
+
+    def _build_grid(self):
         """Create an integer grid"""
-        grid_size = self.grid_size + 1 if self.grid_size % 2 == 0 else self.grid_size
-        max_value = int(np.ceil(grid_size ** (1 / nb_events)))
+        max_value = self._get_true_dim()
+        self.accumulator = []
+        self.entry = np.zeros(self.dim)
+        self._accumulate_integer_grid(0, max_value)
+        xs = np.array(self.accumulator)
+        xs = xs * self.grid_limit / max_value
+
+        """
         min_value = 0
         if self.neg_values:
             max_value = (max_value - 1 + 2 - 1) // 2
@@ -57,10 +81,28 @@ class GridGenerator:
         xs = np.meshgrid(*xs)
         xs = np.stack([x.reshape(-1) for x in xs], axis=1)
         xs = xs * self.grid_limit / max_value
+        """
         return xs
 
-    def _generate_coefs(self, nb_events):
-        np_grid_values = self._build_grid(nb_events=nb_events)
+    def _accumulate_integer_grid(self, index, max_val):
+        if index == self.dim:
+            self.accumulator.append(self.entry.copy())
+        else:
+            if (index == self.dim - 1) and (self.force_L1_norm):
+                if self.neg_allowed[index] and max_val > 0:
+                    values = [-max_val, max_val]
+                else:
+                    values = [max_val]
+            else:
+                min_val = -max_val if self.neg_allowed[index] else 0
+                values = range(min_val, max_val + 1)
+
+            for current_value in values:
+                self.entry[index] = current_value
+                self._accumulate_integer_grid(index + 1, max_val - abs(current_value))
+
+    def _generate_coefs(self):
+        np_grid_values = self._build_grid()
         grid_values = pd.DataFrame(np_grid_values[: self.grid_size]).T
         pos_grid_values = grid_values.copy()
         neg_grid_values = -grid_values.copy()

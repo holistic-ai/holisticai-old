@@ -153,15 +153,12 @@ class GridSearchReduction(BaseEstimator, BMImp):
         constraint_kargs = self._constraint_parameters()
         self.constraint_ = constraints_catalog[self.constraints](**constraint_kargs)
 
-        self.generator_ = GridGenerator(
-            grid_size=self.grid_size, grid_limit=self.grid_limit
-        )
-
         self.model_ = GridSearchAlgorithm(
-            constraint=self.constraint_,
             estimator=self.estimator_,
-            generator=self.generator_,
+            constraint=self.constraint_,
             constraint_weight=self.constraint_weight,
+            grid_size=self.grid_size,
+            grid_limit=self.grid_limit,
             verbose=self.verbose,
         )
 

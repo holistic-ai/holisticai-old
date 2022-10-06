@@ -89,7 +89,8 @@ class ClassificationConstraint(BaseMoment):
         ).iloc[:, 0]
 
         self.index = self._get_index_format()
-        self.basis = self._get_basis()
+        self.default_objective_lambda_vec = None
+        self._get_basis()
 
     def signed_weights(self, lambda_vec):
         """
@@ -166,7 +167,7 @@ class ClassificationConstraint(BaseMoment):
     def _get_basis(self):
         pos_basis = pd.DataFrame()
         neg_basis = pd.DataFrame()
-
+        neg_basis_present = pd.Series(dtype="float64")
         zero_vec = pd.Series(0.0, self.index)
         i = 0
         for event_val in self.event_ids:
@@ -175,8 +176,10 @@ class ClassificationConstraint(BaseMoment):
                 neg_basis[i] = zero_vec
                 pos_basis[i]["+", event_val, group] = 1
                 neg_basis[i]["-", event_val, group] = 1
+                neg_basis_present.at[i] = True
                 i += 1
-        return {"+": pos_basis, "-": neg_basis}
+        self.neg_basis_present = neg_basis_present
+        self.basis = {"+": pos_basis, "-": neg_basis}
 
     def _get_index_format(self):
         index = (
