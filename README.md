@@ -9,7 +9,7 @@ Currently, the library offers a set of techniques to easily measure and mitigate
 
 - Documentation:https://holisticai.readthedocs.io/en/latest/ 
 - Tutorials: https://github.com/holistic-ai/holisticai/tree/main/tutorials
-- Source code: https://github.com/holistic-ai/holisticai
+- Source code: https://github.com/holistic-ai/holisticai/tree/main
 - Holistic Ai website: https://holisticai.com
 
 ## Installation
