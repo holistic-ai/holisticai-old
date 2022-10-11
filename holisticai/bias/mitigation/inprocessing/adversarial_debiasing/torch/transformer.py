@@ -4,7 +4,6 @@ import numpy as np
 import pandas as pd
 import torch
 
-from holisticai.bias.mitigation.inprocessing.commons._group_utils import GroupUtils
 from holisticai.utils.transformers.bias import BMInprocessing as BMImp
 
 from .dataset import ADDataset

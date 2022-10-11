@@ -4,7 +4,7 @@ import numpy as np
 from scipy.stats import multivariate_normal
 from sklearn.metrics import accuracy_score
 
-from holisticai.bias.mitigation.inprocessing.commons._group_utils import GroupUtils
+from holisticai.utils.transformers.bias import SensitiveGroups
 
 
 def prob(dist, x):
@@ -19,7 +19,7 @@ class MetaFairClassifierAlgorithm:
         self.steps = steps
         self.constraint = constraint
         self.logger = logger
-        self.gutil = GroupUtils()
+        self.sens_groups = SensitiveGroups()
 
     def range(self, eps, tau):
         a = np.arange(np.ceil(tau / eps), step=self.steps) * eps
@@ -81,7 +81,9 @@ class MetaFairClassifierAlgorithm:
         y_true = y.copy()
         y_true[y == 0] = -1
 
-        groups_num = self.gutil.create_groups(sensitive_features, convert_numeric=True)
+        groups_num = self.sens_groups.fit_transform(
+            sensitive_features, convert_numeric=True
+        )
 
         """Returns the model given the training data and input tau."""
         train = np.concatenate(
