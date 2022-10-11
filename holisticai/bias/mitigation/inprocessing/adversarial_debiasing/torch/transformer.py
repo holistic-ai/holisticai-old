@@ -5,6 +5,7 @@ import pandas as pd
 import torch
 
 from holisticai.utils.transformers.bias import BMInprocessing as BMImp
+from holisticai.utils.transformers.bias import SensitiveGroups
 
 from .dataset import ADDataset
 from .models import ADModel, ClassifierModel
@@ -109,7 +110,7 @@ class AdversarialDebiasing(BMImp):
         self.device = device
         self.seed = seed
 
-        self.gutils = GroupUtils()
+        self.sens_groups = SensitiveGroups()
 
     def transform_estimator(self, estimator=None):
         if estimator is None:
@@ -125,7 +126,7 @@ class AdversarialDebiasing(BMImp):
         Organize data for pytorch environment.
         """
         groups_num = np.array(
-            self.gutils.create_groups(sensitive_features, convert_numeric=True)
+            self.sens_groups.fit_transform(sensitive_features, convert_numeric=True)
         )
         dataset = ADDataset(X, y, groups_num, device=self.device)
         return dataset
