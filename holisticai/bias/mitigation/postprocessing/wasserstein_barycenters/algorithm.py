@@ -1,5 +1,5 @@
 import numpy as np
-from holisticai.bias.mitigation.inprocessing.commons import SensitiveGroups
+from holisticai.utils.transformers.bias import SensitiveGroups
 
 class WasserteinBarycenterAlgorithm:
     def __init__(self):
