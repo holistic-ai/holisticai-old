@@ -11,6 +11,7 @@ from holisticai.bias.mitigation import PluginEstimationAndCalibration
 from holisticai.pipeline import Pipeline
 from tests.testing_utils._tests_data_utils import load_preprocessed_us_crime
 from tests.testing_utils._tests_utils import check_results
+
 seed = 42
 train_data, test_data = load_preprocessed_us_crime()
 
@@ -78,6 +79,7 @@ def running_with_pipeline():
 
 def test_reproducibility_with_and_without_pipeline():
     import numpy as np
+
     np.random.seed(seed)
     df1 = running_without_pipeline()
     np.random.seed(seed)

@@ -1,16 +1,19 @@
 import numpy as np
+
 from holisticai.utils.transformers.bias import BMPostprocessing as BMPost
+
 from .algorithm import WasserteinBarycenterAlgorithm
+
 
 class WasserteinBarycenter(BMPost):
     """
-    Fair Regression with Wasserstein Barycenters learning a real-valued function that 
-    satisfies the Demographic Parity constraint. The strategy founds the optimal fair 
-    predictor computing the Wasserstein barycenter of the distributions induced by the 
+    Fair Regression with Wasserstein Barycenters learning a real-valued function that
+    satisfies the Demographic Parity constraint. The strategy founds the optimal fair
+    predictor computing the Wasserstein barycenter of the distributions induced by the
     standard regression function on the sensitive groups.
 
     References:
-        Chzhen, Evgenii, et al. "Fair regression with wasserstein barycenters." 
+        Chzhen, Evgenii, et al. "Fair regression with wasserstein barycenters."
         Advances in Neural Information Processing Systems 33 (2020): 7321-7331.
     """
 
@@ -18,12 +21,7 @@ class WasserteinBarycenter(BMPost):
         """Create a Calibrated Equalized Odds Post-processing instance."""
         self.algorithm = WasserteinBarycenterAlgorithm()
 
-    def fit(
-        self,
-        y_pred: np.ndarray,
-        group_a: np.ndarray,
-        group_b: np.ndarray
-    ):
+    def fit(self, y_pred: np.ndarray, group_a: np.ndarray, group_b: np.ndarray):
         """
         Compute parameters for calibrated equalized odds.
 
@@ -34,7 +32,7 @@ class WasserteinBarycenter(BMPost):
         Parameters
         ----------
         y_pred : array-like
-            Predicted vector (num_examples,). 
+            Predicted vector (num_examples,).
         group_a : array-like
             Group membership vector (binary)
         group_b : array-like
@@ -43,11 +41,7 @@ class WasserteinBarycenter(BMPost):
         -------
         Self
         """
-        params = self._load_data(
-            y_pred=y_pred,
-            group_a=group_a,
-            group_b=group_b
-        )
+        params = self._load_data(y_pred=y_pred, group_a=group_a, group_b=group_b)
 
         group_a = params["group_a"] == 1
         group_b = params["group_b"] == 1
@@ -85,28 +79,19 @@ class WasserteinBarycenter(BMPost):
         -------
         dictionnary with new predictions
         """
-        params = self._load_data(
-            y_pred=y_pred,
-            group_a=group_a,
-            group_b=group_b
-        )
+        params = self._load_data(y_pred=y_pred, group_a=group_a, group_b=group_b)
 
         group_a = params["group_a"] == 1
         group_b = params["group_b"] == 1
         y_pred = params["y_pred"]
         sensitive_features = np.stack([group_a, group_b], axis=1)
-        
+
         new_y_pred = self.algorithm.transform(y_pred, sensitive_features)
-        
-        return {
-            "y_pred": new_y_pred
-        }
+
+        return {"y_pred": new_y_pred}
 
     def fit_transform(
-        self,
-        y_pred: np.ndarray,
-        group_a: np.ndarray,
-        group_b: np.ndarray
+        self, y_pred: np.ndarray, group_a: np.ndarray, group_b: np.ndarray
     ):
         """
         Fit and transform
