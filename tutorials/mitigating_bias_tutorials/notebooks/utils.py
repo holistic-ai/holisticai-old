@@ -1,14 +1,17 @@
-from sklearn import metrics
 import pandas as pd
-from holisticai.datasets import load_adult
+from sklearn import metrics
 from sklearn.model_selection import train_test_split
+
+from holisticai.datasets import load_adult
+
 # dictionnary of metrics
-metrics_dict={
-        "Accuracy": metrics.accuracy_score,
-        "Balanced accuracy": metrics.balanced_accuracy_score,
-        "Precision": metrics.precision_score,
-        "Recall": metrics.recall_score,
-        "F1-Score": metrics.f1_score}
+metrics_dict = {
+    "Accuracy": metrics.accuracy_score,
+    "Balanced accuracy": metrics.balanced_accuracy_score,
+    "Precision": metrics.precision_score,
+    "Recall": metrics.recall_score,
+    "F1-Score": metrics.f1_score,
+}
 
 # efficacy metrics dataframe helper tool
 def classification_efficacy_metrics(y_pred, y_true, metrics_dict=metrics_dict):

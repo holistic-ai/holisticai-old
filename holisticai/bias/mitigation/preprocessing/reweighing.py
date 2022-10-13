@@ -6,6 +6,7 @@ import pandas as pd
 from holisticai.utils.transformers.bias import BMPreprocessing as BMPre
 from holisticai.utils.transformers.bias import SensitiveGroups
 
+
 class Reweighing(BMPre):
     """
     Reweighing preprocessing weights the examples in each group-label combination to ensure fairness before
@@ -61,39 +62,39 @@ class Reweighing(BMPre):
         group_lbs = self.sens_groups.fit_transform(np.stack([group_a, group_b], axis=1))
 
         classes = np.unique(y_true)
-        
+
         df = pd.DataFrame()
 
-        df['LABEL'] = pd.Series(y_true)
+        df["LABEL"] = pd.Series(y_true)
 
-        df['GROUP_ID'] = group_lbs
+        df["GROUP_ID"] = group_lbs
 
-        df['COUNT'] = 1
+        df["COUNT"] = 1
 
         for g in self.sens_groups.group_names:
             for c in classes:
-                df[f'{g}-{c}'] = (df['GROUP_ID']==g) & (df['LABEL']==c)
-                
-        df_group_values = df.groupby(['GROUP_ID','LABEL'])['COUNT'].sum()
+                df[f"{g}-{c}"] = (df["GROUP_ID"] == g) & (df["LABEL"] == c)
 
-        df_values = df_group_values.groupby(level='LABEL').sum()
-        
-        df_groups = df_group_values.groupby(level='GROUP_ID').sum()
+        df_group_values = df.groupby(["GROUP_ID", "LABEL"])["COUNT"].sum()
 
-        df_group_values_prob = df_group_values/df_groups
+        df_values = df_group_values.groupby(level="LABEL").sum()
 
-        df_values_prob = df_values/df_values.sum()
+        df_groups = df_group_values.groupby(level="GROUP_ID").sum()
 
-        df_group_values_weights = df_values_prob/df_group_values_prob
+        df_group_values_prob = df_group_values / df_groups
+
+        df_values_prob = df_values / df_values.sum()
+
+        df_group_values_weights = df_values_prob / df_group_values_prob
 
         sample_weight = np.ones_like(y_true, dtype=np.float32)
         for g in self.sens_groups.group_names:
             for l in classes:
-                mask = df[f'{g}-{l}']
-                sample_weight[mask] = df_group_values_weights.at[g,l]
-        
+                mask = df[f"{g}-{l}"]
+                sample_weight[mask] = df_group_values_weights.at[g, l]
+
         self.update_estimator_param("sample_weight", sample_weight)
-        
+
         return self
 
     def transform(self, X: np.ndarray):
