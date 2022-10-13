@@ -14,7 +14,6 @@ from .inprocessing import (
 from .postprocessing import (
     CalibratedEqualizedOdds,
     EqualizedOdds,
-    MLDebiaser,
     PluginEstimationAndCalibration,
     RejectOptionClassification,
     WasserteinBarycenter,
@@ -34,7 +33,6 @@ __all__ = [
     "EqualizedOdds",
     "RejectOptionClassification",
     "WasserteinBarycenter",
-    "MLDebiaser",
     "PluginEstimationAndCalibration",
     "PrejudiceRemover",
     "MetaFairClassifier",
