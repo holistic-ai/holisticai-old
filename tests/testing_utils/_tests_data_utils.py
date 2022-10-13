@@ -242,22 +242,7 @@ class Dclass:
         return train_data, test_data
 
 
-def convert_float_to_categorical(target, nb_classes, numeric_classes=True):
-    eps = np.finfo(float).eps
-    if numeric_classes:
-        labels = list(range(nb_classes))
-    else:
-        labels = [f"Q{c}-Q{c+1}" for c in range(nb_classes)]
-    labels_values = np.linspace(0, 1, nb_classes + 1)
-    v = np.array(target.quantile(labels_values)).squeeze()
-    v[0], v[-1] = v[0] - eps, v[-1] + eps
-    y = target.copy()
-    for (i, c) in enumerate(labels):
-        y[(target.values >= v[i]) & (target.values < v[i + 1])] = c
-    return y.astype(np.int32)
-
-
-def load_preprocessed_us_crime(nb_classes=None):
+def load_preprocessed_us_crime(return_X_y=False, as_frame=True):
     from sklearn.preprocessing import StandardScaler
 
     dataset = load_us_crime()
@@ -286,14 +271,18 @@ def load_preprocessed_us_crime(nb_classes=None):
     scalar = StandardScaler()
     df_t = scalar.fit_transform(df_clean)
     X = df_t[:, :-1]
+    y = df_t[:, -1]
 
-    if nb_classes is None:
-        y = df_t[:, -1]
-    else:
-        y = convert_float_to_categorical(df_clean.iloc[:, -1], nb_classes=nb_classes)
-
-    data = X, y, group_a, group_b
-    datasets = train_test_split(*data, test_size=0.2)
-    train_data = datasets[::2]
-    test_data = datasets[1::2]
+    (
+        X_train,
+        X_test,
+        y_train,
+        y_test,
+        group_a_tr,
+        group_a_ts,
+        group_b_tr,
+        group_b_ts,
+    ) = train_test_split(X, y, group_a, group_b, test_size=0.2)
+    train_data = X_train, y_train, group_a_tr, group_b_tr
+    test_data = X_test, y_test, group_a_ts, group_b_ts
     return train_data, test_data
