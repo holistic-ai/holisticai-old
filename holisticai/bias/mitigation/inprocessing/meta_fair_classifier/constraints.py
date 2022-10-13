@@ -4,7 +4,7 @@ import numpy as np
 from scipy.stats import multivariate_normal
 from sklearn.metrics import accuracy_score
 
-from holisticai.bias.mitigation.inprocessing.commons._group_utils import GroupUtils
+from holisticai.utils.transformers.bias import SensitiveGroups
 
 
 class StatisticalRate:

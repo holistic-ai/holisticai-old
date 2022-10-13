@@ -4,7 +4,6 @@ from typing import Optional
 import numpy as np
 from sklearn.base import BaseEstimator, ClassifierMixin
 
-from holisticai.bias.mitigation.inprocessing.commons._group_utils import GroupUtils
 from holisticai.utils.transformers.bias import BMInprocessing as BMImp
 
 from .algorithm import PrejudiceRemoverAlgorithm

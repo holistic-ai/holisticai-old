@@ -14,7 +14,9 @@ from .inprocessing import (
 from .postprocessing import (
     CalibratedEqualizedOdds,
     EqualizedOdds,
+    PluginEstimationAndCalibration,
     RejectOptionClassification,
+    WasserteinBarycenter,
 )
 
 # preprocessing algorithm classes
@@ -30,6 +32,8 @@ __all__ = [
     "CalibratedEqualizedOdds",
     "EqualizedOdds",
     "RejectOptionClassification",
+    "WasserteinBarycenter",
+    "PluginEstimationAndCalibration",
     "PrejudiceRemover",
     "MetaFairClassifier",
 ]

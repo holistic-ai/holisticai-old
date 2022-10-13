@@ -1,7 +1,7 @@
 import numpy as np
 from scipy.optimize import fmin_cg
 
-from holisticai.bias.mitigation.inprocessing.commons._group_utils import GroupUtils
+from holisticai.utils.transformers.bias import SensitiveGroups
 
 
 class PrejudiceRemoverAlgorithm:
@@ -29,7 +29,7 @@ class PrejudiceRemoverAlgorithm:
         self.logger = logger
         self.objective_fn = objective_fn
         self.maxiter = maxiter
-        self.gutil = GroupUtils()
+        self.sens_groups = SensitiveGroups()
 
     def fit(self, X: np.ndarray, y: np.ndarray, sensitive_features: np.ndarray):
         """
@@ -49,7 +49,9 @@ class PrejudiceRemoverAlgorithm:
             Matrix where each columns is a sensitive feature e.g. [col_1=group_a, col_2=group_b]
         """
 
-        groups_num = self.gutil.create_groups(sensitive_features, convert_numeric=True)
+        groups_num = self.sens_groups.fit_transform(
+            sensitive_features, convert_numeric=True
+        )
         self.estimator.init_params(X, y, groups_num)
         self.logger.set_log_fn(
             loss=lambda coef: self.objective_fn.loss(coef, X, y, groups_num), type=float
@@ -70,11 +72,6 @@ class PrejudiceRemoverAlgorithm:
         self.logger.info(f"Best Loss : {self.f_loss_:.4f}")
         return self
 
-    def _preprocess_groups(self, sensitive_features):
-        group_ids = self.gutil.merge_columns(sensitive_features)
-        group_num = group_ids.apply(lambda x: self.gutil.group2num[x])
-        return group_num
-
     def predict(self, X, sensitive_features):
         """
         predict classes
@@ -91,7 +88,7 @@ class PrejudiceRemoverAlgorithm:
         y : array, shape=(n_samples), dtype=int
             array of predicted class
         """
-        group_num = self._preprocess_groups(sensitive_features)
+        group_num = self.sens_groups.transform(sensitive_features, convert_numeric=True)
         return self.estimator.predict(X, group_num)
 
     def predict_proba(self, X, sensitive_features):
@@ -111,5 +108,5 @@ class PrejudiceRemoverAlgorithm:
         y_proba : array, shape=(n_samples, n_classes), dtype=float
             array of predicted class
         """
-        group_num = self._preprocess_groups(sensitive_features)
+        group_num = self.sens_groups.transform(sensitive_features, convert_numeric=True)
         return self.estimator.predict_proba(X, group_num)
