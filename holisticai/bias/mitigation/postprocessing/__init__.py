@@ -1,6 +1,7 @@
 # imports
 from .calibrated_eq_odds_postprocessing import CalibratedEqualizedOdds
 from .eq_odds_postprocessing import EqualizedOdds
+from .ml_debiaser.transformer import MLDebiaser
 from .plugin_estimator_and_recalibration.transformer import (
     PluginEstimationAndCalibration,
 )
@@ -13,4 +14,5 @@ __all__ = [
     "RejectOptionClassification",
     "WasserteinBarycenter",
     "PluginEstimationAndCalibration",
+    "MLDebiaser",
 ]
