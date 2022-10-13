@@ -13,7 +13,11 @@ SUPPORTED_FUNCTIONS = [
     "predict_score",
     "predictions",
 ]
-POST_PREDICTION = {"predict": "y_pred", "predict_score": "y_score"}
+POST_PREDICTION = {
+    "predict": "y_pred",
+    "predict_score": "y_score",
+    "predict_proba": "y_proba",
+}
 POST_SCORE = "score"
 
 
