@@ -2,26 +2,30 @@ from calendar import c
 from typing import Optional
 
 import numpy as np
-from .algorithm import MulticlassBalancerAlgorithm
+
 from holisticai.utils.transformers.bias import BMPostprocessing as BMPost
 from holisticai.utils.transformers.bias import SensitiveGroups
 
+from .algorithm import MulticlassBalancerAlgorithm
+
+
 class LPDebiaserMulticlass(BMPost):
     """
-    Linear Programmin Debiaser is a postprocessing algorithms designed to debias pretrained classifiers. 
+    Linear Programmin Debiaser is a postprocessing algorithms designed to debias pretrained classifiers.
     The algorithm use constraints such as Equalized Odds and Equalized Opportunity.
     This technique extends LPDebiaserBinary for multiclass classification.
     References:
-        Putzel, Preston, and Scott Lee. "Blackbox Post-Processing for Multiclass Fairness." 
+        Putzel, Preston, and Scott Lee. "Blackbox Post-Processing for Multiclass Fairness."
         arXiv preprint arXiv:2201.04461 (2022).
     """
 
     CONSTRAINT = ["EqualizedOdds", "EqualizedOpportunity"]
     OBJ_FUN = ["macro", "micro"]
+
     def __init__(
         self,
         constraint: Optional["CONSTRAINT"] = "EqualizedOdds",
-        loss: Optional["OBJ_FUN"] = "macro"
+        loss: Optional["OBJ_FUN"] = "macro",
     ):
         """
         Parameters
@@ -29,7 +33,7 @@ class LPDebiaserMulticlass(BMPost):
         constraint : str
             Strategy used to evalute the cost function  The available contraints  are:
             [
-                "EqualizedOdds", 
+                "EqualizedOdds",
                 "EqualizedOpportunity"
             ]
 
@@ -38,7 +42,7 @@ class LPDebiaserMulticlass(BMPost):
             [
                 "macro",
                 "micro"
-            ], 
+            ],
             default "macro"
         """
         self.constraint = constraint
@@ -48,11 +52,11 @@ class LPDebiaserMulticlass(BMPost):
     def fit(
         self,
         y_true: np.ndarray,
-        y_pred : np.ndarray,
+        y_pred: np.ndarray,
         group_a: np.ndarray,
         group_b: np.ndarray,
     ):
-        """       
+        """
 
         Description
         ----------
@@ -64,7 +68,7 @@ class LPDebiaserMulticlass(BMPost):
         y_true : array-like
             Target vector
         y_pred : array-like
-            Predicted label vector (num_examples,). 
+            Predicted label vector (num_examples,).
         group_a : array-like
             Group membership vector (binary)
         group_b : array-like
@@ -74,10 +78,7 @@ class LPDebiaserMulticlass(BMPost):
         Self
         """
         params = self._load_data(
-            y_true=y_true,
-            y_pred = y_pred,
-            group_a=group_a,
-            group_b=group_b
+            y_true=y_true, y_pred=y_pred, group_a=group_a, group_b=group_b
         )
 
         group_a = params["group_a"] == 1
@@ -86,16 +87,20 @@ class LPDebiaserMulticlass(BMPost):
         y_pred = params["y_pred"]
 
         sensitive_features = np.stack([group_a, group_b], axis=1)
-        group_num = self.sens_groups.fit_transform(sensitive_features, convert_numeric=True)    
-        
+        group_num = self.sens_groups.fit_transform(
+            sensitive_features, convert_numeric=True
+        )
+
         constraints_catalog, objective_catalog = self._get_catalogs()
-    
+
         constraint = constraints_catalog[self.constraint]()
-        
+
         objective = objective_catalog[self.loss]()
-    
-        self.algorithm = MulticlassBalancerAlgorithm(constraint=constraint, objective=objective)
-        
+
+        self.algorithm = MulticlassBalancerAlgorithm(
+            constraint=constraint, objective=objective
+        )
+
         self.algorithm.fit(y_true=y_true, y_pred=y_pred, group_num=group_num)
         return self
 
@@ -122,16 +127,12 @@ class LPDebiaserMulticlass(BMPost):
         dictionnary with new predictions
         """
 
-        params = self._load_data(
-                        y_pred=y_pred, 
-                        group_a=group_a, 
-                        group_b=group_b
-                    )
+        params = self._load_data(y_pred=y_pred, group_a=group_a, group_b=group_b)
 
         group_a = params["group_a"] == 1
         group_b = params["group_b"] == 1
         y_pred = params["y_pred"]
-        
+
         sensitive_features = np.stack([group_a, group_b], axis=1)
         group_num = self.sens_groups.transform(sensitive_features, convert_numeric=True)
         new_y_pred = self.algorithm.predict(y_pred=y_pred, group_num=group_num)
@@ -168,20 +169,22 @@ class LPDebiaserMulticlass(BMPost):
             group_a=group_a,
             group_b=group_b,
         ).transform(y_pred=y_pred, group_a=group_a, group_b=group_b)
-        
-        
+
     def _get_catalogs(self):
-        from .constraints import EqualizedOdds, EqualizedOpportunity , Strict, MacroLosses, MicroLosses
-        
+        from .constraints import (
+            EqualizedOdds,
+            EqualizedOpportunity,
+            MacroLosses,
+            MicroLosses,
+            Strict,
+        )
+
         cons_cat = {
-            'EqualizedOdds':EqualizedOdds,
-            'EqualizedOpportunity': EqualizedOpportunity,
-            'Strict': Strict
+            "EqualizedOdds": EqualizedOdds,
+            "EqualizedOpportunity": EqualizedOpportunity,
+            "Strict": Strict,
         }
-        
-        obj_cat = {
-            'macro': MacroLosses,
-            'micro': MicroLosses
-        }
-        
-        return cons_cat , obj_cat
+
+        obj_cat = {"macro": MacroLosses, "micro": MicroLosses}
+
+        return cons_cat, obj_cat

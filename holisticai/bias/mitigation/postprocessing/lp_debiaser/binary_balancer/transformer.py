@@ -2,21 +2,25 @@ from calendar import c
 from typing import Optional
 
 import numpy as np
-from .algorithm import BinaryBalancerAlgorithm
+
 from holisticai.utils.transformers.bias import BMPostprocessing as BMPost
 from holisticai.utils.transformers.bias import SensitiveGroups
 
+from .algorithm import BinaryBalancerAlgorithm
+
+
 class LPDebiaserBinary(BMPost):
     """
-    Linear Programmin Debiaser is a postprocessing algorithms designed to debias pretrained classifiers. 
+    Linear Programmin Debiaser is a postprocessing algorithms designed to debias pretrained classifiers.
     The algorithm use constraints such as Equalized Odds and Equalized Opportunity.
     References:
-        Hardt, Moritz, Eric Price, and Nati Srebro. "Equality of opportunity in supervised learning." 
+        Hardt, Moritz, Eric Price, and Nati Srebro. "Equality of opportunity in supervised learning."
         Advances in neural information processing systems 29 (2016).
     """
 
     CONSTRAINT = ["EqualizedOdds", "EqualizedOpportunity"]
     OBJ_FUN = ["macro", "micro"]
+
     def __init__(
         self,
         constraint: Optional["CONSTRAINT"] = "EqualizedOdds",
@@ -27,7 +31,7 @@ class LPDebiaserBinary(BMPost):
         constraint : str
             Strategy used to evalute the cost function  The available contraints  are:
             [
-                "EqualizedOdds", 
+                "EqualizedOdds",
                 "EqualizedOpportunity"
             ]
         """
@@ -39,10 +43,10 @@ class LPDebiaserBinary(BMPost):
         y_true: np.ndarray,
         group_a: np.ndarray,
         group_b: np.ndarray,
-        y_pred : Optional[np.ndarray] = None,
-        y_proba: Optional[np.ndarray] = None
+        y_pred: Optional[np.ndarray] = None,
+        y_proba: Optional[np.ndarray] = None,
     ):
-        """       
+        """
 
         Description
         ----------
@@ -54,7 +58,7 @@ class LPDebiaserBinary(BMPost):
         y_true : array-like
             Target vector
         y_pred : array-like
-            Predicted label vector (num_examples,). 
+            Predicted label vector (num_examples,).
         y_proba : matrix-like
             Predicted probability matrix (num_examples, num_classes). The probability
             estimates must sum to 1 across the possible classes and each matrix value
@@ -69,10 +73,10 @@ class LPDebiaserBinary(BMPost):
         """
         params = self._load_data(
             y_true=y_true,
-            y_pred = y_pred,
+            y_pred=y_pred,
             y_proba=y_proba,
             group_a=group_a,
-            group_b=group_b
+            group_b=group_b,
         )
 
         group_a = params["group_a"] == 1
@@ -82,26 +86,32 @@ class LPDebiaserBinary(BMPost):
         y_proba = params.get("y_proba", None)
 
         sensitive_features = np.stack([group_a, group_b], axis=1)
-        group_num = self.sens_groups.fit_transform(sensitive_features, convert_numeric=True)    
+        group_num = self.sens_groups.fit_transform(
+            sensitive_features, convert_numeric=True
+        )
 
         constraints_catalog, objective_catalog = self._get_catalogs()
-        
-        constraint = constraints_catalog[self.constraint]()
-        
-        objective = objective_catalog["losses"]()
-        
-        self.algorithm = BinaryBalancerAlgorithm(constraint=constraint, objective=objective)
 
-        self.algorithm.fit(y_true=y_true, y_pred=y_pred, y_proba=y_proba, group_num=group_num)
-            
+        constraint = constraints_catalog[self.constraint]()
+
+        objective = objective_catalog["losses"]()
+
+        self.algorithm = BinaryBalancerAlgorithm(
+            constraint=constraint, objective=objective
+        )
+
+        self.algorithm.fit(
+            y_true=y_true, y_pred=y_pred, y_proba=y_proba, group_num=group_num
+        )
+
         return self
 
     def transform(
         self,
         group_a: np.ndarray,
         group_b: np.ndarray,
-        y_pred: Optional[np.ndarray]=None,
-        y_proba: Optional[np.ndarray]=None
+        y_pred: Optional[np.ndarray] = None,
+        y_proba: Optional[np.ndarray] = None,
     ):
         """
         Apply transform function to predictions and likelihoods
@@ -125,21 +135,20 @@ class LPDebiaserBinary(BMPost):
         """
 
         params = self._load_data(
-                        y_pred=y_pred, 
-                        y_proba=y_proba, 
-                        group_a=group_a, 
-                        group_b=group_b
-                    )
+            y_pred=y_pred, y_proba=y_proba, group_a=group_a, group_b=group_b
+        )
 
         group_a = params["group_a"] == 1
         group_b = params["group_b"] == 1
-        
+
         sensitive_features = np.stack([group_a, group_b], axis=1)
         group_num = self.sens_groups.transform(sensitive_features, convert_numeric=True)
-        
+
         y_proba = params.get("y_proba", None)
         y_pred = params.get("y_pred", None)
-        new_y_pred = self.algorithm.predict(y_pred=y_pred, y_proba=y_proba, group_num=group_num)
+        new_y_pred = self.algorithm.predict(
+            y_pred=y_pred, y_proba=y_proba, group_num=group_num
+        )
         return {"y_pred": new_y_pred}
 
     def fit_transform(
@@ -147,8 +156,8 @@ class LPDebiaserBinary(BMPost):
         y_true: np.ndarray,
         group_a: np.ndarray,
         group_b: np.ndarray,
-        y_pred: Optional[np.ndarray]=None,
-        y_proba: Optional[np.ndarray]=None
+        y_pred: Optional[np.ndarray] = None,
+        y_proba: Optional[np.ndarray] = None,
     ):
         """
         Fit and transform
@@ -179,17 +188,17 @@ class LPDebiaserBinary(BMPost):
             group_a=group_a,
             group_b=group_b,
         ).transform(y_proba=y_proba, y_pred=y_pred, group_a=group_a, group_b=group_b)
-        
+
     def _get_catalogs(self):
-        from .constraints import EqualizedOdds, EqualizedOpportunity,  Losses
-        
+        from .constraints import EqualizedOdds, EqualizedOpportunity, Losses
+
         cons_cat = {
-            'EqualizedOdds':EqualizedOdds,
-            'EqualizedOpportunity': EqualizedOpportunity
+            "EqualizedOdds": EqualizedOdds,
+            "EqualizedOpportunity": EqualizedOpportunity,
         }
-        
+
         obj_cat = {
-            'losses': Losses,
+            "losses": Losses,
         }
-        
-        return cons_cat , obj_cat
+
+        return cons_cat, obj_cat

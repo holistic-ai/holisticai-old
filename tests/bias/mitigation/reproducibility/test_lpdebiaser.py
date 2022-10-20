@@ -1,23 +1,25 @@
 import os
 import sys
+
 import numpy as np
+
 sys.path = ["./"] + sys.path
 import warnings
 
 from sklearn.linear_model import LogisticRegression
 from sklearn.preprocessing import StandardScaler
 
-from holisticai.bias.metrics import classification_bias_metrics
-from holisticai.bias.mitigation import LPDebiaserBinary,LPDebiaserMulticlass
-from holisticai.pipeline import Pipeline
-from tests.testing_utils._tests_utils import check_results, load_preprocessed_adult_v2
-from tests.testing_utils._tests_data_utils import load_preprocessed_us_crime
-from holisticai.utils.transformers.bias import SensitiveGroups
 from holisticai.bias.metrics import classification_bias_metrics, multiclass_bias_metrics
+from holisticai.bias.mitigation import LPDebiaserBinary, LPDebiaserMulticlass
+from holisticai.pipeline import Pipeline
+from holisticai.utils.transformers.bias import SensitiveGroups
+from tests.testing_utils._tests_data_utils import load_preprocessed_us_crime
+from tests.testing_utils._tests_utils import check_results, load_preprocessed_adult_v2
 
 warnings.filterwarnings("ignore")
 
 seed = 42
+
 
 def running_without_pipeline():
     train_data, test_data = load_preprocessed_adult_v2()
@@ -47,19 +49,13 @@ def running_without_pipeline():
     y_proba = model.predict_proba(Xt)
     y_pred = post.transform(y_proba=y_proba, **transform_params)["y_pred"]
 
-    df = classification_bias_metrics(
-        group_a,
-        group_b,
-        y_pred,
-        y,
-        metric_type="both"
-    )
+    df = classification_bias_metrics(group_a, group_b, y_pred, y, metric_type="both")
     return df
 
 
 def running_with_pipeline():
     train_data, test_data = load_preprocessed_adult_v2()
-    
+
     pipeline = Pipeline(
         steps=[
             ("scaler", StandardScaler()),
@@ -67,7 +63,7 @@ def running_with_pipeline():
             ("bm_posprocessing", LPDebiaserBinary()),
         ]
     )
-    
+
     X, y, group_a, group_b = train_data
     fit_params = {"bm__group_a": group_a, "bm__group_b": group_b}
 
@@ -79,13 +75,7 @@ def running_with_pipeline():
         "bm__group_b": group_b,
     }
     y_pred = pipeline.predict(X, **predict_params)
-    df = classification_bias_metrics(
-        group_a,
-        group_b,
-        y_pred,
-        y,
-        metric_type="both"
-    )
+    df = classification_bias_metrics(group_a, group_b, y_pred, y, metric_type="both")
     return df
 
 
@@ -130,7 +120,10 @@ def running_with_pipeline_multiclass():
         steps=[
             ("scaler", StandardScaler()),
             ("estimator", LogisticRegression()),
-            ("bm_posprocessing", LPDebiaserMulticlass(constraint="EqualizedOpportunity")),
+            (
+                "bm_posprocessing",
+                LPDebiaserMulticlass(constraint="EqualizedOpportunity"),
+            ),
         ]
     )
 
@@ -157,14 +150,17 @@ def running_with_pipeline_multiclass():
 
 def test_reproducibility_with_and_without_pipeline_multiclass():
     import numpy as np
+
     np.random.seed(seed)
     df1 = running_without_pipeline()
     np.random.seed(seed)
     df2 = running_with_pipeline()
     check_results(df1, df2)
 
+
 def test_reproducibility_with_and_without_pipeline_binary():
     import numpy as np
+
     np.random.seed(seed)
     df1 = running_without_pipeline()
     np.random.seed(seed)
