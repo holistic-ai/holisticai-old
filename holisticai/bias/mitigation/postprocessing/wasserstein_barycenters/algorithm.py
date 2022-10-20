@@ -3,7 +3,7 @@ import numpy as np
 from holisticai.utils.transformers.bias import SensitiveGroups
 
 
-class WasserteinBarycenterAlgorithm:
+class WassersteinBarycenterAlgorithm:
     def __init__(self):
         self.sens_groups = SensitiveGroups()
         self.eps = np.finfo(float).eps

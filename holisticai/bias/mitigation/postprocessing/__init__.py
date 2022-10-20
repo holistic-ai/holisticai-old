@@ -8,13 +8,13 @@ from .plugin_estimator_and_recalibration.transformer import (
     PluginEstimationAndCalibration,
 )
 from .reject_option_classification import RejectOptionClassification
-from .wasserstein_barycenters.transformer import WasserteinBarycenter
+from .wasserstein_barycenters.transformer import WassersteinBarycenter
 
 __all__ = [
     "CalibratedEqualizedOdds",
     "EqualizedOdds",
     "RejectOptionClassification",
-    "WasserteinBarycenter",
+    "WassersteinBarycenter",
     "PluginEstimationAndCalibration",
     "MLDebiaser",
     "LPDebiaserBinary",
