@@ -1,8 +1,10 @@
 from typing import Optional
 
 import numpy as np
+import pandas as pd
 
 from holisticai.utils.transformers.bias import BMPreprocessing as BMPre
+from holisticai.utils.transformers.bias import SensitiveGroups
 
 
 class Reweighing(BMPre):
@@ -17,10 +19,7 @@ class Reweighing(BMPre):
     """
 
     def __init__(self):
-        self.w_p_fav = 1.0
-        self.w_p_unfav = 1.0
-        self.w_up_fav = 1.0
-        self.w_up_unfav = 1.0
+        self.sens_groups = SensitiveGroups()
 
     def fit(
         self,
@@ -60,32 +59,42 @@ class Reweighing(BMPre):
         group_a = params["group_a"]
         group_b = params["group_b"]
 
-        fav_labels, unfav_labels = self.map_favorable_unfavorable(y_true)
-        f = self.compute_frequencies(fav_labels, unfav_labels, sample_weight)
+        group_lbs = self.sens_groups.fit_transform(np.stack([group_a, group_b], axis=1))
 
-        fav_labels_a, unfav_labels_a = self.map_favorable_unfavorable(y_true, group_a)
-        fa = self.compute_frequencies(
-            fav_labels_a, unfav_labels_a, sample_weight, group_a
-        )
+        classes = np.unique(y_true)
 
-        fav_labels_b, unfav_labels_b = self.map_favorable_unfavorable(y_true, group_b)
-        fb = self.compute_frequencies(
-            fav_labels_b, unfav_labels_b, sample_weight, group_b
-        )
+        df = pd.DataFrame()
 
-        # reweighing weights
-        self.w_a_fav = (f["F"] * fa["N"]) / (f["N"] * fa["F"])
-        self.w_a_unfav = (f["U"] * fa["N"]) / (f["N"] * fa["U"])
-        self.w_b_fav = (f["F"] * fb["N"]) / (f["N"] * fb["F"])
-        self.w_b_unfav = (f["U"] * fb["N"]) / (f["N"] * fb["U"])
+        df["LABEL"] = pd.Series(y_true)
 
-        # apply reweighing
-        sample_weight[fav_labels_a] = sample_weight[fav_labels_a] * self.w_a_fav
-        sample_weight[unfav_labels_a] = sample_weight[unfav_labels_a] * self.w_a_unfav
-        sample_weight[fav_labels_b] = sample_weight[fav_labels_b] * self.w_b_fav
-        sample_weight[unfav_labels_b] = sample_weight[unfav_labels_b] * self.w_b_unfav
+        df["GROUP_ID"] = group_lbs
+
+        df["COUNT"] = 1
+
+        for g in self.sens_groups.group_names:
+            for c in classes:
+                df[f"{g}-{c}"] = (df["GROUP_ID"] == g) & (df["LABEL"] == c)
+
+        df_group_values = df.groupby(["GROUP_ID", "LABEL"])["COUNT"].sum()
+
+        df_values = df_group_values.groupby(level="LABEL").sum()
+
+        df_groups = df_group_values.groupby(level="GROUP_ID").sum()
+
+        df_group_values_prob = df_group_values / df_groups
+
+        df_values_prob = df_values / df_values.sum()
+
+        df_group_values_weights = df_values_prob / df_group_values_prob
+
+        sample_weight = np.ones_like(y_true, dtype=np.float32)
+        for g in self.sens_groups.group_names:
+            for l in classes:
+                mask = df[f"{g}-{l}"]
+                sample_weight[mask] = df_group_values_weights.at[g, l]
 
         self.update_estimator_param("sample_weight", sample_weight)
+
         return self
 
     def transform(self, X: np.ndarray):
@@ -126,31 +135,3 @@ class Reweighing(BMPre):
             X
         """
         return self.fit(y_true, group_a, group_b, sample_weight).transform(X)
-
-    def map_favorable_unfavorable(self, y, group=None):
-        """
-        match favorable and unfavorable labels
-        """
-
-        fav_labels = y == 1
-        unfav_labels = y == 0
-
-        if group is not None:
-            fav_labels = np.logical_and(fav_labels, group == 1)
-            unfav_labels = np.logical_and(unfav_labels, group == 1)
-
-        return fav_labels, unfav_labels
-
-    def compute_frequencies(self, fav_labels, unfav_labels, sample_weight, group=None):
-        """
-        compute frequencies about favorable and unfavorable labels
-        """
-        n = (
-            np.sum(sample_weight, dtype=np.float64)
-            if group is None
-            else np.sum(sample_weight[group == 1], dtype=np.float64)
-        )
-        n_fav = np.sum(sample_weight[fav_labels], dtype=np.float64)
-        n_unfav = np.sum(sample_weight[unfav_labels], dtype=np.float64)
-
-        return {"N": n, "F": n_fav, "U": n_unfav}

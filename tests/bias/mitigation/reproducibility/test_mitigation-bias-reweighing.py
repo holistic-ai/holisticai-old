@@ -1,7 +1,7 @@
 import os
 import sys
 
-sys.path.append(os.getcwd())
+sys.path = ["./"] + sys.path
 
 import warnings
 
@@ -101,3 +101,6 @@ def test_reweighing():
         [2 / 3, 2 / 3, 2 / 3, 2, 1.5, 1.5, 0.75, 0.75, 0.75, 0.75]
     )
     assert_array_almost_equal(sample_weight, expected_output)
+
+
+test_reweighing()
