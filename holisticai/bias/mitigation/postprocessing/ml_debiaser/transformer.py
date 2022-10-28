@@ -127,11 +127,11 @@ class MLDebiaser(BMPost):
         group_b = params["group_b"] == 1
         y_proba = params["y_proba"]
         sensitive_features = np.stack([group_a, group_b], axis=1)
-        group_num = self.sens_groups.transform(sensitive_features, convert_numeric=True)
+        p_attr = self.sens_groups.transform(sensitive_features, convert_numeric=True)
 
         if type(self.algorithm) is Reduce2BinaryAlgorithm:
             # Multiclass classification
-            new_y_prob = self.algorithm.predict(y_proba, group_num)
+            new_y_prob = self.algorithm.predict(y_proba, p_attr)
             new_y_pred = new_y_prob.argmax(axis=-1)
             return {"y_pred": new_y_pred, "y_proba": new_y_prob}
         else:
@@ -140,9 +140,9 @@ class MLDebiaser(BMPost):
             pred = (
                 2 * pred - 1
             )  # follow author implementation (use prediction and not logit)
-            self.algorithm.fit(pred, group_num)
+            self.algorithm.fit(pred, p_attr)
 
-            new_y_score = self.algorithm.predict(pred, group_num)
+            new_y_score = self.algorithm.predict(pred, p_attr)
             new_y_pred = np.where(new_y_score > 0.5, 1, 0)
             return {"y_pred": new_y_pred, "y_score": new_y_score}
 

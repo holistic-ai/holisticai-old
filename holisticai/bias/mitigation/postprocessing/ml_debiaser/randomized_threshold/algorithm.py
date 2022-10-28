@@ -134,7 +134,7 @@ class RandomizedThresholdAlgorithm:
 
             logger.update(iteration=k + 1)
 
-    def predict(self, y_score, group_num):
+    def predict(self, y_score, p_attr):
         """
         Debiases the predictions.
 
@@ -164,7 +164,7 @@ class RandomizedThresholdAlgorithm:
 
         new_y_score = np.zeros((num_examples,))
 
-        for i, k in enumerate(group_num):
+        for i, k in enumerate(p_attr):
             if y_score[i] < (lambdas[k] - mus[k]):
                 new_y_score[i] = 0
             elif y_score[i] < (lambdas[k] - mus[k]) + gamma:

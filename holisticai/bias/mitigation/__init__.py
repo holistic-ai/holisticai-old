@@ -14,10 +14,12 @@ from .inprocessing import (
 from .postprocessing import (
     CalibratedEqualizedOdds,
     EqualizedOdds,
+    LPDebiaserBinary,
+    LPDebiaserMulticlass,
     MLDebiaser,
     PluginEstimationAndCalibration,
     RejectOptionClassification,
-    WasserteinBarycenter,
+    WassersteinBarycenter,
 )
 
 # preprocessing algorithm classes
@@ -33,8 +35,10 @@ __all__ = [
     "CalibratedEqualizedOdds",
     "EqualizedOdds",
     "RejectOptionClassification",
-    "WasserteinBarycenter",
+    "WassersteinBarycenter",
     "MLDebiaser",
+    "LPDebiaserBinary",
+    "LPDebiaserMulticlass",
     "PluginEstimationAndCalibration",
     "PrejudiceRemover",
     "MetaFairClassifier",
