@@ -34,8 +34,7 @@ class BinaryFairnessRegularizer:
         #    (1 - sigma(x,s)) [log(1 - rho(s)) - log(1 - pi)]
         rho_s, pi = self._parameters(sigma, groups)
         return (
-            sigma * (np.log(rho_s) - np.log(pi))
-            + (1.0 - sigma) * (np.log(1.0 - rho_s) - np.log(1.0 - pi))
+            sigma * (np.log(rho_s) - np.log(pi)) + (1.0 - sigma) * (np.log(1.0 - rho_s) - np.log(1.0 - pi))
         ).sum()
 
     def _parameters(self, sigma, groups):
