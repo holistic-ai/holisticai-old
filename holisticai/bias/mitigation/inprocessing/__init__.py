@@ -10,7 +10,7 @@ __all__ = [
     "GridSearchReduction",
     "PrejudiceRemover",
     "MetaFairClassifier",
-    "VariationalFairClustering"
+    "VariationalFairClustering",
 ]
 
 

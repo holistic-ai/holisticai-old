@@ -33,7 +33,9 @@ class WEstimator:
                 if y is not None:
                     fit_params.update({"y": y})
                 fit_params.update(kargs)
-                return getattr(object.__getattribute__(self, "obj"), name)(X, **fit_params)
+                return getattr(object.__getattribute__(self, "obj"), name)(
+                    X, **fit_params
+                )
 
             output = fitwrapper
         else:

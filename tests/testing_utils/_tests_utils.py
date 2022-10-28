@@ -36,8 +36,8 @@ def load_preprocessed_adult():
     group = ["sex"]
     group_a = df[group] == "Female"
     group_b = df[group] == "Male"
-    index_a = list(np.where(group_a==1)[0])
-    index_b = list(np.where(group_b==1)[0])
+    index_a = list(np.where(group_a == 1)[0])
+    index_b = list(np.where(group_b == 1)[0])
     index = index_a[:800] + index_b[:800]
     data = [x.iloc[index], y.iloc[index], group_a.iloc[index], group_b.iloc[index]]
 

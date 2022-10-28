@@ -1,5 +1,6 @@
 import sys
-sys.path = ['./'] + sys.path
+
+sys.path = ["./"] + sys.path
 
 import warnings
 
@@ -38,13 +39,7 @@ def running_without_pipeline():
     }
     Xt = prep.transform(Xt, **transform_params)
     y_pred = model.predict(Xt)
-    df = classification_bias_metrics(
-        group_b,
-        group_a,
-        y_pred,
-        y,
-        metric_type='both'
-    )
+    df = classification_bias_metrics(group_b, group_a, y_pred, y, metric_type="both")
     return df
 
 
@@ -52,7 +47,10 @@ def running_with_pipeline():
     pipeline = Pipeline(
         steps=[
             ("scaler", StandardScaler()),
-            ("bm_preprocessing", LearningFairRepresentation(k=10, Ax=0.1, Ay=1.0, Az=2.0, seed=seed)),
+            (
+                "bm_preprocessing",
+                LearningFairRepresentation(k=10, Ax=0.1, Ay=1.0, Az=2.0, seed=seed),
+            ),
             ("estimator", LogisticRegression()),
         ]
     )
@@ -68,13 +66,7 @@ def running_with_pipeline():
         "bm__group_b": group_b,
     }
     y_pred = pipeline.predict(X, **predict_params)
-    df = classification_bias_metrics(
-        group_b,
-        group_a,
-        y_pred,
-        y,
-        metric_type='both'
-    )
+    df = classification_bias_metrics(group_b, group_a, y_pred, y, metric_type="both")
     return df
 
 

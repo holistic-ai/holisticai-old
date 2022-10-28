@@ -1,7 +1,10 @@
 import sys
-sys.path = ['./'] + sys.path
+
+sys.path = ["./"] + sys.path
 import warnings
+
 from sklearn.preprocessing import StandardScaler
+
 from holisticai.bias.metrics import clustering_bias_metrics
 from holisticai.bias.mitigation import VariationalFairClustering
 from holisticai.pipeline import Pipeline
@@ -27,13 +30,11 @@ def running_without_pipeline():
     X, y, group_a, group_b = test_data
     Xt = scaler.transform(X)
 
-    y_pred = model.predict(Xt, group_a = group_a, group_b = group_b)
+    y_pred = model.predict(Xt, group_a=group_a, group_b=group_b)
     centroids = model.cluster_centers_
-    df = clustering_bias_metrics(group_a, 
-                                 group_b, 
-                                 y_pred, 
-                                 centroids = centroids, 
-                                 metric_type = 'both')
+    df = clustering_bias_metrics(
+        group_a, group_b, y_pred, centroids=centroids, metric_type="both"
+    )
     return df
 
 
@@ -56,12 +57,10 @@ def running_with_pipeline():
         "bm__group_b": group_b,
     }
     y_pred = pipeline.predict(X, **predict_params)
-    centroids = pipeline['bm_inprocessing'].cluster_centers_
-    df = clustering_bias_metrics(group_a, 
-                                 group_b, 
-                                 y_pred, 
-                                 centroids = centroids, 
-                                 metric_type = 'both')
+    centroids = pipeline["bm_inprocessing"].cluster_centers_
+    df = clustering_bias_metrics(
+        group_a, group_b, y_pred, centroids=centroids, metric_type="both"
+    )
     return df
 
 
@@ -73,5 +72,6 @@ def test_reproducibility_with_and_without_pipeline():
     np.random.seed(seed)
     df2 = running_with_pipeline()
     check_results(df1, df2)
+
 
 test_reproducibility_with_and_without_pipeline()
