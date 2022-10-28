@@ -70,7 +70,7 @@ def get_fair_accuracy_proportional(group_prob, groups_ids, l, K):
     return fairness_error.sum()
 
 
-def create_affinity(X, knn, scale=None, alg="annoy", savepath=None, W_path=None):
+def create_affinity(X, knn, scale=None, savepath=None, W_path=None):
     N, D = X.shape
     if W_path is not None:
         if W_path.endswith(".mat"):
@@ -81,16 +81,9 @@ def create_affinity(X, knn, scale=None, alg="annoy", savepath=None, W_path=None)
 
         print("Compute Affinity ")
         start_time = timeit.default_timer()
-        if alg == "flann":
-            print("with Flann")
-            flann = FLANN()
-            knnind, dist = flann.nn(
-                X, X, knn, algorithm="kdtree", target_precision=0.9, cores=5
-            )
-            # knnind = knnind[:,1:]
-        else:
-            nbrs = NearestNeighbors(n_neighbors=knn).fit(X)
-            dist, knnind = nbrs.kneighbors(X)
+
+        nbrs = NearestNeighbors(n_neighbors=knn).fit(X)
+        dist, knnind = nbrs.kneighbors(X)
 
         row = np.repeat(range(N), knn - 1)
         col = knnind[:, 1:].flatten()
