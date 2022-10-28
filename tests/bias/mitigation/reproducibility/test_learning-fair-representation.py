@@ -1,7 +1,5 @@
-import os
 import sys
-
-sys.path.append(os.getcwd())
+sys.path = ['./'] + sys.path
 
 import warnings
 
@@ -26,7 +24,7 @@ def running_without_pipeline():
     scaler = StandardScaler()
     Xt = scaler.fit_transform(X)
 
-    prep = LearningFairRepresentation(seed=seed)
+    prep = LearningFairRepresentation(k=10, Ax=0.1, Ay=1.0, Az=2.0, seed=seed)
     Xt = prep.fit_transform(Xt, y, **fit_params)
 
     model = LogisticRegression()
@@ -41,10 +39,11 @@ def running_without_pipeline():
     Xt = prep.transform(Xt, **transform_params)
     y_pred = model.predict(Xt)
     df = classification_bias_metrics(
-        group_b.to_numpy().ravel(),
-        group_a.to_numpy().ravel(),
+        group_b,
+        group_a,
         y_pred,
-        y.to_numpy().ravel(),
+        y,
+        metric_type='both'
     )
     return df
 
@@ -53,7 +52,7 @@ def running_with_pipeline():
     pipeline = Pipeline(
         steps=[
             ("scaler", StandardScaler()),
-            ("bm_preprocessing", LearningFairRepresentation(seed=seed)),
+            ("bm_preprocessing", LearningFairRepresentation(k=10, Ax=0.1, Ay=1.0, Az=2.0, seed=seed)),
             ("estimator", LogisticRegression()),
         ]
     )
@@ -70,10 +69,11 @@ def running_with_pipeline():
     }
     y_pred = pipeline.predict(X, **predict_params)
     df = classification_bias_metrics(
-        group_b.to_numpy().ravel(),
-        group_a.to_numpy().ravel(),
+        group_b,
+        group_a,
         y_pred,
-        y.to_numpy().ravel(),
+        y,
+        metric_type='both'
     )
     return df
 
