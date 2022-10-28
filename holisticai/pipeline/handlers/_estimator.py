@@ -29,9 +29,11 @@ class WEstimator:
             def fitwrapper(X, y=None, **kargs):
                 # kargs.update(getattr(object.__getattribute__(self, 'params_hdl'), 'get_estimator_paramters')())
                 kargs.update(self.params_hdl.get_estimator_paramters())
-                fit_params = {"X": X, "y": y}
+                fit_params = {}
+                if y is not None:
+                    fit_params.update({"y": y})
                 fit_params.update(kargs)
-                return getattr(object.__getattribute__(self, "obj"), name)(**fit_params)
+                return getattr(object.__getattribute__(self, "obj"), name)(X, **fit_params)
 
             output = fitwrapper
         else:

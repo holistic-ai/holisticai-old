@@ -8,6 +8,7 @@ from .inprocessing import (
     GridSearchReduction,
     MetaFairClassifier,
     PrejudiceRemover,
+    VariationalFairClustering
 )
 
 # postprocessing algorithm classes
@@ -42,6 +43,7 @@ __all__ = [
     "PluginEstimationAndCalibration",
     "PrejudiceRemover",
     "MetaFairClassifier",
+    "VariationalFairClustering"
 ]
 
 import importlib
