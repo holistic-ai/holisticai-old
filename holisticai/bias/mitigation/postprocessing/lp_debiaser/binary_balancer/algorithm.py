@@ -12,15 +12,15 @@ class BinaryBalancerAlgorithm:
         self.objective = objective
         self.binom = binom
 
-    def fit(self, y_true, group_num, y_pred=None, y_proba=None):
+    def fit(self, y_true, p_attr, y_pred=None, y_proba=None):
 
         assert not (
             (y_pred is None) and (y_proba is None)
         ), f"y_pred or y_proba must be passed"
 
         # Getting the group info
-        self.groups = np.unique(group_num)
-        group_ids = [np.where(group_num == g)[0] for g in self.groups]
+        self.groups = np.unique(p_attr)
+        group_ids = [np.where(p_attr == g)[0] for g in self.groups]
 
         # Optionally thresholding probabilities to get class predictions
         if y_proba is not None:
@@ -62,10 +62,10 @@ class BinaryBalancerAlgorithm:
 
         # Setting the adjusted predictions
         self.y_adj = tools.pred_from_pya(
-            y_pred=y_pred, group_num=group_num, pya=self.pya, binom=self.binom
+            y_pred=y_pred, p_attr=p_attr, pya=self.pya, binom=self.binom
         )
 
-    def predict(self, group_num, y_pred=None, y_proba=None, binom=False):
+    def predict(self, p_attr, y_pred=None, y_proba=None, binom=False):
         """Generates bias-adjusted predictions on new data.
         
         Parameters
@@ -88,10 +88,10 @@ class BinaryBalancerAlgorithm:
         # Optional thresholding for continuous predictors
         if y_proba is not None:
             probs = y_proba[:, 1]
-            group_ids = [np.where(group_num == g)[0] for g in self.groups]
+            group_ids = [np.where(p_attr == g)[0] for g in self.groups]
             for g, cut in enumerate(self.cuts):
                 y_pred[group_ids[g]] = tools.threshold(probs[group_ids[g]], cut)
 
         # Returning the adjusted predictions
-        adj = tools.pred_from_pya(y_pred, group_num, self.pya, binom)
+        adj = tools.pred_from_pya(y_pred, p_attr, self.pya, binom)
         return adj

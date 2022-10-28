@@ -10,14 +10,14 @@ class WassersteinBarycenterAlgorithm:
 
     def fit(self, y_pred: np.ndarray, sensitive_groups: np.ndarray):
 
-        group_num = self.sens_groups.fit_transform(
+        p_attr = self.sens_groups.fit_transform(
             sensitive_groups, convert_numeric=True
         ).squeeze()
-        self.group_values = np.unique(group_num)
+        self.group_values = np.unique(p_attr)
 
         group_freq = [
-            np.sum(group_num == self.group_values[0]),
-            np.sum(group_num == self.group_values[1]),
+            np.sum(p_attr == self.group_values[0]),
+            np.sum(p_attr == self.group_values[1]),
         ]
 
         self.iM = np.argmax(group_freq)
@@ -26,10 +26,10 @@ class WassersteinBarycenterAlgorithm:
         self.im = np.argmin(group_freq)
         self.nm = group_freq[self.im]
 
-        self.p = self.nm / len(group_num)
+        self.p = self.nm / len(p_attr)
         self.q = 1 - self.p
 
-        self.SL = group_num
+        self.SL = p_attr
 
         noise = self.eps * np.random.randn(len(y_pred)).squeeze()
         self.YL = y_pred + noise

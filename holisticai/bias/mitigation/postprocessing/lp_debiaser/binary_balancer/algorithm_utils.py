@@ -34,20 +34,20 @@ def loss_from_roc(y, probs, roc):
     return {"guesses": guess_list, "accs": accs, "js": js, "tops": tops}
 
 
-def pred_from_pya(y_pred, group_num, pya, binom=False):
+def pred_from_pya(y_pred, p_attr, pya, binom=False):
     # Getting the groups and making the initially all-zero predictor
-    groups = np.unique(group_num)
+    groups = np.unique(p_attr)
     out = deepcopy(y_pred)
 
     for i, g in enumerate(groups):
-        group_ids = np.where((group_num == g))[0]
+        group_ids = np.where((p_attr == g))[0]
 
         # Pulling the fitted switch probabilities for the group
         p = pya[i]
 
         # Indices in the group from which to choose swaps
-        pos = np.where((group_num == g) & (y_pred == 1))[0]
-        neg = np.where((group_num == g) & (y_pred == 0))[0]
+        pos = np.where((p_attr == g) & (y_pred == 1))[0]
+        neg = np.where((p_attr == g) & (y_pred == 0))[0]
 
         if not binom:
             # Randomly picking the positive predictions

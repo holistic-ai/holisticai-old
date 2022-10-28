@@ -87,7 +87,7 @@ class LPDebiaserMulticlass(BMPost):
         y_pred = params["y_pred"]
 
         sensitive_features = np.stack([group_a, group_b], axis=1)
-        group_num = self.sens_groups.fit_transform(
+        p_attr = self.sens_groups.fit_transform(
             sensitive_features, convert_numeric=True
         )
 
@@ -101,7 +101,7 @@ class LPDebiaserMulticlass(BMPost):
             constraint=constraint, objective=objective
         )
 
-        self.algorithm.fit(y_true=y_true, y_pred=y_pred, group_num=group_num)
+        self.algorithm.fit(y_true=y_true, y_pred=y_pred, p_attr=p_attr)
         return self
 
     def transform(
@@ -134,8 +134,8 @@ class LPDebiaserMulticlass(BMPost):
         y_pred = params["y_pred"]
 
         sensitive_features = np.stack([group_a, group_b], axis=1)
-        group_num = self.sens_groups.transform(sensitive_features, convert_numeric=True)
-        new_y_pred = self.algorithm.predict(y_pred=y_pred, group_num=group_num)
+        p_attr = self.sens_groups.transform(sensitive_features, convert_numeric=True)
+        new_y_pred = self.algorithm.predict(y_pred=y_pred, p_attr=p_attr)
         return {"y_pred": new_y_pred}
 
     def fit_transform(

@@ -105,7 +105,7 @@ class Reduce2BinaryAlgorithm:
         )
         return h_mat + u_mat - j_mat
 
-    def predict(self, y_prob, group_num):
+    def predict(self, y_prob, p_attr):
         """
         Description
         -----------
@@ -118,7 +118,7 @@ class Reduce2BinaryAlgorithm:
           y_prob: np.ndarray
             Predicted probability matrix.
 
-          group_num: An array containing the group id of each instance starting
+          p_attr: An array containing the group id of each instance starting
             from group 0 to group (num_classes-1).
 
         Returns:
@@ -142,9 +142,9 @@ class Reduce2BinaryAlgorithm:
         for iteration in range(self.max_iter):
             # Step 1: debias each label separately.
             for k in range(self.num_classes):
-                self.debiasers[k].fit(f_mat[:, k], group_num)
+                self.debiasers[k].fit(f_mat[:, k], p_attr)
 
-                h_mat[:, k] = self.debiasers[k].predict(f_mat[:, k], group_num)
+                h_mat[:, k] = self.debiasers[k].predict(f_mat[:, k], p_attr)
 
                 # Step 2: update ADMM variables.
                 old_z = copy.deepcopy(z_mat)

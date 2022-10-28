@@ -13,7 +13,7 @@ class MulticlassBalancerAlgorithm:
         self.constraint = constraint
         self.objective = objective
 
-    def fit(self, y_true, y_pred, group_num):
+    def fit(self, y_true, y_pred, p_attr):
         """
         Parameters
         ----------
@@ -25,7 +25,7 @@ class MulticlassBalancerAlgorithm:
             The predicted labels, either as an array or as a string \
             specifying a column in data.
         
-        group_num : array-like of shape (n_samples,) or str
+        p_attr : array-like of shape (n_samples,) or str
             The protected attribute, either as an array, or as a string \
             specifying the column in data.
         """
@@ -34,13 +34,13 @@ class MulticlassBalancerAlgorithm:
 
         # Getting the group info
         p_y = tools.p_vec(y_true)
-        p_a = tools.p_vec(group_num)
+        p_a = tools.p_vec(p_attr)
         self.n_classes = p_y.shape[0]
 
         # Getting some basic info for each group
-        self.groups = np.unique(group_num)
+        self.groups = np.unique(p_attr)
         self.n_groups = len(self.groups)
-        group_ids = [np.where(group_num == g)[0] for g in self.groups]
+        group_ids = [np.where(p_attr == g)[0] for g in self.groups]
 
         # Getting the group-specific P(Y), P(Y- | Y), and constraint matrices
         p_vecs = np.array([tools.p_vec(y_true[ids]) for ids in group_ids])
@@ -76,7 +76,7 @@ class MulticlassBalancerAlgorithm:
             [np.dot(cp_mats[i], m[i]) for i in range(self.n_groups)]
         )
 
-    def predict(self, y_pred, group_num, seed=2021):
+    def predict(self, y_pred, p_attr, seed=2021):
         """Generates bias-adjusted predictions on new data.
 
         Parameters
@@ -84,7 +84,7 @@ class MulticlassBalancerAlgorithm:
         y_pred : ndarry of shape (n_samples,)
             A binary- or real-valued array of unadjusted predictions.
 
-        group_num : ndarray of shape (n_samples,)
+        p_attr : ndarray of shape (n_samples,)
             The protected attributes for the samples in y_.
 
         Returns
@@ -100,7 +100,7 @@ class MulticlassBalancerAlgorithm:
         seeds = np.random.randint(0, 1e6, len(self.groups))
         for g in self.groups:
             for c in range(self.n_classes):
-                y_ids = np.where((group_num == g) & (y_pred == c))[0]
+                y_ids = np.where((p_attr == g) & (y_pred == c))[0]
                 np.random.seed(seeds[g])
                 y_tilde[y_ids] = np.random.choice(
                     a=self.n_classes, p=self.new_cp_mats[g][c], size=len(y_ids)

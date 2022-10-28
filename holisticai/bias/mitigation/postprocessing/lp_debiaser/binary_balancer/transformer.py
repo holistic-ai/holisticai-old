@@ -86,7 +86,7 @@ class LPDebiaserBinary(BMPost):
         y_proba = params.get("y_proba", None)
 
         sensitive_features = np.stack([group_a, group_b], axis=1)
-        group_num = self.sens_groups.fit_transform(
+        p_attr = self.sens_groups.fit_transform(
             sensitive_features, convert_numeric=True
         )
 
@@ -100,9 +100,7 @@ class LPDebiaserBinary(BMPost):
             constraint=constraint, objective=objective
         )
 
-        self.algorithm.fit(
-            y_true=y_true, y_pred=y_pred, y_proba=y_proba, group_num=group_num
-        )
+        self.algorithm.fit(y_true=y_true, y_pred=y_pred, y_proba=y_proba, p_attr=p_attr)
 
         return self
 
@@ -142,12 +140,12 @@ class LPDebiaserBinary(BMPost):
         group_b = params["group_b"] == 1
 
         sensitive_features = np.stack([group_a, group_b], axis=1)
-        group_num = self.sens_groups.transform(sensitive_features, convert_numeric=True)
+        p_attr = self.sens_groups.transform(sensitive_features, convert_numeric=True)
 
         y_proba = params.get("y_proba", None)
         y_pred = params.get("y_pred", None)
         new_y_pred = self.algorithm.predict(
-            y_pred=y_pred, y_proba=y_proba, group_num=group_num
+            y_pred=y_pred, y_proba=y_proba, p_attr=p_attr
         )
         return {"y_pred": new_y_pred}
 

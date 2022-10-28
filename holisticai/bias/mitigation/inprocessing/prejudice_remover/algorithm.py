@@ -88,8 +88,8 @@ class PrejudiceRemoverAlgorithm:
         y : array, shape=(n_samples), dtype=int
             array of predicted class
         """
-        group_num = self.sens_groups.transform(sensitive_features, convert_numeric=True)
-        return self.estimator.predict(X, group_num)
+        p_attr = self.sens_groups.transform(sensitive_features, convert_numeric=True)
+        return self.estimator.predict(X, p_attr)
 
     def predict_proba(self, X, sensitive_features):
         """
@@ -108,5 +108,5 @@ class PrejudiceRemoverAlgorithm:
         y_proba : array, shape=(n_samples, n_classes), dtype=float
             array of predicted class
         """
-        group_num = self.sens_groups.transform(sensitive_features, convert_numeric=True)
-        return self.estimator.predict_proba(X, group_num)
+        p_attr = self.sens_groups.transform(sensitive_features, convert_numeric=True)
+        return self.estimator.predict_proba(X, p_attr)
