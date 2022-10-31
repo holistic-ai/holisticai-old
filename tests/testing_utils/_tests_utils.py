@@ -23,7 +23,6 @@ def metrics_dataframe(y_pred, y_true, metrics_dict=metrics_dict):
 def load_preprocessed_adult():
     dataset = load_adult()
     df = pd.concat([dataset["data"], dataset["target"]], axis=1)
-    df = df.sample(n=500)
     protected_variables = ["sex", "race"]
     output_variable = ["class"]
     favorable_label = 1
@@ -37,9 +36,12 @@ def load_preprocessed_adult():
     group = ["sex"]
     group_a = df[group] == "Female"
     group_b = df[group] == "Male"
-    data = [x, y, group_a, group_b]
+    index_a = list(np.where(group_a == 1)[0])
+    index_b = list(np.where(group_b == 1)[0])
+    index = index_a[:800] + index_b[:800]
+    data = [x.iloc[index], y.iloc[index], group_a.iloc[index], group_b.iloc[index]]
 
-    dataset = train_test_split(*data, test_size=0.2, shuffle=True)
+    dataset = train_test_split(*data, test_size=0.5, shuffle=True)
     train_data = dataset[::2]
     test_data = dataset[1::2]
     return train_data, test_data
