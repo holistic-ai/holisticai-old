@@ -7,7 +7,7 @@ from sklearn.linear_model import LinearRegression
 from sklearn.preprocessing import StandardScaler
 
 from holisticai.bias.metrics import regression_bias_metrics
-from holisticai.bias.mitigation import WasserteinBarycenter
+from holisticai.bias.mitigation import WassersteinBarycenter
 from holisticai.pipeline import Pipeline
 from tests.testing_utils._tests_data_utils import load_preprocessed_us_crime
 from tests.testing_utils._tests_utils import check_results
@@ -29,7 +29,7 @@ def running_without_pipeline():
     y_pred = model.predict(Xt)
 
     fit_params = {"group_a": group_a, "group_b": group_b}
-    post = WasserteinBarycenter()
+    post = WassersteinBarycenter()
     post.fit(y_pred, **fit_params)
 
     X, y, group_a, group_b = test_data
@@ -53,7 +53,7 @@ def running_with_pipeline():
         steps=[
             ("scaler", StandardScaler()),
             ("estimator", LinearRegression()),
-            ("bm_posprocessing", WasserteinBarycenter()),
+            ("bm_posprocessing", WassersteinBarycenter()),
         ]
     )
 

@@ -5,10 +5,12 @@ from sklearn.model_selection import train_test_split
 from holisticai.datasets import load_adult, load_us_crime
 
 
-def load_preprocessed_adult():
+def load_preprocessed_adult(short_version=True):
     dataset = load_adult()
     df = pd.concat([dataset["data"], dataset["target"]], axis=1)
-    df = df.sample(n=500)
+    if not short_version:
+        df = df.sample(n=500)
+
     protected_variables = ["sex", "race"]
     output_variable = ["class"]
     favorable_label = 1

@@ -2,10 +2,10 @@ import numpy as np
 
 from holisticai.utils.transformers.bias import BMPostprocessing as BMPost
 
-from .algorithm import WasserteinBarycenterAlgorithm
+from .algorithm import WassersteinBarycenterAlgorithm
 
 
-class WasserteinBarycenter(BMPost):
+class WassersteinBarycenter(BMPost):
     """
     Fair Regression with Wasserstein Barycenters learning a real-valued function that
     satisfies the Demographic Parity constraint. The strategy founds the optimal fair
@@ -19,7 +19,7 @@ class WasserteinBarycenter(BMPost):
 
     def __init__(self):
         """Create a Calibrated Equalized Odds Post-processing instance."""
-        self.algorithm = WasserteinBarycenterAlgorithm()
+        self.algorithm = WassersteinBarycenterAlgorithm()
 
     def fit(self, y_pred: np.ndarray, group_a: np.ndarray, group_b: np.ndarray):
         """
