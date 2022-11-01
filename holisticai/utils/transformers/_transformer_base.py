@@ -99,7 +99,8 @@ class BMTransformerBase(ABC, TransformerBase):
     def __new__(cls, *args, **kwargs):
         obj = object.__new__(cls)
 
-        obj.fit = obj.reformat_function(obj.fit)
+        if hasattr(obj, "fit"):
+            obj.fit = obj.reformat_function(obj.fit)
 
         if hasattr(obj, "transform"):
             docstring = obj.transform.__doc__
@@ -124,7 +125,3 @@ class BMTransformerBase(ABC, TransformerBase):
         obj.estimator_params = {}
         obj.bias_mitigator_params = {}
         return obj
-
-    @abstractmethod
-    def fit(self, X, y):
-        pass
