@@ -6,8 +6,7 @@ import warnings
 from sklearn.preprocessing import StandardScaler
 
 from holisticai.bias.metrics import clustering_bias_metrics
-from holisticai.bias.mitigation import FairletClustering
-from holisticai.bias.mitigation import FairletClusteringPreprocessing
+from holisticai.bias.mitigation import FairletClustering, FairletClusteringPreprocessing
 from holisticai.pipeline import Pipeline
 from tests.testing_utils._tests_utils import check_results, load_preprocessed_adult
 
@@ -40,7 +39,7 @@ def running_without_pipeline():
 
 
 def running_with_pipeline():
-    
+
     pipeline = Pipeline(
         steps=[
             ("scaler", StandardScaler()),
@@ -65,6 +64,7 @@ def running_with_pipeline():
     )
     return df
 
+
 def test_reproducibility_with_and_without_pipeline():
     import numpy as np
 
@@ -74,24 +74,26 @@ def test_reproducibility_with_and_without_pipeline():
     df2 = running_with_pipeline()
     check_results(df1, df2)
 
+
 def running_without_pipeline_pre():
     from sklearn.cluster import KMeans
+
     X, y, group_a, group_b = train_data
 
     scaler = StandardScaler()
     Xt = scaler.fit_transform(X)
-    
+
     prep = FairletClusteringPreprocessing(p=1, q=3)
     Xt = prep.fit_transform(Xt, group_a=group_a, group_b=group_b)
     sample_weight = prep.estimator_params["sample_weight"]
-    
+
     model = KMeans(n_clusters=4)
     model.fit(Xt, sample_weight=sample_weight)
-    
+
     # Test
     X, y, group_a, group_b = test_data
     Xt = scaler.transform(X)
-    Xt = prep.transform(Xt, group_a=group_a, group_b=group_b)    
+    Xt = prep.transform(Xt, group_a=group_a, group_b=group_b)
     y_pred = model.predict(Xt)
     centroids = model.cluster_centers_
     df = clustering_bias_metrics(
@@ -102,15 +104,15 @@ def running_without_pipeline_pre():
 
 def running_with_pipeline_pre():
     from sklearn.cluster import KMeans
-    
+
     pipeline = Pipeline(
         steps=[
             ("scaler", StandardScaler()),
             ("bm_preprocessing", FairletClusteringPreprocessing(p=1, q=3)),
-            ('cluster', KMeans(n_clusters=4))
+            ("cluster", KMeans(n_clusters=4)),
         ]
     )
-    
+
     X, y, group_a, group_b = train_data
     fit_params = {"bm__group_a": group_a, "bm__group_b": group_b}
 
@@ -137,6 +139,7 @@ def test_reproducibility_with_and_without_pipeline_pre():
     np.random.seed(seed)
     df2 = running_with_pipeline_pre()
     check_results(df1, df2)
+
 
 test_reproducibility_with_and_without_pipeline()
 test_reproducibility_with_and_without_pipeline_pre()
