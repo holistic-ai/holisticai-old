@@ -61,13 +61,7 @@ class FairletClusteringPreprocessing(BaseEstimator, BMPre):
             seed : int
                 Random seed.
         """
-        if decomposition in ["Scalable", "Vanilla"]:
-            self.decomposition = DECOMPOSITION_CATALOG[decomposition](p=p, q=q)
-        elif decomposition in ["MCF"]:
-            self.decomposition = DECOMPOSITION_CATALOG[decomposition](
-                t=t, distance_threshold=distance_threshold
-            )
-
+        self.decomposition = DECOMPOSITION_CATALOG[decomposition](p=p, q=q)
         self.p = p
         self.q = q
         self.seed = seed
