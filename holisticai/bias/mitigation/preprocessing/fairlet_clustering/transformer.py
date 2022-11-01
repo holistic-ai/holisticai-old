@@ -10,6 +10,9 @@ from holisticai.bias.mitigation.commons.fairlet_clustering.clustering._kcenters 
 from holisticai.bias.mitigation.commons.fairlet_clustering.clustering._kmedoids import (
     KMedoids,
 )
+from holisticai.bias.mitigation.commons.fairlet_clustering.decomposition._base import (
+    DecompositionMixin,
+)
 from holisticai.bias.mitigation.commons.fairlet_clustering.decomposition._scalable import (
     ScalableFairletDecomposition,
 )
