@@ -18,6 +18,7 @@ from holisticai.bias.mitigation.commons.fairlet_clustering.decomposition._vanill
 from holisticai.bias.mitigation.inprocessing.fairlet_clustering.algorithm import (
     FairletClusteringAlgorithm,
 )
+from holisticai.bias.mitigation.commons.fairlet_clustering.decomposition._base import DecompositionMixin
 from holisticai.utils.transformers.bias import BMInprocessing as BMImp
 
 DECOMPOSITION_CATALOG = {
