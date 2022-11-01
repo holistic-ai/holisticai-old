@@ -35,6 +35,9 @@ class Logging:
 
             elif param_type is float:
                 params[param_name] = f"{param_value:.4f}"
+                
+            elif param_type is str:
+                params[param_name] = f"{param_value}"
 
         current_time = time.time()
         elapsed_time = current_time - self.time_start

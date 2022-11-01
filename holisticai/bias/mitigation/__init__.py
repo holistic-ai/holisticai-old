@@ -9,6 +9,7 @@ from .inprocessing import (
     MetaFairClassifier,
     PrejudiceRemover,
     VariationalFairClustering,
+    FairletClustering
 )
 
 # postprocessing algorithm classes
@@ -24,7 +25,7 @@ from .postprocessing import (
 )
 
 # preprocessing algorithm classes
-from .preprocessing import CorrelationRemover, LearningFairRepresentation, Reweighing
+from .preprocessing import CorrelationRemover, LearningFairRepresentation, Reweighing, FairletClusteringPreprocessing
 
 # all
 __all__ = [
@@ -44,6 +45,8 @@ __all__ = [
     "PrejudiceRemover",
     "MetaFairClassifier",
     "VariationalFairClustering",
+    "FairletClustering",
+    "FairletClusteringPreprocessing"
 ]
 
 import importlib
