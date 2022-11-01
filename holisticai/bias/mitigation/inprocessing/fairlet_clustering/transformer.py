@@ -9,9 +9,6 @@ from holisticai.bias.mitigation.commons.fairlet_clustering.clustering._kcenters 
 from holisticai.bias.mitigation.commons.fairlet_clustering.clustering._kmedoids import (
     KMedoids,
 )
-from holisticai.bias.mitigation.commons.fairlet_clustering.decomposition._mcf import (
-    MCFFairletDecomposition,
-)
 from holisticai.bias.mitigation.commons.fairlet_clustering.decomposition._scalable import (
     ScalableFairletDecomposition,
 )
@@ -25,7 +22,6 @@ from holisticai.utils.transformers.bias import BMInprocessing as BMImp
 
 DECOMPOSITION_CATALOG = {
     "Scalable": ScalableFairletDecomposition,
-    "MCF": MCFFairletDecomposition,
     "Vanilla": VanillaFairletDecomposition,
 }
 CLUSTERING_CATALOG = {"KCenters": KCenters, "KMedoids": KMedoids}
@@ -49,11 +45,9 @@ class FairletClustering(BaseEstimator, BMImp):
         self,
         n_clusters: Optional[int],
         decomposition: Union["str", "DecompositionMixin"] = "Vanilla",
-        clustering_model: Optional["str"] = "KCenter",
+        clustering_model: Optional["str"] = "KCenters",
         p: Optional[str] = 1,
         q: Optional[float] = 3,
-        t: Optional[int] = 10,
-        distance_threshold: Optional[float] = 400,
         seed: Optional[int] = None,
     ):
         """
@@ -63,7 +57,7 @@ class FairletClustering(BaseEstimator, BMImp):
                 The number of clusters to form as well as the number of centroids to generate.
 
             decomposition : str
-                Fairlet decomposition strategy, available: Vanilla, Scalable, MCF
+                Fairlet decomposition strategy, available: Vanilla, Scalable
 
             clustering_model : str
                 specified lambda parameter
@@ -74,22 +68,11 @@ class FairletClustering(BaseEstimator, BMImp):
             q : int
                 fairlet decomposition parameter for Vanilla and Scalable strategy
 
-            t : float
-                fairlet decomposition parameter for MCF strategy
-
-            distance_threshold : float
-                fairlet decomposition parameter for MCF strategy
-
             seed : int
                 Random seed.
         """
         if decomposition in ["Scalable", "Vanilla"]:
             self.decomposition = DECOMPOSITION_CATALOG[decomposition](p=p, q=q)
-        elif decomposition in ["MCF"]:
-            self.decomposition = DECOMPOSITION_CATALOG[decomposition](
-                t=t, distance_threshold=distance_threshold
-            )
-
         self.clustering_model = CLUSTERING_CATALOG[clustering_model](
             n_clusters=n_clusters
         )
@@ -100,8 +83,6 @@ class FairletClustering(BaseEstimator, BMImp):
         )
         self.p = p
         self.q = q
-        self.t = t
-        self.distance_threshold = distance_threshold
         self.n_clusters = n_clusters
         self.seed = seed
 

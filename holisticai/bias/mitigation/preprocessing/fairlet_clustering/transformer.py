@@ -10,9 +10,6 @@ from holisticai.bias.mitigation.commons.fairlet_clustering.clustering._kcenters 
 from holisticai.bias.mitigation.commons.fairlet_clustering.clustering._kmedoids import (
     KMedoids,
 )
-from holisticai.bias.mitigation.commons.fairlet_clustering.decomposition._mcf import (
-    MCFFairletDecomposition,
-)
 from holisticai.bias.mitigation.commons.fairlet_clustering.decomposition._scalable import (
     ScalableFairletDecomposition,
 )
@@ -23,7 +20,6 @@ from holisticai.utils.transformers.bias import BMPreprocessing as BMPre
 
 DECOMPOSITION_CATALOG = {
     "Scalable": ScalableFairletDecomposition,
-    "MCF": MCFFairletDecomposition,
     "Vanilla": VanillaFairletDecomposition,
 }
 CLUSTERING_CATALOG = {"KCenter": KCenters, "KMedoids": KMedoids}
@@ -48,8 +44,6 @@ class FairletClusteringPreprocessing(BaseEstimator, BMPre):
         decomposition: Union["str", "DecompositionMixin"] = "Vanilla",
         p: Optional[str] = 1,
         q: Optional[float] = 3,
-        t: Optional[int] = 10,
-        distance_threshold: Optional[float] = 400,
         seed: Optional[int] = None,
     ):
         """
@@ -64,12 +58,6 @@ class FairletClusteringPreprocessing(BaseEstimator, BMPre):
             q : int
                 fairlet decomposition parameter for Vanilla and Scalable strategy
 
-            t : float
-                fairlet decomposition parameter for MCF strategy
-
-            distance_threshold : float
-                fairlet decomposition parameter for MCF strategy
-
             seed : int
                 Random seed.
         """
@@ -82,8 +70,6 @@ class FairletClusteringPreprocessing(BaseEstimator, BMPre):
 
         self.p = p
         self.q = q
-        self.t = t
-        self.distance_threshold = distance_threshold
         self.seed = seed
 
     def fit_transform(
