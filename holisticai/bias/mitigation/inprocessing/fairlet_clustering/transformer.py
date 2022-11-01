@@ -1,26 +1,39 @@
-from typing import Optional,Union
+from typing import Optional, Union
+
 import numpy as np
 from sklearn.base import BaseEstimator
-from holisticai.utils.transformers.bias import BMInprocessing as BMImp
-from holisticai.bias.mitigation.inprocessing.fairlet_clustering.algorithm import FairletClusteringAlgorithm
 
-from holisticai.bias.mitigation.commons.fairlet_clustering.decomposition._scalable import ScalableFairletDecomposition
-from holisticai.bias.mitigation.commons.fairlet_clustering.decomposition._mcf import MCFFairletDecomposition
-from holisticai.bias.mitigation.commons.fairlet_clustering.decomposition._vanilla import VanillaFairletDecomposition
-from holisticai.bias.mitigation.commons.fairlet_clustering.clustering._kcenters import KCenters
-from holisticai.bias.mitigation.commons.fairlet_clustering.clustering._kmedoids import KMedoids
+from holisticai.bias.mitigation.commons.fairlet_clustering.clustering._kcenters import (
+    KCenters,
+)
+from holisticai.bias.mitigation.commons.fairlet_clustering.clustering._kmedoids import (
+    KMedoids,
+)
+from holisticai.bias.mitigation.commons.fairlet_clustering.decomposition._mcf import (
+    MCFFairletDecomposition,
+)
+from holisticai.bias.mitigation.commons.fairlet_clustering.decomposition._scalable import (
+    ScalableFairletDecomposition,
+)
+from holisticai.bias.mitigation.commons.fairlet_clustering.decomposition._vanilla import (
+    VanillaFairletDecomposition,
+)
+from holisticai.bias.mitigation.inprocessing.fairlet_clustering.algorithm import (
+    FairletClusteringAlgorithm,
+)
+from holisticai.utils.transformers.bias import BMInprocessing as BMImp
 
 DECOMPOSITION_CATALOG = {
-    'Scalable':ScalableFairletDecomposition,
-    'MCF':MCFFairletDecomposition,
-    'Vanilla':VanillaFairletDecomposition}
-CLUSTERING_CATALOG = {
-    'KCenters':KCenters,
-    'KMedoids':KMedoids
+    "Scalable": ScalableFairletDecomposition,
+    "MCF": MCFFairletDecomposition,
+    "Vanilla": VanillaFairletDecomposition,
 }
+CLUSTERING_CATALOG = {"KCenters": KCenters, "KMedoids": KMedoids}
+
+
 class FairletClustering(BaseEstimator, BMImp):
     """
-    Variational Fair Clustering helps you to find clusters with specified proportions
+    Strategies based in Fairlet clustering  Fair Clustering helps you to find clusters with specified proportions
     of different demographic groups pertaining to a sensitive attribute of the dataset
     (group_a and group_b) for any well-known clustering method such as K-means, K-median
     or Spectral clustering (Normalized cut).
@@ -35,57 +48,61 @@ class FairletClustering(BaseEstimator, BMImp):
     def __init__(
         self,
         n_clusters: Optional[int],
-        decomposition: Union["str","DecompositionMixin"]='Vanilla',
-        clustering_model: Optional["str"]='KCenter',
+        decomposition: Union["str", "DecompositionMixin"] = "Vanilla",
+        clustering_model: Optional["str"] = "KCenter",
         p: Optional[str] = 1,
         q: Optional[float] = 3,
         t: Optional[int] = 10,
         distance_threshold: Optional[float] = 400,
-        verbose: Optional[int] = 0,
         seed: Optional[int] = None,
     ):
         """
         Parameters
         ----------
-            nb_clusters : int
+            n_clusters : int
                 The number of clusters to form as well as the number of centroids to generate.
 
-            lipchitz_value : float
-                Lipchitz value in bound update
+            decomposition : str
+                Fairlet decomposition strategy, available: Vanilla, Scalable, MCF
 
-            lmbda : float
+            clustering_model : str
                 specified lambda parameter
 
-            method : str
-                cluster option : {'kmeans', 'kmedian'} (TODO: 'ncut' take too much time consuming)
+            p : int
+                fairlet decomposition parameter for Vanilla and Scalable strategy
 
-            normalize_input : str
-                Normalize input data X
+            q : int
+                fairlet decomposition parameter for Vanilla and Scalable strategy
+
+            t : float
+                fairlet decomposition parameter for MCF strategy
+
+            distance_threshold : float
+                fairlet decomposition parameter for MCF strategy
 
             seed : int
                 Random seed.
-
-            verbose : bool
-                If true , print metrics
         """
-        if decomposition in ['Scalable','Vanilla']:
+        if decomposition in ["Scalable", "Vanilla"]:
             self.decomposition = DECOMPOSITION_CATALOG[decomposition](p=p, q=q)
-        elif decomposition in ['MCF']:
-            self.decomposition = DECOMPOSITION_CATALOG[decomposition](t=t, distance_threshold=distance_threshold)
-            
-        self.clustering_model = CLUSTERING_CATALOG[clustering_model](n_clusters=n_clusters)
-        
+        elif decomposition in ["MCF"]:
+            self.decomposition = DECOMPOSITION_CATALOG[decomposition](
+                t=t, distance_threshold=distance_threshold
+            )
+
+        self.clustering_model = CLUSTERING_CATALOG[clustering_model](
+            n_clusters=n_clusters
+        )
+
         # Constant parameters
         self.algorithm = FairletClusteringAlgorithm(
-            decomposition=self.decomposition,
-            clustering_model=self.clustering_model
+            decomposition=self.decomposition, clustering_model=self.clustering_model
         )
         self.p = p
         self.q = q
         self.t = t
         self.distance_threshold = distance_threshold
         self.n_clusters = n_clusters
-        self.verbose = verbose
         self.seed = seed
 
     def fit(
@@ -119,8 +136,8 @@ class FairletClustering(BaseEstimator, BMImp):
         """
         params = self._load_data(X=X, group_a=group_a, group_b=group_b)
         X = params["X"]
-        group_a = params["group_a"].astype('int32')
-        group_b = params["group_b"].astype('int32')
+        group_a = params["group_a"].astype("int32")
+        group_b = params["group_b"].astype("int32")
         np.random.seed(self.seed)
         self.algorithm.fit(X, group_a=group_a, group_b=group_b)
         return self

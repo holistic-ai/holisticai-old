@@ -1,25 +1,34 @@
-from typing import Optional,Union
+from typing import Optional, Union
+
 import numpy as np
 from sklearn.base import BaseEstimator
-from holisticai.utils.transformers.bias import BMPreprocessing as BMPre
-from holisticai.bias.mitigation.commons.fairlet_clustering.decomposition._scalable import ScalableFairletDecomposition
-from holisticai.bias.mitigation.commons.fairlet_clustering.decomposition._mcf import MCFFairletDecomposition
-from holisticai.bias.mitigation.commons.fairlet_clustering.decomposition._vanilla import VanillaFairletDecomposition
-from holisticai.bias.mitigation.commons.fairlet_clustering.clustering._kcenters import KCenters
-from holisticai.bias.mitigation.commons.fairlet_clustering.clustering._kmedoids import KMedoids
-from sklearn.metrics.pairwise import (
-    pairwise_distances,
-    pairwise_distances_argmin,
+from sklearn.metrics.pairwise import pairwise_distances, pairwise_distances_argmin
+
+from holisticai.bias.mitigation.commons.fairlet_clustering.clustering._kcenters import (
+    KCenters,
 )
+from holisticai.bias.mitigation.commons.fairlet_clustering.clustering._kmedoids import (
+    KMedoids,
+)
+from holisticai.bias.mitigation.commons.fairlet_clustering.decomposition._mcf import (
+    MCFFairletDecomposition,
+)
+from holisticai.bias.mitigation.commons.fairlet_clustering.decomposition._scalable import (
+    ScalableFairletDecomposition,
+)
+from holisticai.bias.mitigation.commons.fairlet_clustering.decomposition._vanilla import (
+    VanillaFairletDecomposition,
+)
+from holisticai.utils.transformers.bias import BMPreprocessing as BMPre
 
 DECOMPOSITION_CATALOG = {
-    'Scalable':ScalableFairletDecomposition,
-    'MCF':MCFFairletDecomposition,
-    'Vanilla':VanillaFairletDecomposition}
-CLUSTERING_CATALOG = {
-    'KCenter':KCenters,
-    'KMedoids':KMedoids
+    "Scalable": ScalableFairletDecomposition,
+    "MCF": MCFFairletDecomposition,
+    "Vanilla": VanillaFairletDecomposition,
 }
+CLUSTERING_CATALOG = {"KCenter": KCenters, "KMedoids": KMedoids}
+
+
 class FairletClusteringPreprocessing(BaseEstimator, BMPre):
     """
     Variational Fair Clustering helps you to find clusters with specified proportions
@@ -36,48 +45,45 @@ class FairletClusteringPreprocessing(BaseEstimator, BMPre):
 
     def __init__(
         self,
-        decomposition: Union["str","DecompositionMixin"]='Vanilla',
+        decomposition: Union["str", "DecompositionMixin"] = "Vanilla",
         p: Optional[str] = 1,
         q: Optional[float] = 3,
         t: Optional[int] = 10,
         distance_threshold: Optional[float] = 400,
-        verbose: Optional[int] = 0,
         seed: Optional[int] = None,
     ):
         """
         Parameters
         ----------
-            nb_clusters : int
-                The number of clusters to form as well as the number of centroids to generate.
+            decomposition : str
+                Fairlet decomposition strategy, available: Vanilla, Scalable, MCF
 
-            lipchitz_value : float
-                Lipchitz value in bound update
+            p : int
+                fairlet decomposition parameter for Vanilla and Scalable strategy
 
-            lmbda : float
-                specified lambda parameter
+            q : int
+                fairlet decomposition parameter for Vanilla and Scalable strategy
 
-            method : str
-                cluster option : {'kmeans', 'kmedian'} (TODO: 'ncut' take too much time consuming)
+            t : float
+                fairlet decomposition parameter for MCF strategy
 
-            normalize_input : str
-                Normalize input data X
+            distance_threshold : float
+                fairlet decomposition parameter for MCF strategy
 
             seed : int
                 Random seed.
-
-            verbose : bool
-                If true , print metrics
         """
-        if decomposition in ['Scalable','Vanilla']:
+        if decomposition in ["Scalable", "Vanilla"]:
             self.decomposition = DECOMPOSITION_CATALOG[decomposition](p=p, q=q)
-        elif decomposition in ['MCF']:
-            self.decomposition = DECOMPOSITION_CATALOG[decomposition](t=t, distance_threshold=distance_threshold)
-        
+        elif decomposition in ["MCF"]:
+            self.decomposition = DECOMPOSITION_CATALOG[decomposition](
+                t=t, distance_threshold=distance_threshold
+            )
+
         self.p = p
         self.q = q
         self.t = t
         self.distance_threshold = distance_threshold
-        self.verbose = verbose
         self.seed = seed
 
     def fit_transform(
@@ -97,42 +103,48 @@ class FairletClusteringPreprocessing(BaseEstimator, BMPre):
         Parameters
         ----------
 
-        X : numpy array
+        X : matrix-like
             input matrix
 
-        group_a : numpy array
+        group_a : array-like
             binary mask vector
 
-        group_b : numpy array
+        group_b : array-like
             binary mask vector
+
+        sample_weight (optional) : array-like
+            Samples weights vector
 
         Returns
         -------
         the same object
         """
-        params = self._load_data(X=X, sample_weight=sample_weight, group_a=group_a, group_b=group_b)
+        params = self._load_data(
+            X=X, sample_weight=sample_weight, group_a=group_a, group_b=group_b
+        )
         X = params["X"]
-        sample_weight = params['sample_weight']
-        group_a = params["group_a"].astype('int32')
-        group_b = params["group_b"].astype('int32')
+        sample_weight = params["sample_weight"]
+        group_a = params["group_a"].astype("int32")
+        group_b = params["group_b"].astype("int32")
         np.random.seed(self.seed)
-        fairlets, fairlet_centers, fairlet_costs = self.decomposition.fit_transform(X, group_a, group_b)
+        fairlets, fairlet_centers, fairlet_costs = self.decomposition.fit_transform(
+            X, group_a, group_b
+        )
         Xt = np.zeros_like(X)
-        mapping = np.zeros(len(X), dtype='int32')
+        mapping = np.zeros(len(X), dtype="int32")
         centers = np.array([X[fairlet_center] for fairlet_center in fairlet_centers])
-        for i,fairlet in enumerate(fairlets):
+        for i, fairlet in enumerate(fairlets):
             Xt[fairlet] = X[fairlet_centers[i]]
             mapping[fairlet] = i
-            sample_weight[fairlet] = len(fairlet)/len(X)
-            
+            sample_weight[fairlet] = len(fairlet) / len(X)
+
         self.update_estimator_param("sample_weight", sample_weight)
         self.sample_weight = sample_weight
         self.X = X
         self.mapping = mapping
         self.centers = centers
         return Xt
-    
+
     def transform(self, X):
         fairlets_midxs = pairwise_distances_argmin(X, Y=self.X)
         return self.centers[self.mapping[fairlets_midxs]]
-    

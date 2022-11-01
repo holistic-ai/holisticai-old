@@ -1,16 +1,11 @@
-
 import warnings
 
 import numpy as np
-
-from sklearn.metrics.pairwise import (
-    pairwise_distances,
-    pairwise_distances_argmin,
-)
+from sklearn.exceptions import ConvergenceWarning
+from sklearn.metrics.pairwise import pairwise_distances, pairwise_distances_argmin
 from sklearn.utils import check_array, check_random_state
 from sklearn.utils.extmath import stable_cumsum
 from sklearn.utils.validation import check_is_fitted
-from sklearn.exceptions import ConvergenceWarning
 
 
 class KMedoids:
@@ -88,7 +83,6 @@ class KMedoids:
         self.max_iter = max_iter
         self.random_state = random_state
 
-
     def _check_nonnegative_int(self, value, desc, strict=True):
         """Validates if value is a valid integer > 0"""
         if strict:
@@ -97,12 +91,11 @@ class KMedoids:
             negative = (value is None) or (value < 0)
         if negative or not isinstance(value, (int, np.integer)):
             raise ValueError(
-                "%s should be a nonnegative integer. "
-                "%s was given" % (desc, value)
+                "%s should be a nonnegative integer. " "%s was given" % (desc, value)
             )
 
     def _check_init_args(self):
-        """Validates the input arguments. """
+        """Validates the input arguments."""
 
         # Check n_clusters and max_iter
         self._check_nonnegative_int(self.n_clusters, "n_clusters")
@@ -112,9 +105,7 @@ class KMedoids:
         init_methods = ["random", "heuristic", "k-medoids++", "build"]
         if self.init not in init_methods:
             raise ValueError(
-                "init needs to be one of "
-                + "the following: "
-                + "%s" % init_methods
+                "init needs to be one of " + "the following: " + "%s" % init_methods
             )
 
     def fit(self, X, y=None, sample_weight=None):
@@ -139,14 +130,11 @@ class KMedoids:
         if self.n_clusters > X.shape[0]:
             raise ValueError(
                 "The number of medoids (%d) must be less "
-                "than the number of samples %d."
-                % (self.n_clusters, X.shape[0])
+                "than the number of samples %d." % (self.n_clusters, X.shape[0])
             )
 
         D = pairwise_distances(X, metric=self.metric)
-        medoid_idxs = self._initialize_medoids(
-            D, self.n_clusters, random_state_
-        )
+        medoid_idxs = self._initialize_medoids(D, self.n_clusters, random_state_)
         labels = None
 
         # Continue the algorithm as long as
@@ -185,10 +173,10 @@ class KMedoids:
 
         # Return self to enable method chaining
         return self
-    
+
     def assign(self):
         return list(enumerate(self.medoid_indices_))
-        
+
     def _update_medoid_idxs_in_place(self, D, labels, medoid_idxs, sample_weight):
         """In-place update of the medoid indices"""
 
@@ -207,16 +195,14 @@ class KMedoids:
                 )
                 continue
 
-            in_cluster_distances = D[
-                cluster_k_idxs, cluster_k_idxs[:, np.newaxis]
-            ]
-            
+            in_cluster_distances = D[cluster_k_idxs, cluster_k_idxs[:, np.newaxis]]
+
             # Calculate all costs from each point to all others in the cluster
             in_cluster_all_costs = np.sum(in_cluster_distances, axis=1)
-            
+
             if sample_weight is not None:
                 in_cluster_all_costs *= sample_weight[cluster_k_idxs]
-                
+
             min_cost_idx = np.argmin(in_cluster_all_costs)
             min_cost = in_cluster_all_costs[min_cost_idx]
             curr_cost = in_cluster_all_costs[
@@ -228,7 +214,7 @@ class KMedoids:
                 medoid_idxs[k] = cluster_k_idxs[min_cost_idx]
 
     def _compute_cost(self, D, medoid_idxs):
-        """ Compute the cose for a given configuration of the medoids"""
+        """Compute the cose for a given configuration of the medoids"""
         return self._compute_inertia(D[:, medoid_idxs])
 
     def transform(self, X):
@@ -315,9 +301,7 @@ class KMedoids:
         elif self.init == "heuristic":  # Initialization by heuristic
             # Pick K first data points that have the smallest sum distance
             # to every other point. These are the initial medoids.
-            medoids = np.argpartition(np.sum(D, axis=1), n_clusters - 1)[
-                :n_clusters
-            ]
+            medoids = np.argpartition(np.sum(D, axis=1), n_clusters - 1)[:n_clusters]
         else:
             raise ValueError(f"init value '{self.init}' not recognized")
 
@@ -373,12 +357,8 @@ class KMedoids:
 
         # pick the remaining n_clusters-1 points
         for cluster_index in range(1, n_clusters):
-            rand_vals = (
-                random_state_.random_sample(n_local_trials) * current_pot
-            )
-            candidate_ids = np.searchsorted(
-                stable_cumsum(closest_dist_sq), rand_vals
-            )
+            rand_vals = random_state_.random_sample(n_local_trials) * current_pot
+            candidate_ids = np.searchsorted(stable_cumsum(closest_dist_sq), rand_vals)
 
             # Compute distances to center candidates
             distance_to_candidates = D[candidate_ids, :] ** 2
@@ -389,9 +369,7 @@ class KMedoids:
             best_dist_sq = None
             for trial in range(n_local_trials):
                 # Compute potential when including center candidate
-                new_dist_sq = np.minimum(
-                    closest_dist_sq, distance_to_candidates[trial]
-                )
+                new_dist_sq = np.minimum(closest_dist_sq, distance_to_candidates[trial])
                 new_pot = new_dist_sq.sum()
 
                 # Store result if it is the best local trial so far

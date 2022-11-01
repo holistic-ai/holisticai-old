@@ -34,8 +34,10 @@ class BMPreprocessing(BMTransformerBase):
 
         elif "y_true" in locals():
             params.update({"sample_weight": np.ones_like(y_true).astype(np.float64)})
-            
+
         elif "X" in kargs:
-            params.update({"sample_weight": np.ones(len(params['X'])).astype(np.float64)})
+            params.update(
+                {"sample_weight": np.ones(len(params["X"])).astype(np.float64)}
+            )
 
         return params
