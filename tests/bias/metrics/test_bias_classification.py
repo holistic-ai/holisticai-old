@@ -60,18 +60,19 @@ def test_cohen_d():
     assert_approx_equal(a, b)
 
 
-def test_z_test_diff():
+def test_z_t_diff():
     """test z_test_diff"""
     a = z_test_diff(group_a, group_b, y_pred_c)
     b = 1.290994449
     assert_approx_equal(a, b)
-test_z_test_diff()
-def test_z_test_ratio():
+
+
+def test_z_t_ratio():
     """test z_test_ratio"""
     a = z_test_ratio(group_a, group_b, y_pred_c)
     b = 1.256287689
     assert_approx_equal(a, b)
-test_z_test_ratio()
+
 
 def test_equal_opportunity_diff():
     """test equal_oppotunity_diff"""
