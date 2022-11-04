@@ -17,7 +17,7 @@ from holisticai.bias.metrics import (
     statistical_parity,
     true_negative_rate_diff,
     z_test_diff,
-    z_test_ratio
+    z_test_ratio,
 )
 
 # Formatting
