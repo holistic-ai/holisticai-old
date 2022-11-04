@@ -294,11 +294,11 @@ def z_test_diff(group_a, group_b, y_pred):
     Examples
     --------
     >>> import numpy as np
-    >>> from holisticai.bias.metrics import tsd_rule
+    >>> from holisticai.bias.metrics import z_test_diff
     >>> group_a = np.array([1, 1, 1, 1, 0, 0, 0, 0, 0, 0])
     >>> group_b = np.array([0, 0, 0, 0, 1, 1, 1, 1, 1, 1])
     >>> y_pred = np.array([1, 1, 1, 0, 1, 1, 0, 0, 0, 0])
-    >>> tsd_rule(group_a, group_b, y_pred)
+    >>> z_test_diff(group_a, group_b, y_pred)
     1.290994449
 
     References
@@ -359,11 +359,11 @@ def z_test_ratio(group_a, group_b, y_pred):
     Examples
     --------
     >>> import numpy as np
-    >>> from holisticai.bias.metrics import di_tsd_rule
+    >>> from holisticai.bias.metrics import z_test_ratio
     >>> group_a = np.array([1, 1, 1, 1, 0, 0, 0, 0, 0, 0])
     >>> group_b = np.array([0, 0, 0, 0, 1, 1, 1, 1, 1, 1])
     >>> y_pred = np.array([1, 1, 1, 0, 1, 1, 0, 0, 0, 0])
-    >>> di_tsd_rule(group_a, group_b, y_pred)
+    >>> z_test_ratio(group_a, group_b, y_pred)
     1.256287689
 
     References
