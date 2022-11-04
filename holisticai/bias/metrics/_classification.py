@@ -919,7 +919,7 @@ def classification_bias_metrics(
         "Average Odds Difference": 0,
         "Accuracy Difference": 0,
         "ABROCA": 0,
-        "2SD Rule":0
+        "2SD Rule": 0
     }
 
     out_metrics = [
