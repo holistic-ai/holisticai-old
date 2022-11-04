@@ -262,14 +262,14 @@ def cohen_d(group_a, group_b, y_pred):
     return (sr_a - sr_b) / std_pool
 
 
-def tsd_rule(group_a, group_b, y_pred):
+def z_test_diff(group_a, group_b, y_pred):
     r"""
-    2SD Rule.
+    Z Test (Difference).
 
     Description
     -----------
-    This function computes the 2-SD Statistic, also known
-    as a Z-test.
+    This function computes the Z-test statistic for the difference 
+    in success rates. Also known as 2-SD Statistic.
 
     Interpretation
     --------------
@@ -289,7 +289,7 @@ def tsd_rule(group_a, group_b, y_pred):
     Returns
     -------
     float
-        2SD
+        Z test (difference version)
 
     Examples
     --------
@@ -327,19 +327,20 @@ def tsd_rule(group_a, group_b, y_pred):
     return (sr_a-sr_b)/np.sqrt((sr_tot*(1-sr_tot))/(n_tot*p_a*(1-p_a)))
 
 
-def di_tsd_rule(group_a, group_b, y_pred):
+def z_test_ratio(group_a, group_b, y_pred):
     r"""
-    Disparate Impact 2SD Rule.
+    Z Test (Ratio).
 
     Description
     -----------
-    This function computes the 2-SD Statistic based on Disparate Impact.
+    This function computes the Z-test statistic for the ratio
+    in success rates. Also known as 2-SD Statistic.
 
     Interpretation
     --------------
     A value of 0 is desired. This test considers the data unfair
     if the computed value is greater than 2 or smaller than -2, 
-    indicating a statistically significant difference in success rates.
+    indicating a statistically significant ratio in success rates.
 
     Parameters
     ----------
@@ -353,7 +354,7 @@ def di_tsd_rule(group_a, group_b, y_pred):
     Returns
     -------
     float
-        DI 2SD
+        Z-test (ratio version)
 
     Examples
     --------
@@ -894,6 +895,7 @@ def classification_bias_metrics(
         "Disparate Impact": disparate_impact,
         "Four Fifths Rule": four_fifths,
         "Cohen D": cohen_d,
+        "2SD Rule": z_test_diff
     }
 
     equal_opportunity_metrics = {
@@ -917,6 +919,7 @@ def classification_bias_metrics(
         "Average Odds Difference": 0,
         "Accuracy Difference": 0,
         "ABROCA": 0,
+        "2SD Rule":0
     }
 
     out_metrics = [
