@@ -16,6 +16,8 @@ from holisticai.bias.metrics import (
     four_fifths,
     statistical_parity,
     true_negative_rate_diff,
+    tsd_rule,
+    di_tsd_rule
 )
 
 # Formatting
@@ -57,6 +59,19 @@ def test_cohen_d():
     b = 0.9109750373485539
     assert_approx_equal(a, b)
 
+
+def test_2sd_rule():
+    """test 2sd_rule"""
+    a = tsd_rule(group_a, group_b, y_pred_c)
+    b = 1.290994449
+    assert_approx_equal(a, b)
+test_2sd_rule()
+def test_di_2sd_rule():
+    """test 2sd_rule"""
+    a = di_tsd_rule(group_a, group_b, y_pred_c)
+    b = 1.256287689
+    assert_approx_equal(a, b)
+test_di_2sd_rule()
 
 def test_equal_opportunity_diff():
     """test equal_oppotunity_diff"""
