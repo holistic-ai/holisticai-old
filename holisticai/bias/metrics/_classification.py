@@ -268,13 +268,13 @@ def z_test_diff(group_a, group_b, y_pred):
 
     Description
     -----------
-    This function computes the Z-test statistic for the difference 
+    This function computes the Z-test statistic for the difference
     in success rates. Also known as 2-SD Statistic.
 
     Interpretation
     --------------
     A value of 0 is desired. This test considers the data unfair
-    if the computed value is greater than 2 or smaller than -2, 
+    if the computed value is greater than 2 or smaller than -2,
     indicating a statistically significant difference in success rates.
 
     Parameters
@@ -312,19 +312,19 @@ def z_test_diff(group_a, group_b, y_pred):
     group_a, group_b, y_pred, _ = _classification_checks(
         group_a, group_b, y_pred, y_true=None
     )
-    
+
     # calculate sr_a and sr_b
     sr_a = _group_success_rate(group_a, y_pred)  # success rate group_a
     sr_b = _group_success_rate(group_b, y_pred)  # success rate group_b
     n_a = group_a.sum()
     n_b = group_b.sum()
-    sr_tot = (sr_a*n_a + sr_b*n_b)/(n_a+n_b)
-    n_tot = n_a+n_b
-    
-    # calculate p_a
-    p_a = n_a/n_tot
+    sr_tot = (sr_a * n_a + sr_b * n_b) / (n_a + n_b)
+    n_tot = n_a + n_b
 
-    return (sr_a-sr_b)/np.sqrt((sr_tot*(1-sr_tot))/(n_tot*p_a*(1-p_a)))
+    # calculate p_a
+    p_a = n_a / n_tot
+
+    return (sr_a - sr_b) / np.sqrt((sr_tot * (1 - sr_tot)) / (n_tot * p_a * (1 - p_a)))
 
 
 def z_test_ratio(group_a, group_b, y_pred):
@@ -339,7 +339,7 @@ def z_test_ratio(group_a, group_b, y_pred):
     Interpretation
     --------------
     A value of 0 is desired. This test considers the data unfair
-    if the computed value is greater than 2 or smaller than -2, 
+    if the computed value is greater than 2 or smaller than -2,
     indicating a statistically significant ratio in success rates.
 
     Parameters
@@ -376,19 +376,21 @@ def z_test_ratio(group_a, group_b, y_pred):
     group_a, group_b, y_pred, _ = _classification_checks(
         group_a, group_b, y_pred, y_true=None
     )
-    
+
     # calculate sr_a and sr_b
     sr_a = _group_success_rate(group_a, y_pred)  # success rate group_a
     sr_b = _group_success_rate(group_b, y_pred)  # success rate group_b
     n_a = group_a.sum()
     n_b = group_b.sum()
-    sr_tot = (sr_a*n_a + sr_b*n_b)/(n_a+n_b)
-    n_tot = n_a+n_b
-    
-    # calculate p_a
-    p_a = n_a/n_tot
+    sr_tot = (sr_a * n_a + sr_b * n_b) / (n_a + n_b)
+    n_tot = n_a + n_b
 
-    return (np.log(sr_a/sr_b))/np.sqrt((1-sr_tot)/(sr_tot*n_tot*p_a*(1-p_a)))
+    # calculate p_a
+    p_a = n_a / n_tot
+
+    return (np.log(sr_a / sr_b)) / np.sqrt(
+        (1 - sr_tot) / (sr_tot * n_tot * p_a * (1 - p_a))
+    )
 
 
 def _correlation_diff(group_a, group_b, y_pred, y_true):
@@ -852,9 +854,6 @@ def abroca(group_a, group_b, y_score, y_true):
     return val
 
 
-
-
-
 def classification_bias_metrics(
     group_a, group_b, y_pred, y_true=None, y_score=None, metric_type="equal_outcome"
 ):
@@ -895,7 +894,7 @@ def classification_bias_metrics(
         "Disparate Impact": disparate_impact,
         "Four Fifths Rule": four_fifths,
         "Cohen D": cohen_d,
-        "2SD Rule": z_test_diff
+        "2SD Rule": z_test_diff,
     }
 
     equal_opportunity_metrics = {
@@ -919,7 +918,7 @@ def classification_bias_metrics(
         "Average Odds Difference": 0,
         "Accuracy Difference": 0,
         "ABROCA": 0,
-        "2SD Rule": 0
+        "2SD Rule": 0,
     }
 
     out_metrics = [

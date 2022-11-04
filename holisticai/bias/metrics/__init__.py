@@ -17,7 +17,7 @@ from ._classification import (
     statistical_parity,
     true_negative_rate_diff,
     z_test_diff,
-    z_test_ratio
+    z_test_ratio,
 )
 
 # Clustering
@@ -137,5 +137,5 @@ __all__ = [
     "multiclass_statistical_parity",
     "multiclass_bias_metrics",
     "z_test_diff",
-    "z_test_ratio"
+    "z_test_ratio",
 ]
