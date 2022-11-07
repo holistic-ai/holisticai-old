@@ -1,5 +1,6 @@
 import numpy as np
 
+
 def distance(a, b, order=2):
     """
     Description

@@ -1,6 +1,8 @@
 import numpy as np
-from ._base import DecompositionMixin
 from sklearn.metrics.pairwise import pairwise_distances
+
+from ._base import DecompositionMixin
+
 
 class VanillaFairletDecomposition(DecompositionMixin):
     def __init__(self, p, q):
@@ -21,16 +23,18 @@ class VanillaFairletDecomposition(DecompositionMixin):
         Description
         -----------
         Adds fairlet to fairlet decomposition, returns median cost
-        
+
         dataset: matrix-like
             input data
-            
+
         points:
 
         """
-        
+
         self.fairlets.append(points)
-        cost_matrix = np.sum(pairwise_distances(dataset[points], Y=dataset[points]), axis=1)        
+        cost_matrix = np.sum(
+            pairwise_distances(dataset[points], Y=dataset[points]), axis=1
+        )
         center = np.argmin(cost_matrix)
         cost = cost_matrix[center]
         self.fairlet_centers.append(points[center])
@@ -41,22 +45,26 @@ class VanillaFairletDecomposition(DecompositionMixin):
         Description
         -----------
         Computes vanilla (p,q)-fairlet decomposition of given points (Lemma 3 in NIPS17 paper).
-        
+
         Parameters
         ----------
         group_a : array-like
             Group membership vector (binary)
         group_b : array-like
             Group membership vector (binary)
-        
-        Returns 
+
+        Returns
         ------
         cost.
-        
+
         """
         blues = list(np.where(group_a)[0])
         reds = list(np.where(group_b)[0])
-        return self.fairlets, self.fairlet_centers, self._decompose(blues, reds, dataset)
+        return (
+            self.fairlets,
+            self.fairlet_centers,
+            self._decompose(blues, reds, dataset),
+        )
 
     def _decompose(self, blues, reds, dataset):
         p = self.p

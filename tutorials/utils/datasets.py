@@ -2,9 +2,10 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 
 
-def preprocessed_dataset(dataset='adult'):
-    if dataset == 'adult':
+def preprocessed_dataset(dataset="adult"):
+    if dataset == "adult":
         from holisticai.datasets import load_adult
+
         # Dataset
         dataset = load_adult()
 
@@ -19,7 +20,7 @@ def preprocessed_dataset(dataset='adult'):
         group = ["sex"]
         group_a = df[group] == "Female"
         group_b = df[group] == "Male"
-        data = [X.iloc[:,:-1], y, group_a, group_b]
+        data = [X.iloc[:, :-1], y, group_a, group_b]
 
         # Train test split
         dataset = train_test_split(*data, test_size=0.2, shuffle=True)

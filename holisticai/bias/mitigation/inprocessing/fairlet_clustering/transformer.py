@@ -11,9 +11,7 @@ from holisticai.bias.mitigation.commons.fairlet_clustering.decompositions import
 from holisticai.bias.mitigation.inprocessing.fairlet_clustering.algorithm import (
     FairletClusteringAlgorithm,
 )
-
 from holisticai.utils.models.cluster import KCenters, KMedoids
-
 from holisticai.utils.transformers.bias import BMInprocessing as BMImp
 
 DECOMPOSITION_CATALOG = {
