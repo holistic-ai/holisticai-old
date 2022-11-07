@@ -1,5 +1,4 @@
 from typing import Optional, Union
-
 import numpy as np
 from sklearn.base import BaseEstimator
 from sklearn.metrics.pairwise import pairwise_distances_argmin

@@ -1,6 +1,6 @@
 import numpy as np
 from sklearn.metrics.pairwise import pairwise_distances, pairwise_distances_argmin
-
+from holisticai.bias.mitigation.commons.fairlet_clustering._utils import distance
 
 class FairletClusteringAlgorithm:
     def __init__(self, decomposition, clustering_model):
@@ -21,7 +21,6 @@ class FairletClusteringAlgorithm:
         self.labels = np.zeros(len(X), dtype="int32")
         for fairlet_id, final_cluster in mapping:
             self.labels[fairlets[fairlet_id]] = int(fairlet_centers[final_cluster])
-
         self.centers = np.array(
             [fairlet_centers[i] for i in self.clustering_model.centers]
         )
