@@ -67,7 +67,7 @@ class KMediamClusteringAlgorithm:
             starting_centers = kmedoids.medoid_indices_
 
         elif self.init_centers == "Random":
-            starting_centers = random.sample(range(1, n - 1), self.k)
+            starting_centers = random.sample(range(1, self.n - 1), self.k)
 
         if starting_centers[1] > starting_centers[0] - 1:
             starting_centers[1] += 1
