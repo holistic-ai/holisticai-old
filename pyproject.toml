@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "holisticai"
-version = "0.2.2" # PROD
+version = "0.2.0" # PROD
 description = "Holistic AI Library"
 authors = ["Research Team"]
 maintainers = ["Research Team <researchteam@holisticai.com>"]
