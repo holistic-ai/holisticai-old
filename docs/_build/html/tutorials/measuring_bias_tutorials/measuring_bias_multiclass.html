@@ -16,13 +16,12 @@
         <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
         <script src="../../_static/jquery.js"></script>
         <script src="../../_static/underscore.js"></script>
-        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../../_static/doctools.js"></script>
         <script src="../../_static/clipboard.min.js"></script>
         <script src="../../_static/copybutton.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
         <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
-        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -62,7 +61,9 @@
 <li class="toctree-l1 current"><a class="reference internal" href="../../measuring_bias.html">Measuring bias</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="measuring_bias_classification.html"><strong>Measuring Bias in classification</strong></a></li>
 <li class="toctree-l2"><a class="reference internal" href="measuring_bias_regression.html"><strong>Measuring Bias in regression</strong></a></li>
-<li class="toctree-l2"><a class="reference internal" href="measuring_bias_recommender.html">Measuring bias in recommender systems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="measuring_bias_recommender.html">Importing the data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="measuring_bias_recommender.html#Plotting-and-Data-Exploration">Plotting and Data Exploration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="measuring_bias_recommender.html#Evaluate-Fairness-of-Model">Evaluate Fairness of Model</a></li>
 <li class="toctree-l2"><a class="reference internal" href="measuring_bias_clustering.html"><strong>Measuring Bias in clustering</strong></a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#"><strong>Measuring Bias in multiclass classification</strong></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#Load-the-data"><strong>Load the data</strong></a></li>
@@ -380,11 +381,11 @@ div.rendered_html tbody tr:hover {
 }
 </style>
 <section id="Measuring-Bias-in-multiclass-classification">
-<h1><strong>Measuring Bias in multiclass classification</strong><a class="headerlink" href="#Measuring-Bias-in-multiclass-classification" title="Permalink to this heading"></a></h1>
+<h1><strong>Measuring Bias in multiclass classification</strong><a class="headerlink" href="#Measuring-Bias-in-multiclass-classification" title="Permalink to this headline"></a></h1>
 <p>This tutorial will explain how to measure bias in a multiclass classification task using the holisticai library. We will introduce here some of the functions that can help study algorithmic bias.</p>
 <p>The sections are organised as follows : 1. Load the data : we load the student dataset as a pandas DataFrame 2. Data Exploration : some preliminary analysis of the data 3. Train a Model : we train a model (sklearn) 4. Measure Bias : we compute a few bias metrics, and comment on their meaning</p>
 <section id="Load-the-data">
-<h2><strong>Load the data</strong><a class="headerlink" href="#Load-the-data" title="Permalink to this heading"></a></h2>
+<h2><strong>Load the data</strong><a class="headerlink" href="#Load-the-data" title="Permalink to this headline"></a></h2>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
@@ -748,7 +749,7 @@ div.rendered_html tbody tr:hover {
 </div>
 </section>
 <section id="Data-Exploration">
-<h2><strong>Data Exploration</strong><a class="headerlink" href="#Data-Exploration" title="Permalink to this heading"></a></h2>
+<h2><strong>Data Exploration</strong><a class="headerlink" href="#Data-Exploration" title="Permalink to this headline"></a></h2>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
@@ -894,7 +895,7 @@ div.rendered_html tbody tr:hover {
 </div>
 </section>
 <section id="Train-a-model">
-<h2><strong>Train a model</strong><a class="headerlink" href="#Train-a-model" title="Permalink to this heading"></a></h2>
+<h2><strong>Train a model</strong><a class="headerlink" href="#Train-a-model" title="Permalink to this headline"></a></h2>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
@@ -1379,7 +1380,7 @@ div.rendered_html tbody tr:hover {
 </div>
 </section>
 <section id="Measure-bias">
-<h2><strong>Measure bias</strong><a class="headerlink" href="#Measure-bias" title="Permalink to this heading"></a></h2>
+<h2><strong>Measure bias</strong><a class="headerlink" href="#Measure-bias" title="Permalink to this headline"></a></h2>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
 </pre></div>
