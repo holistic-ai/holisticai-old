@@ -100,7 +100,9 @@ class BMTransformerBase(ABC, TransformerBase):
         obj = object.__new__(cls)
 
         if hasattr(obj, "fit"):
+            docstring = obj.fit.__doc__
             obj.fit = obj.reformat_function(obj.fit)
+            obj.fit.__doc__ = docstring
 
         if hasattr(obj, "transform"):
             docstring = obj.transform.__doc__

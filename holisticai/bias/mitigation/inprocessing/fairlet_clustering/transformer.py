@@ -3,24 +3,15 @@ from typing import Optional, Union
 import numpy as np
 from sklearn.base import BaseEstimator
 
-from holisticai.bias.mitigation.commons.fairlet_clustering.clustering._kcenters import (
-    KCenters,
-)
-from holisticai.bias.mitigation.commons.fairlet_clustering.clustering._kmedoids import (
-    KMedoids,
-)
-from holisticai.bias.mitigation.commons.fairlet_clustering.decomposition._base import (
+from holisticai.bias.mitigation.commons.fairlet_clustering.decompositions import (
     DecompositionMixin,
-)
-from holisticai.bias.mitigation.commons.fairlet_clustering.decomposition._scalable import (
     ScalableFairletDecomposition,
-)
-from holisticai.bias.mitigation.commons.fairlet_clustering.decomposition._vanilla import (
     VanillaFairletDecomposition,
 )
 from holisticai.bias.mitigation.inprocessing.fairlet_clustering.algorithm import (
     FairletClusteringAlgorithm,
 )
+from holisticai.utils.models.cluster import KCenters, KMedoids
 from holisticai.utils.transformers.bias import BMInprocessing as BMImp
 
 DECOMPOSITION_CATALOG = {
@@ -32,16 +23,15 @@ CLUSTERING_CATALOG = {"KCenters": KCenters, "KMedoids": KMedoids}
 
 class FairletClustering(BaseEstimator, BMImp):
     """
-    Strategies based in Fairlet clustering  Fair Clustering helps you to find clusters with specified proportions
-    of different demographic groups pertaining to a sensitive attribute of the dataset
-    (group_a and group_b) for any well-known clustering method such as K-means, K-median
-    or Spectral clustering (Normalized cut).
+    Fairlet Clustering inprocessing bias mitigation works in two steps:
+    - The pointset is partitioned into subsets called fairlets that satisfy
+    the fairness requirement and approximately preserve the k-median objective.
+    - Fairlets are merged into k clusters by one of the existing k-median algorithms.
 
-
-    References
-    ----------
-        Ziko, Imtiaz Masud, et al. "Variational fair clustering." Proceedings of the AAAI
-        Conference on Artificial Intelligence. Vol. 35. No. 12. 2021.
+    Reference
+    ---------
+        Backurs, Arturs, et al. "Scalable fair clustering." International Conference on
+        Machine Learning. PMLR, 2019.
     """
 
     def __init__(
