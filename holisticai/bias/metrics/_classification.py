@@ -262,6 +262,137 @@ def cohen_d(group_a, group_b, y_pred):
     return (sr_a - sr_b) / std_pool
 
 
+def z_test_diff(group_a, group_b, y_pred):
+    r"""
+    Z Test (Difference).
+
+    Description
+    -----------
+    This function computes the Z-test statistic for the difference
+    in success rates. Also known as 2-SD Statistic.
+
+    Interpretation
+    --------------
+    A value of 0 is desired. This test considers the data unfair
+    if the computed value is greater than 2 or smaller than -2,
+    indicating a statistically significant difference in success rates.
+
+    Parameters
+    ----------
+    group_a : array-like
+        Group membership vector (binary)
+    group_b : array-like
+        Group membership vector (binary)
+    y_pred : array-like
+        Predictions vector (binary)
+
+    Returns
+    -------
+    float
+        Z test (difference version)
+
+    Examples
+    --------
+    >>> import numpy as np
+    >>> from holisticai.bias.metrics import z_test_diff
+    >>> group_a = np.array([1, 1, 1, 1, 0, 0, 0, 0, 0, 0])
+    >>> group_b = np.array([0, 0, 0, 0, 1, 1, 1, 1, 1, 1])
+    >>> y_pred = np.array([1, 1, 1, 0, 1, 1, 0, 0, 0, 0])
+    >>> z_test_diff(group_a, group_b, y_pred)
+    1.290994449
+
+    References
+    ----------
+    .. [1] `Morris (2001).
+           Sample size requirements for adverse impact analysis
+            <https://www.semanticscholar.org/paper/Sample-Size-Required-for-Adverse-Impact-Analysis-Morris/877f7acd7c646a21f4947166a07f41664dcabe95>`
+
+    """
+    # check and coerce
+    group_a, group_b, y_pred, _ = _classification_checks(
+        group_a, group_b, y_pred, y_true=None
+    )
+
+    # calculate sr_a and sr_b
+    sr_a = _group_success_rate(group_a, y_pred)  # success rate group_a
+    sr_b = _group_success_rate(group_b, y_pred)  # success rate group_b
+    n_a = group_a.sum()
+    n_b = group_b.sum()
+    sr_tot = (sr_a * n_a + sr_b * n_b) / (n_a + n_b)
+    n_tot = n_a + n_b
+
+    # calculate p_a
+    p_a = n_a / n_tot
+
+    return (sr_a - sr_b) / np.sqrt((sr_tot * (1 - sr_tot)) / (n_tot * p_a * (1 - p_a)))
+
+
+def z_test_ratio(group_a, group_b, y_pred):
+    r"""
+    Z Test (Ratio).
+
+    Description
+    -----------
+    This function computes the Z-test statistic for the ratio
+    in success rates. Also known as 2-SD Statistic.
+
+    Interpretation
+    --------------
+    A value of 0 is desired. This test considers the data unfair
+    if the computed value is greater than 2 or smaller than -2,
+    indicating a statistically significant ratio in success rates.
+
+    Parameters
+    ----------
+    group_a : array-like
+        Group membership vector (binary)
+    group_b : array-like
+        Group membership vector (binary)
+    y_pred : array-like
+        Predictions vector (binary)
+
+    Returns
+    -------
+    float
+        Z-test (ratio version)
+
+    Examples
+    --------
+    >>> import numpy as np
+    >>> from holisticai.bias.metrics import z_test_ratio
+    >>> group_a = np.array([1, 1, 1, 1, 0, 0, 0, 0, 0, 0])
+    >>> group_b = np.array([0, 0, 0, 0, 1, 1, 1, 1, 1, 1])
+    >>> y_pred = np.array([1, 1, 1, 0, 1, 1, 0, 0, 0, 0])
+    >>> z_test_ratio(group_a, group_b, y_pred)
+    1.256287689
+
+    References
+    ----------
+    .. [1] `Morris (2001).
+           Sample size requirements for adverse impact analysis
+            <https://www.semanticscholar.org/paper/Sample-Size-Required-for-Adverse-Impact-Analysis-Morris/877f7acd7c646a21f4947166a07f41664dcabe95>`
+    """
+    # check and coerce
+    group_a, group_b, y_pred, _ = _classification_checks(
+        group_a, group_b, y_pred, y_true=None
+    )
+
+    # calculate sr_a and sr_b
+    sr_a = _group_success_rate(group_a, y_pred)  # success rate group_a
+    sr_b = _group_success_rate(group_b, y_pred)  # success rate group_b
+    n_a = group_a.sum()
+    n_b = group_b.sum()
+    sr_tot = (sr_a * n_a + sr_b * n_b) / (n_a + n_b)
+    n_tot = n_a + n_b
+
+    # calculate p_a
+    p_a = n_a / n_tot
+
+    return (np.log(sr_a / sr_b)) / np.sqrt(
+        (1 - sr_tot) / (sr_tot * n_tot * p_a * (1 - p_a))
+    )
+
+
 def _correlation_diff(group_a, group_b, y_pred, y_true):
     """
     Correlation difference.
@@ -763,6 +894,7 @@ def classification_bias_metrics(
         "Disparate Impact": disparate_impact,
         "Four Fifths Rule": four_fifths,
         "Cohen D": cohen_d,
+        "2SD Rule": z_test_diff,
     }
 
     equal_opportunity_metrics = {
@@ -786,6 +918,7 @@ def classification_bias_metrics(
         "Average Odds Difference": 0,
         "Accuracy Difference": 0,
         "ABROCA": 0,
+        "2SD Rule": 0,
     }
 
     out_metrics = [
