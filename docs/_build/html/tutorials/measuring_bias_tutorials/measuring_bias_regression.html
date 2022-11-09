@@ -16,17 +16,16 @@
         <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
         <script src="../../_static/jquery.js"></script>
         <script src="../../_static/underscore.js"></script>
-        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../../_static/doctools.js"></script>
         <script src="../../_static/clipboard.min.js"></script>
         <script src="../../_static/copybutton.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
         <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
-        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="Measuring bias in recommender systems" href="measuring_bias_recommender.html" />
+    <link rel="next" title="Importing the data" href="measuring_bias_recommender.html" />
     <link rel="prev" title="Measuring Bias in classification" href="measuring_bias_classification.html" /> 
 </head>
 
@@ -68,7 +67,9 @@
 <li class="toctree-l3"><a class="reference internal" href="#Measure-bias"><strong>Measure bias</strong></a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="measuring_bias_recommender.html">Measuring bias in recommender systems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="measuring_bias_recommender.html">Importing the data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="measuring_bias_recommender.html#Plotting-and-Data-Exploration">Plotting and Data Exploration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="measuring_bias_recommender.html#Evaluate-Fairness-of-Model">Evaluate Fairness of Model</a></li>
 <li class="toctree-l2"><a class="reference internal" href="measuring_bias_clustering.html"><strong>Measuring Bias in clustering</strong></a></li>
 <li class="toctree-l2"><a class="reference internal" href="measuring_bias_multiclass.html"><strong>Measuring Bias in multiclass classification</strong></a></li>
 </ul>
@@ -380,11 +381,11 @@ div.rendered_html tbody tr:hover {
 }
 </style>
 <section id="Measuring-Bias-in-regression">
-<h1><strong>Measuring Bias in regression</strong><a class="headerlink" href="#Measuring-Bias-in-regression" title="Permalink to this heading"></a></h1>
+<h1><strong>Measuring Bias in regression</strong><a class="headerlink" href="#Measuring-Bias-in-regression" title="Permalink to this headline"></a></h1>
 <p>This notebook is a tutorial on auditing bias within a regression task. We will use the holisticai library thoughout, introducing some of the functions we have created to help study algorithmic bias.</p>
 <p>The sections are organised as follows : 1. Load the data : we load the student grades dataset as a pandas DataFrame 2. Data Exploration : some preliminary analysis of the data 3. Train a Model : we train a simple linear regression model (sklearn) 4. Measure Bias : we compute a few bias metrics, and comment on their meaning</p>
 <section id="Load-the-data">
-<h2><strong>Load the data</strong><a class="headerlink" href="#Load-the-data" title="Permalink to this heading"></a></h2>
+<h2><strong>Load the data</strong><a class="headerlink" href="#Load-the-data" title="Permalink to this headline"></a></h2>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
@@ -726,7 +727,7 @@ div.rendered_html tbody tr:hover {
 <p>We host a few example datasets on the holisticai library for quick loading and experimentation. Here we load and use the Student dataset. The goal of this dataset is the prediction of the numerical attribute ‘G3’ (mathematics grade of student in 3rd trimester). There are a number of sensitive attributes in this dataset, some of which are : sex, address, Mjob (mother’s job), Fjob (father’s job)…</p>
 </section>
 <section id="Data-Exploration">
-<h2><strong>Data Exploration</strong><a class="headerlink" href="#Data-Exploration" title="Permalink to this heading"></a></h2>
+<h2><strong>Data Exploration</strong><a class="headerlink" href="#Data-Exploration" title="Permalink to this headline"></a></h2>
 <p>We import some of the holisticai plotters for quick exploration of the data.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
@@ -870,7 +871,7 @@ div.rendered_html tbody tr:hover {
 <p>The above shows the success rate (sucess is exceeding the given threshold) as a function of threshold for different subgroups of the population : Father’s job in [‘at_home’, ‘health’, ‘teacher’]. We can observe that student’s with a parent as a teacher are more likely to exceed high thresholds than other groups.</p>
 </section>
 <section id="Preprocess-Data-and-Train-a-model">
-<h2><strong>Preprocess Data and Train a model</strong><a class="headerlink" href="#Preprocess-Data-and-Train-a-model" title="Permalink to this heading"></a></h2>
+<h2><strong>Preprocess Data and Train a model</strong><a class="headerlink" href="#Preprocess-Data-and-Train-a-model" title="Permalink to this headline"></a></h2>
 <p>We use a sklearn linear regression model.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
@@ -962,7 +963,7 @@ Max Residual Error     : 11.4404296875
 </div>
 </section>
 <section id="Measure-bias">
-<h2><strong>Measure bias</strong><a class="headerlink" href="#Measure-bias" title="Permalink to this heading"></a></h2>
+<h2><strong>Measure bias</strong><a class="headerlink" href="#Measure-bias" title="Permalink to this headline"></a></h2>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
@@ -1264,7 +1265,7 @@ Disparate Impact Q80     : 4.2298850574712645
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="measuring_bias_classification.html" class="btn btn-neutral float-left" title="Measuring Bias in classification" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="measuring_bias_recommender.html" class="btn btn-neutral float-right" title="Measuring bias in recommender systems" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="measuring_bias_recommender.html" class="btn btn-neutral float-right" title="Importing the data" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
