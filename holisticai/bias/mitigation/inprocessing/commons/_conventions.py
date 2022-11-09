@@ -1,13 +1,15 @@
 # Constant values defined for grid search reduction
-UPPER_BOUND_DIFF = "upper"
-LOWER_BOUND_DIFF = "lower"
-LABEL = "y"
-PRED = "pred"
-EVENT = "event"
-GROUP_ID = "group_id"
-ALL = "all"
-SIGNED = "signed"
-
+_UPPER_BOUND_DIFF = "upper"
+_LOWER_BOUND_DIFF = "lower"
+_LABEL = "y"
+_EVENT = "event"
+_GROUP_ID = "group_id"
+_P_ATTR = "p_attr"
+_ALL = "all"
+_PRED = "pred"
+_SIGNED = "signed"
+_LOSS = "loss"
+_PREDICTION = "prediction"
 
 # Constant values defined for exponentiated gradient reductions
 SHRINK_ETA = 0.8

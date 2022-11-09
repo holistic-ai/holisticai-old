@@ -2,13 +2,15 @@ import numpy as np
 import pandas as pd
 from sklearn.model_selection import train_test_split
 
-from holisticai.datasets import load_adult
+from holisticai.datasets import load_adult, load_us_crime
 
 
-def load_preprocessed_adult():
+def load_preprocessed_adult(short_version=True):
     dataset = load_adult()
     df = pd.concat([dataset["data"], dataset["target"]], axis=1)
-    df = df.sample(n=500)
+    if not short_version:
+        df = df.sample(n=500)
+
     protected_variables = ["sex", "race"]
     output_variable = ["class"]
     favorable_label = 1
@@ -240,3 +242,60 @@ class Dclass:
         train_data = dataset[::2]
         test_data = dataset[1::2]
         return train_data, test_data
+
+
+def convert_float_to_categorical(target, nb_classes, numeric_classes=True):
+    eps = np.finfo(float).eps
+    if numeric_classes:
+        labels = list(range(nb_classes))
+    else:
+        labels = [f"Q{c}-Q{c+1}" for c in range(nb_classes)]
+    labels_values = np.linspace(0, 1, nb_classes + 1)
+    v = np.array(target.quantile(labels_values)).squeeze()
+    v[0], v[-1] = v[0] - eps, v[-1] + eps
+    y = target.copy()
+    for (i, c) in enumerate(labels):
+        y[(target.values >= v[i]) & (target.values < v[i + 1])] = c
+    return y.astype(np.int32)
+
+
+def load_preprocessed_us_crime(nb_classes=None):
+    from sklearn.preprocessing import StandardScaler
+
+    dataset = load_us_crime()
+
+    df = pd.concat([dataset["data"], dataset["target"]], axis=1)
+    df_clean = df.iloc[
+        :, [i for i, n in enumerate(df.isna().sum(axis=0).T.values) if n < 1000]
+    ]
+    df_clean = df_clean.dropna()
+
+    group_a = df_clean["racePctWhite"].apply(lambda x: x > 0.5)
+    group_b = 1 - group_a
+    xor_groups = group_a ^ group_b
+
+    # Remove sensitive groups from dataset
+    cols = [
+        c
+        for c in df_clean.columns
+        if (not c.startswith("race")) and (not c.startswith("age"))
+    ]
+    df_clean = df_clean[cols].iloc[:, 3:]
+    df_clean = df_clean[xor_groups]
+    group_a = group_a[xor_groups]
+    group_b = group_b[xor_groups]
+
+    scalar = StandardScaler()
+    df_t = scalar.fit_transform(df_clean)
+    X = df_t[:, :-1]
+
+    if nb_classes is None:
+        y = df_t[:, -1]
+    else:
+        y = convert_float_to_categorical(df_clean.iloc[:, -1], nb_classes=nb_classes)
+
+    data = X, y, group_a, group_b
+    datasets = train_test_split(*data, test_size=0.2)
+    train_data = datasets[::2]
+    test_data = datasets[1::2]
+    return train_data, test_data

@@ -16,6 +16,8 @@ from holisticai.bias.metrics import (
     four_fifths,
     statistical_parity,
     true_negative_rate_diff,
+    z_test_diff,
+    z_test_ratio,
 )
 
 # Formatting
@@ -55,6 +57,20 @@ def test_cohen_d():
     """test cohen_d"""
     a = cohen_d(group_a, group_b, y_pred_c)
     b = 0.9109750373485539
+    assert_approx_equal(a, b)
+
+
+def test_z_test_diff():
+    """test z_test_diff"""
+    a = z_test_diff(group_a, group_b, y_pred_c)
+    b = 1.290994449
+    assert_approx_equal(a, b)
+
+
+def test_z_test_ratio():
+    """test z_test_ratio"""
+    a = z_test_ratio(group_a, group_b, y_pred_c)
+    b = 1.256287689
     assert_approx_equal(a, b)
 
 

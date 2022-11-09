@@ -1,8 +1,8 @@
 import numpy as np
 import pandas as pd
 
-from ._conventions import ALL, LABEL
-from ._moments_utils import BaseMoment
+from .._conventions import _ALL, _LABEL
+from .._moments_utils import BaseMoment
 
 
 class ErrorRate(BaseMoment):
@@ -15,11 +15,11 @@ class ErrorRate(BaseMoment):
 
     def load_data(self, X, y, sensitive_features):
         super().load_data(X, y, sensitive_features)
-        self.index = [ALL]
+        self.index = [_ALL]
 
     def signed_weights(self):
         """Return the signed weights."""
-        return 2 * self.tags[LABEL] - 1
+        return 2 * self.tags[_LABEL] - 1
 
     def gamma(self, predictor):
         """Return the gamma values for the given predictor."""
@@ -28,5 +28,7 @@ class ErrorRate(BaseMoment):
         if isinstance(pred, np.ndarray):
             pred = np.squeeze(pred)
 
-        error = pd.Series(data=(self.tags[LABEL] - pred).abs().mean(), index=self.index)
+        error = pd.Series(
+            data=(self.tags[_LABEL] - pred).abs().mean(), index=self.index
+        )
         return error

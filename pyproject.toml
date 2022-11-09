@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "holisticai"
-version = "0.1.2" # PROD
+version = "0.2.0" # PROD
 description = "Holistic AI Library"
 authors = ["Research Team"]
 maintainers = ["Research Team <researchteam@holisticai.com>"]
@@ -10,8 +10,9 @@ readme = "README.md"
 python = ">=3.7,<3.11"
 scikit-learn = ">=1.0.2"
 seaborn = ">=0.11.2"
+tqdm = "^4.64.1"
 
-[tool.poetry.group.dev.dependencies]
+[tool.poetry.dev-dependencies]
 flake8 = "^5.0.4"
 pre-commit = "^2.20.0"
 pytest = "^7.1.3"

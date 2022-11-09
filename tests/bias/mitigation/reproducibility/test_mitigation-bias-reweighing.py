@@ -1,7 +1,7 @@
 import os
 import sys
 
-sys.path.append(os.getcwd())
+sys.path = ["./"] + sys.path
 
 import warnings
 
@@ -15,7 +15,7 @@ from holisticai.bias.metrics import classification_bias_metrics
 from holisticai.bias.mitigation import Reweighing
 from holisticai.pipeline import Pipeline
 from holisticai.utils import extract_columns
-from tests.testing_utils._tests_data_utils import check_results, load_preprocessed_adult
+from tests.testing_utils._tests_utils import check_results, load_preprocessed_adult
 
 warnings.filterwarnings("ignore")
 
@@ -101,3 +101,6 @@ def test_reweighing():
         [2 / 3, 2 / 3, 2 / 3, 2, 1.5, 1.5, 0.75, 0.75, 0.75, 0.75]
     )
     assert_array_almost_equal(sample_weight, expected_output)
+
+
+test_reweighing()

@@ -19,10 +19,7 @@ class BMInprocessing(BMTransformerBase):
         if "y_true" in kargs:
             y_true = np.array(kargs.get("y_true")).ravel()
             classes_ = list(np.unique(y_true))
-            index2class = np.vectorize(lambda x: classes_[x])
-            params.update(
-                {"y_true": y_true, "classes_": classes_, "index2class": index2class}
-            )
+            params.update({"y_true": y_true, "classes_": classes_})
 
         params_to_numpy_format = ["group_a", "group_b"]
         for param_name in params_to_numpy_format:

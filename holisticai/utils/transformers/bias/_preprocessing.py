@@ -29,10 +29,15 @@ class BMPreprocessing(BMTransformerBase):
         if "X" in kargs:
             params.update({"X": self._to_numpy(kargs, "X", ravel=False)})
 
-        if ("sample_weight" in kargs) and (not kargs["sample_weight"] is None):
+        if ("sample_weight" in kargs) and (kargs["sample_weight"] is not None):
             params.update({"sample_weight": self._to_numpy(kargs, "sample_weight")})
 
         elif "y_true" in locals():
             params.update({"sample_weight": np.ones_like(y_true).astype(np.float64)})
+
+        elif "X" in kargs:
+            params.update(
+                {"sample_weight": np.ones(len(params["X"])).astype(np.float64)}
+            )
 
         return params

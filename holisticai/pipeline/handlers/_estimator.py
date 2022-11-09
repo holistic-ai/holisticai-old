@@ -29,9 +29,13 @@ class WEstimator:
             def fitwrapper(X, y=None, **kargs):
                 # kargs.update(getattr(object.__getattribute__(self, 'params_hdl'), 'get_estimator_paramters')())
                 kargs.update(self.params_hdl.get_estimator_paramters())
-                fit_params = {"X": X, "y": y}
+                fit_params = {}
+                if y is not None:
+                    fit_params.update({"y": y})
                 fit_params.update(kargs)
-                return getattr(object.__getattribute__(self, "obj"), name)(**fit_params)
+                return getattr(object.__getattribute__(self, "obj"), name)(
+                    X, **fit_params
+                )
 
             output = fitwrapper
         else:
@@ -75,3 +79,13 @@ class EstimatorHandler:
         steps[-1] = (steps[-1][0], WEstimator(steps[-1][1], self.params_hdl))
         self.estimator = steps[-1][1]
         return steps
+
+    def run_predictions(self, Xt):
+        kargs = {}
+        y_pred = self.estimator.predict(Xt)
+        kargs["y_pred"] = y_pred
+
+        if hasattr(self.estimator, "predict_proba"):
+            y_proba = self.estimator.predict_proba(Xt)
+            kargs["y_proba"] = y_proba
+        return kargs

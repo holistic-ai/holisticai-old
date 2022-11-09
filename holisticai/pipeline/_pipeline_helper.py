@@ -2,11 +2,9 @@ import numpy as np
 from sklearn.pipeline import Pipeline as SKLPipeline
 from sklearn.utils.metaestimators import available_if
 
-from holisticai.pipeline._estimator_wrapper import EstimatorHandler
-from holisticai.pipeline._handlers import (
-    PipelineParametersHandler,
-    UTransformersHandler,
-)
+from holisticai.pipeline.handlers._estimator import EstimatorHandler
+from holisticai.pipeline.handlers._pipeline_params import PipelineParametersHandler
+from holisticai.pipeline.handlers._utransformers import UTransformersHandler
 
 SUPPORTED_FUNCTIONS = [
     "fit",
@@ -15,7 +13,12 @@ SUPPORTED_FUNCTIONS = [
     "predict_score",
     "predictions",
 ]
-POST_PREDICTION = {"predict": "y_pred", "predict_score": "y_score"}
+POST_PREDICTION = {
+    "predict": "y_pred",
+    "predict_score": "y_score",
+    "predict_proba": "y_proba",
+}
+POST_SCORE = "score"
 
 
 class PipelineHelper:
@@ -40,6 +43,10 @@ class PipelineHelper:
                     # For predictions we must check supported methods
                     fn = object.__getattribute__(self, "predictions")
                     output = fn(X, **params)[POST_PREDICTION[fn_name]]
+
+                elif fn_name == POST_SCORE:
+                    # For score we must check supported methods
+                    output = fn = object.__getattribute__(self, "score")
 
                 else:
                     # For fitting model the method mus be called from the main class
@@ -140,7 +147,8 @@ class PipelineHelper:
         -------
         None
         """
-        self.utransformers_hdl.fit_postprocessing(Xt, y)
+        output_kargs = self.estimator_hdl.run_predictions(Xt)
+        self.utransformers_hdl.fit_postprocessing(Xt, y, **output_kargs)
 
     def _transform_post_estimator_transformers(self, Xt):
         """
@@ -160,7 +168,9 @@ class PipelineHelper:
         dict
             Post-processed predictions vectors
         """
-        return self.utransformers_hdl.transform_postprocessing(Xt)
+
+        output_kargs = self.estimator_hdl.run_predictions(Xt)
+        return self.utransformers_hdl.transform_postprocessing(**output_kargs)
 
     def _transform_without_final(self, X):
         """Transform the data. Not apply `transform` with the final estimator.
