@@ -5,3 +5,9 @@ Mitigating bias
 
     tutorials/mitigating_bias_tutorials/mitigating_bias_classification
     tutorials/mitigating_bias_tutorials/mitigating_bias_classification_pipeline
+    tutorials/mitigating_bias_tutorials/mitigation_bias_regression_pipeline
+    tutorials/mitigating_bias_tutorials/mitigation_bias_clustering
+    tutorials/mitigating_bias_tutorials/mitigation_bias_multiclass
+    tutorials/mitigating_bias_tutorials/mitigation_bias_fairlet_clustering
+    tutorials/mitigating_bias_tutorials/mitigation_bias_fair_k_center_clustering
+    tutorials/mitigating_bias_tutorials/mitigation_bias_fair_k_mediam_clustering

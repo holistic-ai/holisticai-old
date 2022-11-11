@@ -1,18 +1,40 @@
+
+
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
-
+  <meta charset="utf-8" />
+  
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
   <title>Measuring Bias in multiclass classification &mdash; holisticai  documentation</title>
-      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
-      <link rel="stylesheet" href="../../_static/copybutton.css" type="text/css" />
-      <link rel="stylesheet" href="../../_static/css/custom_style.css" type="text/css" />
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/copybutton.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/fonts.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/css/custom_style.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
   <!--[if lt IE 9]>
     <script src="../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
         <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
         <script src="../../_static/jquery.js"></script>
         <script src="../../_static/underscore.js"></script>
@@ -20,23 +42,44 @@
         <script src="../../_static/clipboard.min.js"></script>
         <script src="../../_static/copybutton.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
         <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
-    <script src="../../_static/js/theme.js"></script>
+        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="Mitigating bias" href="../../mitigating_bias.html" />
     <link rel="prev" title="Measuring Bias in clustering" href="measuring_bias_clustering.html" /> 
 </head>
 
-<body class="wy-body-for-nav"> 
+<body class="wy-body-for-nav">
+
+   
   <div class="wy-grid-for-nav">
+    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
+          
+
+          
             <a href="../../index.html" class="icon icon-home"> holisticai
+          
+
+          
+            
             <img src="../../_static/holistic_ai.png" class="logo" alt="Logo"/>
+          
           </a>
+
+          
+            
+            
+          
+
+          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -44,7 +87,18 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
               <p class="caption" role="heading"><span class="caption-text">Documentation</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../metrics.html">Metrics</a></li>
@@ -61,9 +115,7 @@
 <li class="toctree-l1 current"><a class="reference internal" href="../../measuring_bias.html">Measuring bias</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="measuring_bias_classification.html"><strong>Measuring Bias in classification</strong></a></li>
 <li class="toctree-l2"><a class="reference internal" href="measuring_bias_regression.html"><strong>Measuring Bias in regression</strong></a></li>
-<li class="toctree-l2"><a class="reference internal" href="measuring_bias_recommender.html">Importing the data</a></li>
-<li class="toctree-l2"><a class="reference internal" href="measuring_bias_recommender.html#Plotting-and-Data-Exploration">Plotting and Data Exploration</a></li>
-<li class="toctree-l2"><a class="reference internal" href="measuring_bias_recommender.html#Evaluate-Fairness-of-Model">Evaluate Fairness of Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="measuring_bias_recommender.html">Measuring bias in recommender systems</a></li>
 <li class="toctree-l2"><a class="reference internal" href="measuring_bias_clustering.html"><strong>Measuring Bias in clustering</strong></a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#"><strong>Measuring Bias in multiclass classification</strong></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#Load-the-data"><strong>Load the data</strong></a></li>
@@ -77,31 +129,77 @@
 <li class="toctree-l1"><a class="reference internal" href="../../mitigating_bias.html">Mitigating bias</a></li>
 </ul>
 
+            
+          
         </div>
+        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../../index.html">holisticai</a>
+        
       </nav>
 
+
       <div class="wy-nav-content">
+<div class="git-ribbon">
+  <a href="http://github.com/SwissDataScienceCenter" rel="me">Join us on GitHub</a>
+</div>
+
+        
         <div class="rst-content">
-          <div role="navigation" aria-label="Page navigation">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
   <ul class="wy-breadcrumbs">
+    
       <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
           <li><a href="../../measuring_bias.html">Measuring bias</a> &raquo;</li>
+        
       <li><strong>Measuring Bias in multiclass classification</strong></li>
+    
+    
       <li class="wy-breadcrumbs-aside">
+        
+          
             <a href="../../_sources/tutorials/measuring_bias_tutorials/measuring_bias_multiclass.ipynb.txt" rel="nofollow"> View page source</a>
+          
+        
       </li>
+    
   </ul>
+
+  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-             
+            
   
 <style>
 /* CSS for nbsphinx extension */
@@ -357,44 +455,22 @@ div.rendered_html tbody tr:nth-child(odd) {
 div.rendered_html tbody tr:hover {
   background: rgba(66, 165, 245, 0.2);
 }
-
-/* CSS overrides for sphinx_rtd_theme */
-
-/* 24px margin */
-.nbinput.nblast.container,
-.nboutput.nblast.container {
-    margin-bottom: 19px;  /* padding has already 5px */
-}
-
-/* ... except between code cells! */
-.nblast.container + .nbinput.container {
-    margin-top: -19px;
-}
-
-.admonition > p:before {
-    margin-right: 4px;  /* make room for the exclamation icon */
-}
-
-/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
-.math {
-    text-align: unset;
-}
 </style>
-<section id="Measuring-Bias-in-multiclass-classification">
-<h1><strong>Measuring Bias in multiclass classification</strong><a class="headerlink" href="#Measuring-Bias-in-multiclass-classification" title="Permalink to this headline"></a></h1>
+<div class="section" id="Measuring-Bias-in-multiclass-classification">
+<h1><strong>Measuring Bias in multiclass classification</strong><a class="headerlink" href="#Measuring-Bias-in-multiclass-classification" title="Permalink to this headline">¶</a></h1>
 <p>This tutorial will explain how to measure bias in a multiclass classification task using the holisticai library. We will introduce here some of the functions that can help study algorithmic bias.</p>
 <p>The sections are organised as follows : 1. Load the data : we load the student dataset as a pandas DataFrame 2. Data Exploration : some preliminary analysis of the data 3. Train a Model : we train a model (sklearn) 4. Measure Bias : we compute a few bias metrics, and comment on their meaning</p>
-<section id="Load-the-data">
-<h2><strong>Load the data</strong><a class="headerlink" href="#Load-the-data" title="Permalink to this headline"></a></h2>
+<div class="section" id="Load-the-data">
+<h2><strong>Load the data</strong><a class="headerlink" href="#Load-the-data" title="Permalink to this headline">¶</a></h2>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Base imports</span>
-<span class="kn">import</span> <span class="nn">sys</span>
-<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;../../&#39;</span><span class="p">)</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Base imports
+import sys
+sys.path.append(&#39;../../&#39;)
+import numpy as np
+import pandas as pd
 </pre></div>
 </div>
 </div>
@@ -403,7 +479,7 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">holisticai.datasets</span> <span class="kn">import</span> <span class="n">load_student</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>from holisticai.datasets import load_student
 </pre></div>
 </div>
 </div>
@@ -411,23 +487,23 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># load data</span>
-<span class="n">df</span> <span class="o">=</span> <span class="n">load_student</span><span class="p">()[</span><span class="s1">&#39;frame&#39;</span><span class="p">]</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># load data
+df = load_student()[&#39;frame&#39;]
 
-<span class="c1"># Make data multiclass by slicing into 4 buckets</span>
-<span class="n">y</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;G3&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
-<span class="n">buckets</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">8</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">14</span><span class="p">])</span>
-<span class="n">y_cat</span> <span class="o">=</span> <span class="p">(</span><span class="n">y</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">buckets</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">))</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-<span class="n">df</span><span class="p">[</span><span class="s1">&#39;target&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">y_cat</span>
+# Make data multiclass by slicing into 4 buckets
+y = df[&#39;G3&#39;].to_numpy()
+buckets = np.array([8, 11, 14])
+y_cat = (y.reshape(-1, 1) &gt; buckets.reshape(1, -1)).sum(axis=1)
+df[&#39;target&#39;] = y_cat
 
-<span class="c1"># map dictionary</span>
-<span class="n">grade_dict</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">:</span><span class="s1">&#39;very-low&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">:</span><span class="s1">&#39;low&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">:</span><span class="s1">&#39;high&#39;</span><span class="p">,</span><span class="mi">3</span><span class="p">:</span><span class="s1">&#39;very-high&#39;</span><span class="p">}</span>
-<span class="n">df</span><span class="p">[</span><span class="s1">&#39;target&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;target&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">grade_dict</span><span class="p">)</span>
+# map dictionary
+grade_dict = {0:&#39;very-low&#39;, 1:&#39;low&#39;, 2:&#39;high&#39;,3:&#39;very-high&#39;}
+df[&#39;target&#39;] = df[&#39;target&#39;].map(grade_dict)
 
-<span class="c1"># drop the other grade columns</span>
-<span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;G1&#39;</span><span class="p">,</span><span class="s1">&#39;G2&#39;</span><span class="p">,</span><span class="s1">&#39;G3&#39;</span><span class="p">])</span>
+# drop the other grade columns
+df = df.drop(columns=[&#39;G1&#39;,&#39;G2&#39;,&#39;G3&#39;])
 
-<span class="n">df</span>
+df
 </pre></div>
 </div>
 </div>
@@ -747,17 +823,17 @@ div.rendered_html tbody tr:hover {
 <p>395 rows × 31 columns</p>
 </div></div>
 </div>
-</section>
-<section id="Data-Exploration">
-<h2><strong>Data Exploration</strong><a class="headerlink" href="#Data-Exploration" title="Permalink to this headline"></a></h2>
+</div>
+<div class="section" id="Data-Exploration">
+<h2><strong>Data Exploration</strong><a class="headerlink" href="#Data-Exploration" title="Permalink to this headline">¶</a></h2>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">holisticai.bias.plots</span> <span class="kn">import</span> <span class="n">group_pie_plot</span>
-<span class="kn">from</span> <span class="nn">holisticai.bias.plots</span> <span class="kn">import</span> <span class="n">histogram_plot</span>
-<span class="kn">from</span> <span class="nn">holisticai.bias.plots</span> <span class="kn">import</span> <span class="n">frequency_matrix_plot</span>
-<span class="kn">from</span> <span class="nn">holisticai.bias.plots</span> <span class="kn">import</span> <span class="n">frequency_plot</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>from holisticai.bias.plots import group_pie_plot
+from holisticai.bias.plots import histogram_plot
+from holisticai.bias.plots import frequency_matrix_plot
+from holisticai.bias.plots import frequency_plot
 </pre></div>
 </div>
 </div>
@@ -765,7 +841,7 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">group_pie_plot</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;sex&#39;</span><span class="p">])</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>group_pie_plot(df[&#39;sex&#39;])
 </pre></div>
 </div>
 </div>
@@ -789,7 +865,7 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">group_pie_plot</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Mjob&#39;</span><span class="p">])</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>group_pie_plot(df[&#39;Mjob&#39;])
 </pre></div>
 </div>
 </div>
@@ -813,7 +889,7 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">histogram_plot</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;target&#39;</span><span class="p">])</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>histogram_plot(df[&#39;target&#39;])
 </pre></div>
 </div>
 </div>
@@ -837,7 +913,7 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">frequency_matrix_plot</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Mjob&#39;</span><span class="p">],</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;target&#39;</span><span class="p">],</span> <span class="n">normalize</span><span class="o">=</span><span class="s1">&#39;group&#39;</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>frequency_matrix_plot(df[&#39;Mjob&#39;], df[&#39;target&#39;], normalize=&#39;group&#39;)
 </pre></div>
 </div>
 </div>
@@ -861,7 +937,7 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">frequency_plot</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Mjob&#39;</span><span class="p">],</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;target&#39;</span><span class="p">])</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>frequency_plot(df[&#39;Mjob&#39;], df[&#39;target&#39;])
 </pre></div>
 </div>
 </div>
@@ -893,16 +969,16 @@ div.rendered_html tbody tr:hover {
 <img alt="../../_images/tutorials_measuring_bias_tutorials_measuring_bias_multiclass_13_3.png" src="../../_images/tutorials_measuring_bias_tutorials_measuring_bias_multiclass_13_3.png" />
 </div>
 </div>
-</section>
-<section id="Train-a-model">
-<h2><strong>Train a model</strong><a class="headerlink" href="#Train-a-model" title="Permalink to this headline"></a></h2>
+</div>
+<div class="section" id="Train-a-model">
+<h2><strong>Train a model</strong><a class="headerlink" href="#Train-a-model" title="Permalink to this headline">¶</a></h2>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">train_test_split</span>
-<span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="kn">import</span> <span class="n">OneHotEncoder</span>
-<span class="kn">from</span> <span class="nn">sklearn.ensemble</span> <span class="kn">import</span> <span class="n">RandomForestClassifier</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import OneHotEncoder
+from sklearn.ensemble import RandomForestClassifier
 </pre></div>
 </div>
 </div>
@@ -910,19 +986,19 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># preprocess categorical columns</span>
-<span class="k">def</span> <span class="nf">preprocess_data</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">protected_attributes</span><span class="p">,</span> <span class="n">label_attributes</span><span class="p">):</span>
-    <span class="n">categoricals</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">col</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">protected_attributes</span> <span class="ow">and</span> <span class="n">col</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">label_attributes</span> <span class="ow">and</span> <span class="n">data</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">dtype</span> <span class="o">==</span> <span class="nb">object</span><span class="p">:</span>
-            <span class="n">categoricals</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">col</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># preprocess categorical columns
+def preprocess_data(data, protected_attributes, label_attributes):
+    categoricals = []
+    for col in data.columns:
+        if col not in protected_attributes and col not in label_attributes and data[col].dtype == object:
+            categoricals.append(col)
 
-    <span class="n">cat_encoder</span> <span class="o">=</span> <span class="n">OneHotEncoder</span><span class="p">()</span>
-    <span class="n">enc</span> <span class="o">=</span> <span class="n">cat_encoder</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">categoricals</span><span class="p">])</span>
-    <span class="n">enc</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">enc</span><span class="o">.</span><span class="n">toarray</span><span class="p">())</span>
-    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">data</span><span class="p">,</span><span class="n">enc</span><span class="p">],</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="n">categoricals</span><span class="p">)</span> <span class="c1"># add encoded columns</span>
-    <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="s1">&#39;columns&#39;</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">df</span>
+    cat_encoder = OneHotEncoder()
+    enc = cat_encoder.fit_transform(data[categoricals])
+    enc = pd.DataFrame(enc.toarray())
+    df = pd.concat([data,enc],axis=1).drop(columns=categoricals) # add encoded columns
+    df = df.rename(str, axis=&#39;columns&#39;)
+    return df
 </pre></div>
 </div>
 </div>
@@ -930,16 +1006,16 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># we don&#39;t want to encode protected attributes</span>
-<span class="n">protected_attributes</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;sex&#39;</span><span class="p">,</span> <span class="s1">&#39;address&#39;</span><span class="p">,</span> <span class="s1">&#39;Mjob&#39;</span><span class="p">,</span> <span class="s1">&#39;Fjob&#39;</span><span class="p">]</span>
-<span class="n">label_attributes</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;target&#39;</span><span class="p">]</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># we don&#39;t want to encode protected attributes
+protected_attributes = [&#39;sex&#39;, &#39;address&#39;, &#39;Mjob&#39;, &#39;Fjob&#39;]
+label_attributes = [&#39;target&#39;]
 
-<span class="c1"># Load, preprocess and split for training</span>
-<span class="n">preproc_data</span> <span class="o">=</span> <span class="n">preprocess_data</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">protected_attributes</span><span class="p">,</span> <span class="n">label_attributes</span><span class="p">)</span>
-<span class="n">train</span><span class="p">,</span> <span class="n">test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">preproc_data</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.4</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+# Load, preprocess and split for training
+preproc_data = preprocess_data(df, protected_attributes, label_attributes)
+train, test = train_test_split(preproc_data, test_size=0.4, random_state=42)
 
-<span class="c1"># display</span>
-<span class="n">preproc_data</span>
+# display
+preproc_data
 </pre></div>
 </div>
 </div>
@@ -1263,18 +1339,18 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># set up data for training</span>
-<span class="n">X_train</span> <span class="o">=</span> <span class="n">train</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="n">label_attributes</span><span class="p">)</span>
-<span class="n">X_test</span> <span class="o">=</span> <span class="n">test</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="n">label_attributes</span><span class="p">)</span>
-<span class="n">y_train</span> <span class="o">=</span> <span class="n">train</span><span class="p">[</span><span class="s1">&#39;target&#39;</span><span class="p">]</span>
-<span class="n">y_test</span> <span class="o">=</span> <span class="n">test</span><span class="p">[</span><span class="s1">&#39;target&#39;</span><span class="p">]</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># set up data for training
+X_train = train.drop(columns=label_attributes)
+X_test = test.drop(columns=label_attributes)
+y_train = train[&#39;target&#39;]
+y_test = test[&#39;target&#39;]
 
-<span class="c1"># Train a simple Random Forest Classifier</span>
-<span class="n">model</span> <span class="o">=</span> <span class="n">RandomForestClassifier</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="mi">111</span><span class="p">)</span>
-<span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="n">protected_attributes</span><span class="p">),</span> <span class="n">y_train</span><span class="p">)</span>
+# Train a simple Random Forest Classifier
+model = RandomForestClassifier(random_state=111)
+model.fit(X_train.drop(columns=protected_attributes), y_train)
 
-<span class="c1"># Predict values</span>
-<span class="n">y_pred</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="n">protected_attributes</span><span class="p">))</span>
+# Predict values
+y_pred = model.predict(X_test.drop(columns=protected_attributes))
 </pre></div>
 </div>
 </div>
@@ -1282,8 +1358,8 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">holisticai.bias.metrics</span> <span class="kn">import</span> <span class="n">confusion_matrix</span>
-<span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">precision_score</span><span class="p">,</span> <span class="n">recall_score</span><span class="p">,</span> <span class="n">accuracy_score</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>from holisticai.bias.metrics import confusion_matrix
+from sklearn.metrics import precision_score, recall_score, accuracy_score
 </pre></div>
 </div>
 </div>
@@ -1291,7 +1367,7 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">confusion_matrix</span><span class="p">(</span><span class="n">y_pred</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">classes</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;very-low&#39;</span><span class="p">,</span><span class="s1">&#39;low&#39;</span><span class="p">,</span><span class="s1">&#39;high&#39;</span><span class="p">,</span><span class="s1">&#39;very-high&#39;</span><span class="p">])</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>confusion_matrix(y_pred, y_test, classes=[&#39;very-low&#39;,&#39;low&#39;,&#39;high&#39;,&#39;very-high&#39;])
 </pre></div>
 </div>
 </div>
@@ -1361,10 +1437,10 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># evaluate</span>
-<span class="nb">print</span> <span class="p">(</span><span class="n">accuracy_score</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">))</span>
-<span class="nb">print</span> <span class="p">(</span><span class="n">precision_score</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">,</span> <span class="n">average</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;very-low&#39;</span><span class="p">,</span><span class="s1">&#39;low&#39;</span><span class="p">,</span><span class="s1">&#39;high&#39;</span><span class="p">,</span><span class="s1">&#39;very-high&#39;</span><span class="p">]))</span>
-<span class="nb">print</span> <span class="p">(</span><span class="n">recall_score</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">,</span> <span class="n">average</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;very-low&#39;</span><span class="p">,</span><span class="s1">&#39;low&#39;</span><span class="p">,</span><span class="s1">&#39;high&#39;</span><span class="p">,</span><span class="s1">&#39;very-high&#39;</span><span class="p">]))</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># evaluate
+print (accuracy_score(y_test, y_pred))
+print (precision_score(y_test, y_pred, average=None, labels=[&#39;very-low&#39;,&#39;low&#39;,&#39;high&#39;,&#39;very-high&#39;]))
+print (recall_score(y_test, y_pred, average=None, labels=[&#39;very-low&#39;,&#39;low&#39;,&#39;high&#39;,&#39;very-high&#39;]))
 </pre></div>
 </div>
 </div>
@@ -1378,15 +1454,15 @@ div.rendered_html tbody tr:hover {
 [0.38297872 0.68085106 0.24242424 0.25806452]
 </pre></div></div>
 </div>
-</section>
-<section id="Measure-bias">
-<h2><strong>Measure bias</strong><a class="headerlink" href="#Measure-bias" title="Permalink to this headline"></a></h2>
+</div>
+<div class="section" id="Measure-bias">
+<h2><strong>Measure bias</strong><a class="headerlink" href="#Measure-bias" title="Permalink to this headline">¶</a></h2>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">holisticai.bias.plots</span> <span class="kn">import</span> <span class="n">frequency_matrix_plot</span>
-<span class="kn">from</span> <span class="nn">holisticai.bias.plots</span> <span class="kn">import</span> <span class="n">frequency_plot</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>from holisticai.bias.plots import frequency_matrix_plot
+from holisticai.bias.plots import frequency_plot
 </pre></div>
 </div>
 </div>
@@ -1394,10 +1470,10 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># set up vectors</span>
-<span class="n">p_attr</span> <span class="o">=</span> <span class="n">test</span><span class="p">[</span><span class="s1">&#39;Mjob&#39;</span><span class="p">]</span>                                               <span class="c1"># protected attribute</span>
-<span class="n">y_pred</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="n">protected_attributes</span><span class="p">))</span>   <span class="c1"># multiclass prediction vector</span>
-<span class="n">y_true</span> <span class="o">=</span> <span class="n">y_test</span>                                                     <span class="c1"># multiclass label vector</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># set up vectors
+p_attr = test[&#39;Mjob&#39;]                                               # protected attribute
+y_pred = model.predict(X_test.drop(columns=protected_attributes))   # multiclass prediction vector
+y_true = y_test                                                     # multiclass label vector
 </pre></div>
 </div>
 </div>
@@ -1405,7 +1481,7 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">frequency_matrix_plot</span><span class="p">(</span><span class="n">p_attr</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">,</span> <span class="n">normalize</span><span class="o">=</span><span class="s1">&#39;group&#39;</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>frequency_matrix_plot(p_attr, y_pred, normalize=&#39;group&#39;)
 </pre></div>
 </div>
 </div>
@@ -1430,7 +1506,7 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">frequency_plot</span><span class="p">(</span><span class="n">p_attr</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>frequency_plot(p_attr, y_pred)
 </pre></div>
 </div>
 </div>
@@ -1468,11 +1544,11 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">holisticai.bias.metrics</span> <span class="kn">import</span> <span class="n">multiclass_statistical_parity</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>from holisticai.bias.metrics import multiclass_statistical_parity
 
-<span class="n">multiclass_statistical_parity</span><span class="p">(</span>
-    <span class="n">p_attr</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">,</span> <span class="n">groups</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">classes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">aggregation_fun</span><span class="o">=</span><span class="s2">&quot;mean&quot;</span>
-<span class="p">)</span>
+multiclass_statistical_parity(
+    p_attr, y_pred, groups=None, classes=None, aggregation_fun=&quot;mean&quot;
+)
 </pre></div>
 </div>
 </div>
@@ -1490,9 +1566,9 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">multiclass_statistical_parity</span><span class="p">(</span>
-    <span class="n">p_attr</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">,</span> <span class="n">groups</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">classes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">aggregation_fun</span><span class="o">=</span><span class="s2">&quot;max&quot;</span>
-<span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>multiclass_statistical_parity(
+    p_attr, y_pred, groups=None, classes=None, aggregation_fun=&quot;max&quot;
+)
 </pre></div>
 </div>
 </div>
@@ -1511,11 +1587,11 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">holisticai.bias.metrics</span> <span class="kn">import</span> <span class="n">multiclass_equality_of_opp</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>from holisticai.bias.metrics import multiclass_equality_of_opp
 
-<span class="n">multiclass_equality_of_opp</span><span class="p">(</span>
-    <span class="n">p_attr</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">,</span> <span class="n">y_true</span><span class="p">,</span> <span class="n">groups</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">classes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">aggregation_fun</span><span class="o">=</span><span class="s2">&quot;mean&quot;</span>
-<span class="p">)</span>
+multiclass_equality_of_opp(
+    p_attr, y_pred, y_true, groups=None, classes=None, aggregation_fun=&quot;mean&quot;
+)
 </pre></div>
 </div>
 </div>
@@ -1532,9 +1608,9 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">multiclass_equality_of_opp</span><span class="p">(</span>
-    <span class="n">p_attr</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">,</span> <span class="n">y_true</span><span class="p">,</span> <span class="n">groups</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">classes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">aggregation_fun</span><span class="o">=</span><span class="s2">&quot;max&quot;</span>
-<span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>multiclass_equality_of_opp(
+    p_attr, y_pred, y_true, groups=None, classes=None, aggregation_fun=&quot;max&quot;
+)
 </pre></div>
 </div>
 </div>
@@ -1547,38 +1623,55 @@ div.rendered_html tbody tr:hover {
 0.46875
 </pre></div></div>
 </div>
-</section>
-</section>
+</div>
+</div>
 
 
            </div>
+           
           </div>
-          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="measuring_bias_clustering.html" class="btn btn-neutral float-left" title="Measuring Bias in clustering" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
         <a href="../../mitigating_bias.html" class="btn btn-neutral float-right" title="Mitigating bias" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="measuring_bias_clustering.html" class="btn btn-neutral float-left" title="Measuring Bias in clustering" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2022, Holistic AI.</p>
-  </div>
+    <p>
+        &#169; Copyright 2022, Holistic AI.
 
-  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
     <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    provided by <a href="https://readthedocs.org">Read the Docs</a>.
-   
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
         </div>
       </div>
+
     </section>
+
   </div>
-  <script>
+  
+
+  <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  </script>
+
+  
+  
+    
+   
 
 </body>
 </html>

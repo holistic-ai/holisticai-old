@@ -23,7 +23,6 @@
       ~GridSearchReduction.predict
       ~GridSearchReduction.predict_proba
       ~GridSearchReduction.reformat_function
-      ~GridSearchReduction.score
       ~GridSearchReduction.set_params
       ~GridSearchReduction.transform_estimator
       ~GridSearchReduction.update_bias_param

@@ -23,6 +23,8 @@ Binary Classification
     holisticai.bias.metrics.four_fifths
     holisticai.bias.metrics.statistical_parity
     holisticai.bias.metrics.true_negative_rate_diff
+    holisticai.bias.metrics.z_test_diff
+    holisticai.bias.metrics.z_test_ratio
 
 
 .. _multiclass classification:

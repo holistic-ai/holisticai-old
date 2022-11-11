@@ -1,18 +1,40 @@
+
+
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
-
+  <meta charset="utf-8" />
+  
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
   <title>Measuring Bias in regression &mdash; holisticai  documentation</title>
-      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
-      <link rel="stylesheet" href="../../_static/copybutton.css" type="text/css" />
-      <link rel="stylesheet" href="../../_static/css/custom_style.css" type="text/css" />
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/copybutton.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/fonts.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/css/custom_style.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
   <!--[if lt IE 9]>
     <script src="../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
         <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
         <script src="../../_static/jquery.js"></script>
         <script src="../../_static/underscore.js"></script>
@@ -20,23 +42,44 @@
         <script src="../../_static/clipboard.min.js"></script>
         <script src="../../_static/copybutton.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
         <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
-    <script src="../../_static/js/theme.js"></script>
+        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="Importing the data" href="measuring_bias_recommender.html" />
+    <link rel="next" title="Measuring bias in recommender systems" href="measuring_bias_recommender.html" />
     <link rel="prev" title="Measuring Bias in classification" href="measuring_bias_classification.html" /> 
 </head>
 
-<body class="wy-body-for-nav"> 
+<body class="wy-body-for-nav">
+
+   
   <div class="wy-grid-for-nav">
+    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
+          
+
+          
             <a href="../../index.html" class="icon icon-home"> holisticai
+          
+
+          
+            
             <img src="../../_static/holistic_ai.png" class="logo" alt="Logo"/>
+          
           </a>
+
+          
+            
+            
+          
+
+          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -44,7 +87,18 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
               <p class="caption" role="heading"><span class="caption-text">Documentation</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../metrics.html">Metrics</a></li>
@@ -67,9 +121,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#Measure-bias"><strong>Measure bias</strong></a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="measuring_bias_recommender.html">Importing the data</a></li>
-<li class="toctree-l2"><a class="reference internal" href="measuring_bias_recommender.html#Plotting-and-Data-Exploration">Plotting and Data Exploration</a></li>
-<li class="toctree-l2"><a class="reference internal" href="measuring_bias_recommender.html#Evaluate-Fairness-of-Model">Evaluate Fairness of Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="measuring_bias_recommender.html">Measuring bias in recommender systems</a></li>
 <li class="toctree-l2"><a class="reference internal" href="measuring_bias_clustering.html"><strong>Measuring Bias in clustering</strong></a></li>
 <li class="toctree-l2"><a class="reference internal" href="measuring_bias_multiclass.html"><strong>Measuring Bias in multiclass classification</strong></a></li>
 </ul>
@@ -77,31 +129,77 @@
 <li class="toctree-l1"><a class="reference internal" href="../../mitigating_bias.html">Mitigating bias</a></li>
 </ul>
 
+            
+          
         </div>
+        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../../index.html">holisticai</a>
+        
       </nav>
 
+
       <div class="wy-nav-content">
+<div class="git-ribbon">
+  <a href="http://github.com/SwissDataScienceCenter" rel="me">Join us on GitHub</a>
+</div>
+
+        
         <div class="rst-content">
-          <div role="navigation" aria-label="Page navigation">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
   <ul class="wy-breadcrumbs">
+    
       <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
           <li><a href="../../measuring_bias.html">Measuring bias</a> &raquo;</li>
+        
       <li><strong>Measuring Bias in regression</strong></li>
+    
+    
       <li class="wy-breadcrumbs-aside">
+        
+          
             <a href="../../_sources/tutorials/measuring_bias_tutorials/measuring_bias_regression.ipynb.txt" rel="nofollow"> View page source</a>
+          
+        
       </li>
+    
   </ul>
+
+  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-             
+            
   
 <style>
 /* CSS for nbsphinx extension */
@@ -357,44 +455,22 @@ div.rendered_html tbody tr:nth-child(odd) {
 div.rendered_html tbody tr:hover {
   background: rgba(66, 165, 245, 0.2);
 }
-
-/* CSS overrides for sphinx_rtd_theme */
-
-/* 24px margin */
-.nbinput.nblast.container,
-.nboutput.nblast.container {
-    margin-bottom: 19px;  /* padding has already 5px */
-}
-
-/* ... except between code cells! */
-.nblast.container + .nbinput.container {
-    margin-top: -19px;
-}
-
-.admonition > p:before {
-    margin-right: 4px;  /* make room for the exclamation icon */
-}
-
-/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
-.math {
-    text-align: unset;
-}
 </style>
-<section id="Measuring-Bias-in-regression">
-<h1><strong>Measuring Bias in regression</strong><a class="headerlink" href="#Measuring-Bias-in-regression" title="Permalink to this headline"></a></h1>
+<div class="section" id="Measuring-Bias-in-regression">
+<h1><strong>Measuring Bias in regression</strong><a class="headerlink" href="#Measuring-Bias-in-regression" title="Permalink to this headline">¶</a></h1>
 <p>This notebook is a tutorial on auditing bias within a regression task. We will use the holisticai library thoughout, introducing some of the functions we have created to help study algorithmic bias.</p>
 <p>The sections are organised as follows : 1. Load the data : we load the student grades dataset as a pandas DataFrame 2. Data Exploration : some preliminary analysis of the data 3. Train a Model : we train a simple linear regression model (sklearn) 4. Measure Bias : we compute a few bias metrics, and comment on their meaning</p>
-<section id="Load-the-data">
-<h2><strong>Load the data</strong><a class="headerlink" href="#Load-the-data" title="Permalink to this headline"></a></h2>
+<div class="section" id="Load-the-data">
+<h2><strong>Load the data</strong><a class="headerlink" href="#Load-the-data" title="Permalink to this headline">¶</a></h2>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Base Imports</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">sys</span>
-<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;../../&#39;</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Base Imports
+import pandas as pd
+import numpy as np
+import sys
+sys.path.append(&#39;../../&#39;)
 </pre></div>
 </div>
 </div>
@@ -402,9 +478,9 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">holisticai.datasets</span> <span class="kn">import</span> <span class="n">load_student</span>
-<span class="n">df</span> <span class="o">=</span> <span class="n">load_student</span><span class="p">()[</span><span class="s1">&#39;frame&#39;</span><span class="p">]</span>
-<span class="n">df</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>from holisticai.datasets import load_student
+df = load_student()[&#39;frame&#39;]
+df
 </pre></div>
 </div>
 </div>
@@ -725,17 +801,17 @@ div.rendered_html tbody tr:hover {
 </div></div>
 </div>
 <p>We host a few example datasets on the holisticai library for quick loading and experimentation. Here we load and use the Student dataset. The goal of this dataset is the prediction of the numerical attribute ‘G3’ (mathematics grade of student in 3rd trimester). There are a number of sensitive attributes in this dataset, some of which are : sex, address, Mjob (mother’s job), Fjob (father’s job)…</p>
-</section>
-<section id="Data-Exploration">
-<h2><strong>Data Exploration</strong><a class="headerlink" href="#Data-Exploration" title="Permalink to this headline"></a></h2>
+</div>
+<div class="section" id="Data-Exploration">
+<h2><strong>Data Exploration</strong><a class="headerlink" href="#Data-Exploration" title="Permalink to this headline">¶</a></h2>
 <p>We import some of the holisticai plotters for quick exploration of the data.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">holisticai.bias.plots</span> <span class="kn">import</span> <span class="n">group_pie_plot</span>
-<span class="kn">from</span> <span class="nn">holisticai.bias.plots</span> <span class="kn">import</span> <span class="n">distribution_plot</span>
-<span class="kn">from</span> <span class="nn">holisticai.bias.plots</span> <span class="kn">import</span> <span class="n">success_rate_curves</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>from holisticai.bias.plots import group_pie_plot
+from holisticai.bias.plots import distribution_plot
+from holisticai.bias.plots import success_rate_curves
 </pre></div>
 </div>
 </div>
@@ -743,7 +819,7 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">group_pie_plot</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;sex&#39;</span><span class="p">])</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>group_pie_plot(df[&#39;sex&#39;])
 </pre></div>
 </div>
 </div>
@@ -768,8 +844,8 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># distribution of grades for male an female</span>
-<span class="n">distribution_plot</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;G3&#39;</span><span class="p">],</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;sex&#39;</span><span class="p">])</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># distribution of grades for male an female
+distribution_plot(df[&#39;G3&#39;], df[&#39;sex&#39;])
 </pre></div>
 </div>
 </div>
@@ -794,8 +870,8 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># distribution of grades for urban and rural</span>
-<span class="n">distribution_plot</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;G3&#39;</span><span class="p">],</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;address&#39;</span><span class="p">])</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># distribution of grades for urban and rural
+distribution_plot(df[&#39;G3&#39;], df[&#39;address&#39;])
 </pre></div>
 </div>
 </div>
@@ -820,8 +896,8 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># distribution of grades for different Mother jobs</span>
-<span class="n">distribution_plot</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;G3&#39;</span><span class="p">],</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Mjob&#39;</span><span class="p">])</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># distribution of grades for different Mother jobs
+distribution_plot(df[&#39;G3&#39;], df[&#39;Mjob&#39;])
 </pre></div>
 </div>
 </div>
@@ -846,9 +922,9 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">p_attr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Fjob&#39;</span><span class="p">])</span>
-<span class="n">y</span> <span class="o">=</span>      <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;G3&#39;</span><span class="p">])</span>
-<span class="n">success_rate_curves</span><span class="p">(</span><span class="n">p_attr</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">groups</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;at_home&#39;</span><span class="p">,</span> <span class="s1">&#39;health&#39;</span><span class="p">,</span> <span class="s1">&#39;teacher&#39;</span><span class="p">])</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>p_attr = np.array(df[&#39;Fjob&#39;])
+y =      np.array(df[&#39;G3&#39;])
+success_rate_curves(p_attr, y, groups=[&#39;at_home&#39;, &#39;health&#39;, &#39;teacher&#39;])
 </pre></div>
 </div>
 </div>
@@ -869,17 +945,17 @@ div.rendered_html tbody tr:hover {
 </div>
 </div>
 <p>The above shows the success rate (sucess is exceeding the given threshold) as a function of threshold for different subgroups of the population : Father’s job in [‘at_home’, ‘health’, ‘teacher’]. We can observe that student’s with a parent as a teacher are more likely to exceed high thresholds than other groups.</p>
-</section>
-<section id="Preprocess-Data-and-Train-a-model">
-<h2><strong>Preprocess Data and Train a model</strong><a class="headerlink" href="#Preprocess-Data-and-Train-a-model" title="Permalink to this headline"></a></h2>
+</div>
+<div class="section" id="Preprocess-Data-and-Train-a-model">
+<h2><strong>Preprocess Data and Train a model</strong><a class="headerlink" href="#Preprocess-Data-and-Train-a-model" title="Permalink to this headline">¶</a></h2>
 <p>We use a sklearn linear regression model.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">train_test_split</span>
-<span class="kn">from</span> <span class="nn">sklearn.linear_model</span> <span class="kn">import</span> <span class="n">LinearRegression</span>
-<span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="kn">import</span> <span class="n">OneHotEncoder</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+from sklearn.preprocessing import OneHotEncoder
 </pre></div>
 </div>
 </div>
@@ -887,24 +963,24 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># we don&#39;t want to encode protected attributes</span>
-<span class="n">protected_attributes</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;sex&#39;</span><span class="p">,</span> <span class="s1">&#39;address&#39;</span><span class="p">,</span> <span class="s1">&#39;Mjob&#39;</span><span class="p">,</span> <span class="s1">&#39;Fjob&#39;</span><span class="p">]</span>
-<span class="n">label_attributes</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;G3&#39;</span><span class="p">,</span> <span class="s1">&#39;G2&#39;</span><span class="p">,</span> <span class="s1">&#39;G1&#39;</span><span class="p">]</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># we don&#39;t want to encode protected attributes
+protected_attributes = [&#39;sex&#39;, &#39;address&#39;, &#39;Mjob&#39;, &#39;Fjob&#39;]
+label_attributes = [&#39;G3&#39;, &#39;G2&#39;, &#39;G1&#39;]
 
-<span class="c1"># preprocess categorical columns</span>
-<span class="k">def</span> <span class="nf">preprocess_data</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">protected_attributes</span><span class="p">,</span> <span class="n">label_attributes</span><span class="p">):</span>
-    <span class="n">categoricals</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">col</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">protected_attributes</span> <span class="ow">and</span> <span class="n">col</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">label_attributes</span> <span class="ow">and</span> <span class="n">data</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">dtype</span> <span class="o">==</span> <span class="nb">object</span><span class="p">:</span>
-            <span class="n">categoricals</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">col</span><span class="p">)</span>
+# preprocess categorical columns
+def preprocess_data(data, protected_attributes, label_attributes):
+    categoricals = []
+    for col in data.columns:
+        if col not in protected_attributes and col not in label_attributes and data[col].dtype == object:
+            categoricals.append(col)
 
-    <span class="n">cat_encoder</span> <span class="o">=</span> <span class="n">OneHotEncoder</span><span class="p">()</span>
-    <span class="n">enc</span> <span class="o">=</span> <span class="n">cat_encoder</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">categoricals</span><span class="p">])</span>
-    <span class="n">enc</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">enc</span><span class="o">.</span><span class="n">toarray</span><span class="p">())</span>
-    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">data</span><span class="p">,</span><span class="n">enc</span><span class="p">],</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="n">categoricals</span><span class="p">)</span> <span class="c1"># add encoded columns</span>
+    cat_encoder = OneHotEncoder()
+    enc = cat_encoder.fit_transform(data[categoricals])
+    enc = pd.DataFrame(enc.toarray())
+    df = pd.concat([data,enc],axis=1).drop(columns=categoricals) # add encoded columns
 
-    <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="s1">&#39;columns&#39;</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">df</span>
+    df = df.rename(str, axis=&#39;columns&#39;)
+    return df
 </pre></div>
 </div>
 </div>
@@ -912,10 +988,10 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Load, preprocess and split for training</span>
-<span class="n">data</span> <span class="o">=</span> <span class="n">df</span>
-<span class="n">preproc_data</span> <span class="o">=</span> <span class="n">preprocess_data</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">protected_attributes</span><span class="p">,</span> <span class="n">label_attributes</span><span class="p">)</span>
-<span class="n">train</span><span class="p">,</span> <span class="n">test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">preproc_data</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Load, preprocess and split for training
+data = df
+preproc_data = preprocess_data(data, protected_attributes, label_attributes)
+train, test = train_test_split(preproc_data, test_size=0.3, random_state=42)
 <br/></pre></div>
 </div>
 </div>
@@ -923,18 +999,18 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># G3 is the students final grade (drop G2 and G1 as well because highly correlated with G3)</span>
-<span class="n">X_train</span> <span class="o">=</span> <span class="n">train</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="n">label_attributes</span><span class="p">)</span>
-<span class="n">X_test</span> <span class="o">=</span> <span class="n">test</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="n">label_attributes</span><span class="p">)</span>
-<span class="n">y_train</span> <span class="o">=</span> <span class="n">train</span><span class="p">[</span><span class="s1">&#39;G3&#39;</span><span class="p">]</span>
-<span class="n">y_test</span> <span class="o">=</span> <span class="n">test</span><span class="p">[</span><span class="s1">&#39;G3&#39;</span><span class="p">]</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># G3 is the students final grade (drop G2 and G1 as well because highly correlated with G3)
+X_train = train.drop(columns=label_attributes)
+X_test = test.drop(columns=label_attributes)
+y_train = train[&#39;G3&#39;]
+y_test = test[&#39;G3&#39;]
 
-<span class="c1"># Train a simple linear regression model</span>
-<span class="n">LR</span> <span class="o">=</span> <span class="n">LinearRegression</span><span class="p">()</span>
-<span class="n">model</span> <span class="o">=</span> <span class="n">LR</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="n">protected_attributes</span><span class="p">),</span> <span class="n">y_train</span><span class="p">)</span>
+# Train a simple linear regression model
+LR = LinearRegression()
+model = LR.fit(X_train.drop(columns=protected_attributes), y_train)
 
-<span class="c1"># Predict values</span>
-<span class="n">y_pred</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="n">protected_attributes</span><span class="p">))</span>
+# Predict values
+y_pred = model.predict(X_test.drop(columns=protected_attributes))
 </pre></div>
 </div>
 </div>
@@ -942,12 +1018,12 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">mean_absolute_error</span><span class="p">,</span> <span class="n">mean_squared_error</span><span class="p">,</span> <span class="n">max_error</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>from sklearn.metrics import mean_absolute_error, mean_squared_error, max_error
 
-<span class="c1"># evaluate</span>
-<span class="nb">print</span> <span class="p">(</span><span class="s1">&#39;Mean Absolute Error    : &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">mean_absolute_error</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">)))</span>
-<span class="nb">print</span> <span class="p">(</span><span class="s1">&#39;Root Mean Square Error : &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">mean_squared_error</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">,</span> <span class="n">squared</span><span class="o">=</span><span class="kc">False</span><span class="p">)))</span>
-<span class="nb">print</span> <span class="p">(</span><span class="s1">&#39;Max Residual Error     : &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">max_error</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">)))</span>
+# evaluate
+print (&#39;Mean Absolute Error    : &#39; + str(mean_absolute_error(y_test, y_pred)))
+print (&#39;Root Mean Square Error : &#39; + str(mean_squared_error(y_test, y_pred, squared=False)))
+print (&#39;Max Residual Error     : &#39; + str(max_error(y_test, y_pred)))
 </pre></div>
 </div>
 </div>
@@ -961,18 +1037,18 @@ Root Mean Square Error : 4.368370386032354
 Max Residual Error     : 11.4404296875
 </pre></div></div>
 </div>
-</section>
-<section id="Measure-bias">
-<h2><strong>Measure bias</strong><a class="headerlink" href="#Measure-bias" title="Permalink to this headline"></a></h2>
+</div>
+<div class="section" id="Measure-bias">
+<h2><strong>Measure bias</strong><a class="headerlink" href="#Measure-bias" title="Permalink to this headline">¶</a></h2>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># import some bias metrics</span>
-<span class="kn">from</span> <span class="nn">holisticai.bias.metrics</span> <span class="kn">import</span> <span class="n">statistical_parity_regression</span>
-<span class="kn">from</span> <span class="nn">holisticai.bias.metrics</span> <span class="kn">import</span> <span class="n">disparate_impact_regression</span>
-<span class="kn">from</span> <span class="nn">holisticai.bias.metrics</span> <span class="kn">import</span> <span class="n">mae_ratio</span>
-<span class="kn">from</span> <span class="nn">holisticai.bias.metrics</span> <span class="kn">import</span> <span class="n">rmse_ratio</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># import some bias metrics
+from holisticai.bias.metrics import statistical_parity_regression
+from holisticai.bias.metrics import disparate_impact_regression
+from holisticai.bias.metrics import mae_ratio
+from holisticai.bias.metrics import rmse_ratio
 </pre></div>
 </div>
 </div>
@@ -980,12 +1056,12 @@ Max Residual Error     : 11.4404296875
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># set up vectors for gender</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># set up vectors for gender
 
-<span class="n">group_a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">X_test</span><span class="p">[</span><span class="s1">&#39;sex&#39;</span><span class="p">]</span><span class="o">==</span><span class="s1">&#39;M&#39;</span><span class="p">)</span>
-<span class="n">group_b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">X_test</span><span class="p">[</span><span class="s1">&#39;sex&#39;</span><span class="p">]</span><span class="o">==</span><span class="s1">&#39;F&#39;</span><span class="p">)</span>
-<span class="n">y_pred</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="n">protected_attributes</span><span class="p">)))</span>
-<span class="n">y_true</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">y_test</span><span class="p">)</span>
+group_a = np.array(X_test[&#39;sex&#39;]==&#39;M&#39;)
+group_b = np.array(X_test[&#39;sex&#39;]==&#39;F&#39;)
+y_pred  = np.array(model.predict(X_test.drop(columns=protected_attributes)))
+y_true  = np.array(y_test)
 </pre></div>
 </div>
 </div>
@@ -993,11 +1069,11 @@ Max Residual Error     : 11.4404296875
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># evaluate fairness metrics for gender</span>
-<span class="nb">print</span> <span class="p">(</span><span class="s1">&#39;Statistical Parity Q80   : &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">statistical_parity_regression</span><span class="p">(</span><span class="n">group_a</span><span class="p">,</span> <span class="n">group_b</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">,</span> <span class="n">q</span><span class="o">=</span><span class="mf">0.8</span><span class="p">)))</span>
-<span class="nb">print</span> <span class="p">(</span><span class="s1">&#39;Disparate Impact Q80     : &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">disparate_impact_regression</span><span class="p">(</span><span class="n">group_a</span><span class="p">,</span> <span class="n">group_b</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">,</span> <span class="n">q</span><span class="o">=</span><span class="mf">0.8</span><span class="p">)))</span>
-<span class="nb">print</span> <span class="p">(</span><span class="s1">&#39;MAE Ratio                : &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">mae_ratio</span><span class="p">(</span><span class="n">group_a</span><span class="p">,</span> <span class="n">group_b</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">,</span> <span class="n">y_true</span><span class="p">)))</span>
-<span class="nb">print</span> <span class="p">(</span><span class="s1">&#39;RMSE Ratio               : &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">rmse_ratio</span><span class="p">(</span><span class="n">group_a</span><span class="p">,</span> <span class="n">group_b</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">,</span> <span class="n">y_true</span><span class="p">)))</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># evaluate fairness metrics for gender
+print (&#39;Statistical Parity Q80   : &#39; + str(statistical_parity_regression(group_a, group_b, y_pred, q=0.8)))
+print (&#39;Disparate Impact Q80     : &#39; + str(disparate_impact_regression(group_a, group_b, y_pred, q=0.8)))
+print (&#39;MAE Ratio                : &#39; + str(mae_ratio(group_a, group_b, y_pred, y_true)))
+print (&#39;RMSE Ratio               : &#39; + str(rmse_ratio(group_a, group_b, y_pred, y_true)))
 </pre></div>
 </div>
 </div>
@@ -1017,12 +1093,12 @@ RMSE Ratio               : 0.8664403104812392
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># set up vectors for address</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># set up vectors for address
 
-<span class="n">group_a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">X_test</span><span class="p">[</span><span class="s1">&#39;address&#39;</span><span class="p">]</span><span class="o">==</span><span class="s1">&#39;U&#39;</span><span class="p">)</span>
-<span class="n">group_b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">X_test</span><span class="p">[</span><span class="s1">&#39;address&#39;</span><span class="p">]</span><span class="o">==</span><span class="s1">&#39;R&#39;</span><span class="p">)</span>
-<span class="n">y_pred</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="n">protected_attributes</span><span class="p">)))</span>
-<span class="n">y_true</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">y_test</span><span class="p">)</span>
+group_a = np.array(X_test[&#39;address&#39;]==&#39;U&#39;)
+group_b = np.array(X_test[&#39;address&#39;]==&#39;R&#39;)
+y_pred  = np.array(model.predict(X_test.drop(columns=protected_attributes)))
+y_true  = np.array(y_test)
 </pre></div>
 </div>
 </div>
@@ -1030,11 +1106,11 @@ RMSE Ratio               : 0.8664403104812392
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># evaluate fairness metrics for address</span>
-<span class="nb">print</span> <span class="p">(</span><span class="s1">&#39;Statistical Parity Q80   : &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">statistical_parity_regression</span><span class="p">(</span><span class="n">group_a</span><span class="p">,</span> <span class="n">group_b</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">,</span> <span class="n">q</span><span class="o">=</span><span class="mf">0.8</span><span class="p">)))</span>
-<span class="nb">print</span> <span class="p">(</span><span class="s1">&#39;Disparate Impact Q80     : &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">disparate_impact_regression</span><span class="p">(</span><span class="n">group_a</span><span class="p">,</span> <span class="n">group_b</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">,</span> <span class="n">q</span><span class="o">=</span><span class="mf">0.8</span><span class="p">)))</span>
-<span class="nb">print</span> <span class="p">(</span><span class="s1">&#39;MAE Ratio                : &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">mae_ratio</span><span class="p">(</span><span class="n">group_a</span><span class="p">,</span> <span class="n">group_b</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">,</span> <span class="n">y_true</span><span class="p">)))</span>
-<span class="nb">print</span> <span class="p">(</span><span class="s1">&#39;RMSE Ratio               : &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">rmse_ratio</span><span class="p">(</span><span class="n">group_a</span><span class="p">,</span> <span class="n">group_b</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">,</span> <span class="n">y_true</span><span class="p">)))</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># evaluate fairness metrics for address
+print (&#39;Statistical Parity Q80   : &#39; + str(statistical_parity_regression(group_a, group_b, y_pred, q=0.8)))
+print (&#39;Disparate Impact Q80     : &#39; + str(disparate_impact_regression(group_a, group_b, y_pred, q=0.8)))
+print (&#39;MAE Ratio                : &#39; + str(mae_ratio(group_a, group_b, y_pred, y_true)))
+print (&#39;RMSE Ratio               : &#39; + str(rmse_ratio(group_a, group_b, y_pred, y_true)))
 </pre></div>
 </div>
 </div>
@@ -1054,7 +1130,7 @@ RMSE Ratio               : 0.9324667996167351
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span> <span class="p">(</span><span class="s1">&#39;Disparate Impact Q80     : &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">disparate_impact_regression</span><span class="p">(</span><span class="n">group_a</span><span class="p">,</span> <span class="n">group_b</span><span class="p">,</span> <span class="n">y_true</span><span class="p">,</span> <span class="n">q</span><span class="o">=</span><span class="mf">0.8</span><span class="p">)))</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>print (&#39;Disparate Impact Q80     : &#39; + str(disparate_impact_regression(group_a, group_b, y_true, q=0.8)))
 </pre></div>
 </div>
 </div>
@@ -1073,11 +1149,11 @@ Disparate Impact Q80     : 4.2298850574712645
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># set up vectors for address</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># set up vectors for address
 
-<span class="n">group_a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">X_test</span><span class="p">[</span><span class="s1">&#39;address&#39;</span><span class="p">]</span><span class="o">==</span><span class="s1">&#39;U&#39;</span><span class="p">)</span>
-<span class="n">group_b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">X_test</span><span class="p">[</span><span class="s1">&#39;address&#39;</span><span class="p">]</span><span class="o">==</span><span class="s1">&#39;R&#39;</span><span class="p">)</span>
-<span class="n">y_pred</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="n">protected_attributes</span><span class="p">)))</span>
+group_a = np.array(X_test[&#39;address&#39;]==&#39;U&#39;)
+group_b = np.array(X_test[&#39;address&#39;]==&#39;R&#39;)
+y_pred  = np.array(model.predict(X_test.drop(columns=protected_attributes)))
 </pre></div>
 </div>
 </div>
@@ -1085,8 +1161,8 @@ Disparate Impact Q80     : 4.2298850574712645
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">holisticai.bias.metrics</span> <span class="kn">import</span> <span class="n">regression_bias_metrics</span>
-<span class="n">regression_bias_metrics</span><span class="p">(</span><span class="n">group_a</span><span class="p">,</span> <span class="n">group_b</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">,</span> <span class="n">metric_type</span><span class="o">=</span><span class="s1">&#39;equal_outcome&#39;</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>from holisticai.bias.metrics import regression_bias_metrics
+regression_bias_metrics(group_a, group_b, y_pred, metric_type=&#39;equal_outcome&#39;)
 </pre></div>
 </div>
 </div>
@@ -1178,12 +1254,12 @@ Disparate Impact Q80     : 4.2298850574712645
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># set up vectors for address</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># set up vectors for address
 
-<span class="n">group_a</span> <span class="o">=</span> <span class="n">X_test</span><span class="p">[</span><span class="s1">&#39;address&#39;</span><span class="p">]</span><span class="o">==</span><span class="s1">&#39;U&#39;</span>
-<span class="n">group_b</span> <span class="o">=</span> <span class="n">X_test</span><span class="p">[</span><span class="s1">&#39;address&#39;</span><span class="p">]</span><span class="o">==</span><span class="s1">&#39;R&#39;</span>
-<span class="n">y_pred</span>  <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="n">protected_attributes</span><span class="p">))</span>
-<span class="n">y_true</span>  <span class="o">=</span> <span class="n">y_test</span>
+group_a = X_test[&#39;address&#39;]==&#39;U&#39;
+group_b = X_test[&#39;address&#39;]==&#39;R&#39;
+y_pred  = model.predict(X_test.drop(columns=protected_attributes))
+y_true  = y_test
 </pre></div>
 </div>
 </div>
@@ -1191,7 +1267,7 @@ Disparate Impact Q80     : 4.2298850574712645
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">regression_bias_metrics</span><span class="p">(</span><span class="n">group_a</span><span class="p">,</span> <span class="n">group_b</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">,</span> <span class="n">y_true</span><span class="p">,</span> <span class="n">metric_type</span><span class="o">=</span><span class="s1">&#39;equal_opportunity&#39;</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>regression_bias_metrics(group_a, group_b, y_pred, y_true, metric_type=&#39;equal_opportunity&#39;)
 </pre></div>
 </div>
 </div>
@@ -1257,38 +1333,55 @@ Disparate Impact Q80     : 4.2298850574712645
 </table>
 </div></div>
 </div>
-</section>
-</section>
+</div>
+</div>
 
 
            </div>
+           
           </div>
-          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="measuring_bias_recommender.html" class="btn btn-neutral float-right" title="Measuring bias in recommender systems" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
         <a href="measuring_bias_classification.html" class="btn btn-neutral float-left" title="Measuring Bias in classification" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="measuring_bias_recommender.html" class="btn btn-neutral float-right" title="Importing the data" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2022, Holistic AI.</p>
-  </div>
+    <p>
+        &#169; Copyright 2022, Holistic AI.
 
-  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
     <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    provided by <a href="https://readthedocs.org">Read the Docs</a>.
-   
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
         </div>
       </div>
+
     </section>
+
   </div>
-  <script>
+  
+
+  <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  </script>
+
+  
+  
+    
+   
 
 </body>
 </html>
