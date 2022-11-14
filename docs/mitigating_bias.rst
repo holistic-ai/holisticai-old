@@ -1,5 +1,8 @@
 Mitigating bias
 ===============
+
+Here are some tutorials showing how we can mitigate bias in ML using the holisticai library.
+
 .. toctree::
     :maxdepth: 1
 

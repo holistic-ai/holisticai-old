@@ -5,14 +5,14 @@ Holistic AI Library
 Welcome to the Holistic AI library! This is an open-source tool to assess and improve the trustworthiness of AI systems. The current version of the library offers a set of techniques to easily measure and mitigate Bias across a variety of tasks.  
 
 .. toctree::
-    :maxdepth: 3
+    :maxdepth: 2
     :caption: Documentation
 
     metrics
     mitigation
 
 .. toctree::
-    :maxdepth: 2
+    :maxdepth: 1
     :hidden:
 
     plotting
@@ -21,7 +21,7 @@ Welcome to the Holistic AI library! This is an open-source tool to assess and im
     utils
 
 .. toctree::
-    :maxdepth: 2
+    :maxdepth: 1
     :hidden:
     :caption: Tutorials
 

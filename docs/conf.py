@@ -79,6 +79,7 @@ sys.path.insert(0, os.path.abspath(".."))
 # pick them up properly.
 
 # Uncomment when tutorials folder is present
+'''
 NOTEBOOKS_DIR = os.path.abspath("tutorials")
 if os.path.exists(NOTEBOOKS_DIR):
     import warnings
@@ -91,7 +92,7 @@ shutil.copytree(
 )
 if os.path.exists(NOTEBOOKS_DIR + "/local_scratch"):
     shutil.rmtree(NOTEBOOKS_DIR + "/local_scratch")
-
+'''
 
 # Custom css
 html_css_files = [
