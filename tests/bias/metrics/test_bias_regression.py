@@ -6,6 +6,7 @@ from numpy.testing import assert_approx_equal
 # Regression
 from holisticai.bias.metrics import (
     avg_score_diff,
+    avg_score_ratio,
     correlation_diff,
     disparate_impact_regression,
     mae_ratio,
@@ -80,6 +81,13 @@ def test_avg_score_diff():
     """test avg_score_diff"""
     a = avg_score_diff(group_a, group_b, y_pred_r)
     b = 0.1 / 12
+    assert_approx_equal(a, b)
+
+
+def test_avg_score_ratio():
+    """test avg_score_diff"""
+    a = avg_score_diff(group_a, group_b, y_pred_r)
+    b = 1.016129032
     assert_approx_equal(a, b)
 
 
