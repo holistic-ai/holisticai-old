@@ -16,6 +16,9 @@ def disparate_impact_regression(group_a, group_b, y_pred, q=0.8):
     This function computes the ratio of success rates between group_a and
     group_b, where sucess means predicted score exceeds a given quantile (default = 0.8).
 
+    If q is a vector, this function returns a vector with the
+    respective result for each given quantile in q.
+
     Interpretation
     --------------
     A value of 1 is desired. Values below 1 are unfair towards group_a.
@@ -30,7 +33,7 @@ def disparate_impact_regression(group_a, group_b, y_pred, q=0.8):
         Group membership vector (binary)
     y_pred : array-like
         Predictions vector (regression)
-    q (optional) : float, default=0.8
+    q (optional) : float or array, default=0.8
         quantile of predictions considered
 
     Returns
@@ -86,6 +89,9 @@ def statistical_parity_regression(group_a, group_b, y_pred, q=0.5):
     This function computes the difference of success rates between group_a and
     group_b, where sucess means that the predicted score exceeds a given quantile.
 
+    If q is a vector, this function returns a vector with the
+    respective result for each given quantile in q.
+
     Interpretation
     --------------
     A value of 0 is desired. Values below 0 are unfair towards group_a.
@@ -99,7 +105,7 @@ def statistical_parity_regression(group_a, group_b, y_pred, q=0.5):
         Group membership vector (binary)
     y_pred : array-like
         Predictions vector (regression)
-    q (optional) : float
+    q (optional) : float or array, default=0.5
         quantile of predictions considered
 
     Returns
@@ -213,6 +219,9 @@ def avg_score_diff(group_a, group_b, y_pred, q=0):
     This function computes the difference in average scores between
     group_a and group_b.
 
+    If q is a vector, this function returns a vector with the
+    respective result for each given quantile in q.
+
     Interpretation
     --------------
     A value of 0 is desired. Negative values indicate the group_a
@@ -228,7 +237,7 @@ def avg_score_diff(group_a, group_b, y_pred, q=0):
         Group membership vector (binary)
     y_pred : array-like
         Predictions vector (regression)
-    q (optional) : float
+    q (optional) : float or array
         quantile of predictions considered
 
     Returns
@@ -272,6 +281,78 @@ def avg_score_diff(group_a, group_b, y_pred, q=0):
     return np.squeeze(avg_score_diff)[()]
 
 
+def avg_score_ratio(group_a, group_b, y_pred, q=0):
+    """
+
+    Average Score Ratio.
+
+    Description
+    -----------
+    This function computes the ratio in average scores between
+    group_a and group_b.
+
+    If q is a vector, this function returns a vector with the
+    respective result for each given quantile in q.
+
+    Interpretation
+    --------------
+    A value of 1 is desired. Values below 1 indicate the group_a
+    has lower average score, so bias against group_a. Values above 1
+    indicate group_b has lower average score, so bias against group_b.
+    (0.8, 1.25) range is considered fair.
+
+    Parameters
+    ----------
+    group_a : array-like
+        Group membership vector (binary)
+    group_b : array-like
+        Group membership vector (binary)
+    y_pred : array-like
+        Predictions vector (regression)
+    q (optional) : float or array
+        quantile of predictions considered
+
+    Returns
+    -------
+    float
+        Average Score Ratio : :math:`\texttt{AVgroup_a / AVgroup_b}`
+
+    Examples
+    -------
+    >>> import numpy as np
+    >>> from holisticai.bias.metrics import avg_score_ratio
+    >>> group_a = np.array([1, 1, 1, 1, 0, 0, 0, 0, 0, 0])
+    >>> group_b = np.array([0, 0, 0, 0, 1, 1, 1, 1, 1, 1])
+    >>> y_pred = np.array([0.8, 0.9, 0.2, 0.1, 0.7, 0.9, 0.8, 0.6, 0.3, 0.5])
+    >>> avg_score_ratio(group_a, group_b, y_pred)
+    0.7894736842
+    """
+    # check and coerce inputs
+    group_a, group_b, y_pred, _, q = _regression_checks(
+        group_a, group_b, y_pred, None, q
+    )
+
+    y_pred_list, group_a_list, group_b_list = slice_arrays_by_quantile(
+        q, y_pred, [y_pred, group_a, group_b]
+    )
+
+    n_q = len(group_a_list)
+    avg_score_ratio = np.zeros(n_q)
+
+    for i in range(n_q):
+        group_a, group_b = group_a_list[i], group_b_list[i]
+        _check_non_empty(group_a, name="group_a", quantile=q[i])
+        _check_non_empty(group_b, name="group_b", quantile=q[i])
+
+        y_pred = y_pred_list[i]
+        avgroup_a = y_pred[group_a == 1].mean()
+        avgroup_b = y_pred[group_b == 1].mean()
+
+        avg_score_ratio[i] = avgroup_a / avgroup_b
+
+    return np.squeeze(avg_score_ratio)[()]
+
+
 def zscore_diff(group_a, group_b, y_pred, q=0):
     """
 
@@ -282,6 +363,9 @@ def zscore_diff(group_a, group_b, y_pred, q=0):
     This function computes the spread in Zscores between
     group_a and group_b. The Zscore is a normalised
     version of Disparate Impact.
+
+    If q is a vector, this function returns a vector with the
+    respective result for each given quantile in q.
 
     Interpretation
     --------------
@@ -297,6 +381,8 @@ def zscore_diff(group_a, group_b, y_pred, q=0):
         Group membership vector (binary)
     y_pred : array-like
         Predictions vector (regression)
+    q (optional) : float or array
+        quantile of predictions considered
 
     Returns
     -------
@@ -528,6 +614,9 @@ def correlation_diff(group_a, group_b, y_pred, y_true, q=0):
     This function computes the difference in correlation between predictions
     and targets for group_a and group_b.
 
+    If q is a vector, this function returns a vector with the
+    respective result for each given quantile in q.
+
     Interpretation
     --------------
     A value of 0 is desired. This metric ranges between -2 and 2,
@@ -544,7 +633,7 @@ def correlation_diff(group_a, group_b, y_pred, y_true, q=0):
         Predictions vector (regression)
     y_true : numpy array
         Target vector (regression)
-    q (optional) : float
+    q (optional) : float or array
         quantile of predictions considered
 
     Returns
@@ -599,6 +688,9 @@ def rmse_ratio(group_a, group_b, y_pred, y_true, q=0):
     -----------
     This function computes the ratio of the RMSE for group_a and group_b.
 
+    If q is a vector, this function returns a vector with the
+    respective result for each given quantile in q.
+
     Interpretation
     --------------
     A value of 1 is desired. Lower values show bias against group_a.
@@ -614,7 +706,7 @@ def rmse_ratio(group_a, group_b, y_pred, y_true, q=0):
         Predictions vector (regression)
     y_true : numpy array
         Target vector (regression)
-    q (optional) : float
+    q (optional) : float or array
         quantile of predictions considered
 
     Returns
@@ -669,6 +761,9 @@ def mae_ratio(group_a, group_b, y_pred, y_true, q=0):
     -----------
     This function computes the ratio of the MAE for group_a and group_b.
 
+    If q is a vector, this function returns a vector with the
+    respective result for each given quantile in q.
+
     Interpretation
     --------------
     A value of 1 is desired. Lower values show bias against group_a.
@@ -684,7 +779,7 @@ def mae_ratio(group_a, group_b, y_pred, y_true, q=0):
         Predictions vector (regression)
     y_true : numpy array
         Target vector (regression)
-    q (optional) : float
+    q (optional) : float or array
         quantile of predictions considered
 
     Returns
