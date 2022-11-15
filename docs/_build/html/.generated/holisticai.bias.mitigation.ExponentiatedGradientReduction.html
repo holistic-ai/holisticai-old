@@ -1,75 +1,114 @@
 
 
-
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
-<html xml:lang="" lang="" version="-//W3C//DTD XHTML 1.1//EN" xmlns="http://www.w3.org/1999/xhtml">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+<!DOCTYPE html>
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
   <title>holisticai.bias.mitigation.ExponentiatedGradientReduction &mdash; holisticai  documentation</title>
   
 
   
-
   
-
-    <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'/>
-    <link rel="stylesheet" href="../_static/css/pdj.css" type="text/css" />
-
   
-    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-  
-    <link rel="stylesheet" href="../_static/css/pdj.css" type="text/css" />
-  
-    <link rel="stylesheet" href="../_static/copybutton.css" type="text/css" />
-  
-    <link rel="stylesheet" href="../_static/css/custom_style.css" type="text/css" />
   
 
   
 
   
-        <link rel="index" title="Index"
-              href="../genindex.html"/>
-        <link rel="search" title="Search" href="../search.html"/>
-    <link rel="top" title="holisticai  documentation" href="../index.html"/>
-        <link rel="up" title="Mitigation" href="../mitigation.html"/>
-        <link rel="next" title="holisticai.bias.mitigation.GridSearchReduction" href="holisticai.bias.mitigation.GridSearchReduction.html"/>
-        <link rel="prev" title="holisticai.bias.mitigation.FairletClusteringPreprocessing" href="holisticai.bias.mitigation.FairletClusteringPreprocessing.html"/>
+  
+    
 
-    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-    <meta http-equiv="cache-control" content="public" />
-    <meta name="robots" content="follow, all" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <!-- Add jQuery library -->
-    <script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
+  
 
-  </head>
+  <link rel="stylesheet" href="../_static/css/theme.min.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/custom.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/theme.min.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/copybutton.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/custom_style.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="holisticai.bias.mitigation.GridSearchReduction" href="holisticai.bias.mitigation.GridSearchReduction.html" />
+    <link rel="prev" title="holisticai.bias.mitigation.FairletClusteringPreprocessing" href="holisticai.bias.mitigation.FairletClusteringPreprocessing.html" /> 
 
-  <body class="wy-body-for-nav" role="document">
+</head>
 
-  <div class="wy-grid-for-nav">
-    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
-      <div class="wy-side-nav-search">
-        <a href="../index.html" class="fa fa-home"> holisticai </a>
-        <div role="search">
-	  <form id ="rtd-search-form" class="wy-form"
-		action="../search.html" method="get">
-	    <input type="text" name="q" placeholder="Search docs" />
-	    <input type="hidden" name="check_keywords" value="yes" />
-	    <input type="hidden" name="area" value="default" />
-	  </form>
-	</div>
-      </div>
+<body>
+    <header>
+        <div class="container">
+            <a class="site-nav-toggle hidden-lg-up"><i class="icon-menu"></i></a>
+            <a class="site-title" href="../index.html">
+                holisticai
+            </a>
+        </div>
+    </header>
 
-      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-	
+
+<div class="breadcrumbs-outer hidden-xs-down">
+    <div class="container">
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a></li>
+        
+          <li><a href="../mitigation.html">Mitigation</a></li>
+        
+      <li>holisticai.bias.mitigation.ExponentiatedGradientReduction</li>
+    
+    
+      <li class="breadcrumbs-aside">
+        
+            
+            <a href="../_sources/.generated/holisticai.bias.mitigation.ExponentiatedGradientReduction.rst.txt" rel="nofollow"> View page source</a>
           
-          
-              <p class="caption" role="heading"><span class="caption-text">Documentation</span></p>
+        
+      </li>
+    
+  </ul>
+</div>
+    </div>
+</div>
+    <div class="main-outer">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 col-lg-3 site-nav">
+                    
+<div role="search">
+    <form class="search" action="../search.html" method="get">
+        <div class="icon-input">
+            <input type="text" name="q" placeholder="Search" />
+            <span class="icon-search"></span>
+        </div>
+        <input type="submit" value="Go" class="d-hidden" />
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+                    <div class="site-nav-tree">
+                        
+                            
+                            
+                                <p class="caption" role="heading"><span class="caption-text">Documentation</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../metrics.html">Metrics</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../metrics.html#binary-classification">Binary Classification</a></li>
@@ -125,44 +164,14 @@
 </li>
 </ul>
 
-          
-        
-
-      </div>
-      &nbsp;
-    </nav>
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      <nav class="wy-nav-top" id="barra-mobile" role="navigation" aria-label="top navigation">
-        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-        <a href="#">Porão do Juca</a>
-      </nav>
-
-      <div class="wy-nav-content">
-	<div class="fundo-claro">
-	</div>
-	<div class="fundo-escuro">
-	</div>
-
-        <div class="rst-content">
-          <div role="navigation" aria-label="breadcrumbs navigation">
-	    
-	    <!-- <ul class="wy-breadcrumbs"> -->
-	    <!--   <li><a href="#">Docs</a> &raquo;</li> -->
-
-	    <!--   <li>Features</li> -->
-	    <!--   <li class="wy-breadcrumbs-aside"> -->
-
-	    <!-- 	<a href="_sources/index.txt" rel="nofollow"> View page source</a> -->
-
-	    <!--   </li> -->
-	    <!-- </ul> -->
-	    <!-- <hr/> -->
-	  </div>
-
-          <div role="main" class="">
-
-	    <div id="content" class="hfeed entry-container hentry">
+                            
+                        
+                    </div>
+                </div>
+                <div class="col-12 col-lg-9">
+                    <div class="document">
+                        
+                            
   <div class="section" id="holisticai-bias-mitigation-exponentiatedgradientreduction">
 <h1>holisticai.bias.mitigation.ExponentiatedGradientReduction<a class="headerlink" href="#holisticai-bias-mitigation-exponentiatedgradientreduction" title="Permalink to this headline">¶</a></h1>
 <dl class="py class">
@@ -408,81 +417,42 @@ possible to update each component of a nested object.</p>
 </div>
 
 
-	    </div>
-            <footer>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>    
+
+
   
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="holisticai.bias.mitigation.GridSearchReduction.html" class="btn btn-neutral float-right" title="holisticai.bias.mitigation.GridSearchReduction">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="holisticai.bias.mitigation.FairletClusteringPreprocessing.html" class="btn btn-neutral" title="holisticai.bias.mitigation.FairletClusteringPreprocessing"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
-    </div>
-  
-
-  <hr/>
-
-  <div role="contentinfo">
-    <p>
-        &copy; Copyright 2022, Holistic AI.
-    </p>
-  </div>
-
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/jucacrispim/sphinx_pdj_theme">theme</a> provided by <a href="http://poraodojuca.net">Porão do Juca</a>.
-
-</footer>
-	</div>
-	</div>
-	  
 
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
             VERSION:'',
+            LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
         };
     </script>
-    <script type="text/javascript" src="../_static/documentation_options.js">
-
-    </script>
-    <script type="text/javascript" src="../_static/jquery.js">
-
-    </script>
-    <script type="text/javascript" src="../_static/underscore.js">
-
-    </script>
-    <script type="text/javascript" src="../_static/doctools.js">
-
-    </script>
-    <script type="text/javascript" src="../_static/clipboard.min.js">
-
-    </script>
-    <script type="text/javascript" src="../_static/copybutton.js">
-
-    </script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js">
-
-    </script>
-
+    <script type="text/javascript" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/clipboard.min.js"></script>
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
   
+    <div class="footer" role="contentinfo">
+        <div class="container">
+            &#169; Copyright 2022, Holistic AI.
+        Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.5.0.
+        </div>
+    </div>  
 
-   <script type="text/javascript"
-           src="../_static/js/theme.js"></script>
-
-   <script type="text/javascript"
-           src="../_static/js/pdj.js"></script>
-
-  
-  
-  <script type="text/javascript">
-      jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
-      });
-  </script>
-   
-
-  </body>
+</body>
 </html>
