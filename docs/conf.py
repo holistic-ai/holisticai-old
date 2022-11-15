@@ -58,7 +58,7 @@ html_logo = "holistic_ai.png"
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = "renku"
+html_theme = 'karma_sphinx_theme'
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
@@ -73,7 +73,7 @@ import os
 import shutil
 import sys
 
-sys.path.insert(0, os.path.abspath(".."))
+#sys.path.insert(0, os.path.abspath(".."))
 
 # make copy of notebooks in docs folder, as they must be here for sphinx to
 # pick them up properly.

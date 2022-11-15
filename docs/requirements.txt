@@ -5,3 +5,4 @@ nbsphinx
 sphinxcontrib-napoleon
 sphinx-copybutton
 holisticai
+karma-sphinx-theme

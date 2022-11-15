@@ -31,6 +31,7 @@ Binary Classification
 
 Multiclass Classification
 -------------------------
+
 .. autosummary::
     :toctree: generated/
 
@@ -70,6 +71,7 @@ Regression
 
 Clustering
 ----------
+
 .. autosummary::
     :toctree: generated/
 
