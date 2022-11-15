@@ -1,68 +1,47 @@
-$(document).ready(function(){
-
-    var $header = $('header');
-    var $body = $('body');
-    var $window = $(window);
-
-    // scrolling variables
-	var scrolling = false,
-    previousTop = 0,
-    currentTop = 0,
-    scrollDelta = 10,
-    scrollOffset = 150;
-
-    // scroll event to show / hide header
-    $window.on('scroll', function(){
-		if( !scrolling ) {
-			scrolling = true;
-			(!window.requestAnimationFrame) ? setTimeout(autoHideHeader, 250) : requestAnimationFrame(autoHideHeader);
-		}
+$( document ).ready(function() {
+    // Shift nav in mobile when clicking the menu.
+    $(document).on('click', "[data-toggle='wy-nav-top']", function() {
+      $("[data-toggle='wy-nav-shift']").toggleClass("shift");
+      $("[data-toggle='rst-versions']").toggleClass("shift");
     });
-    
-    function autoHideHeader() {
-		var currentTop = $window.scrollTop();
-        var isNavOpen = $body.hasClass('nav-in');
-        if (!isNavOpen) {
-            if (previousTop - currentTop > scrollDelta) {
-                // if scrolling up...
-                $header.removeClass('up');
-            } else if( currentTop - previousTop > scrollDelta && currentTop > scrollOffset) {
-                // if scrolling down...
-                $header.addClass('up');
-            }
-        }
-	   	previousTop = currentTop;
-		scrolling = false;
-	}
-
-    // toggle sidebar
-    $(document).on('click', '.site-nav-toggle, .site-nav a', function() {
-        $body.toggleClass('nav-in');
+    // Close menu when you click a link.
+    $(document).on('click', ".wy-menu-vertical .current ul li a", function() {
+      $("[data-toggle='wy-nav-shift']").removeClass("shift");
+      $("[data-toggle='rst-versions']").toggleClass("shift");
     });
-
-    // replace anchor scroll to offset the fixed header on mobile
-    $("a[href^='#']").on('click', function(e) {
-        // prevent default anchor click behavior
-        e.preventDefault();
-     
-        var width = $window.width();
-        var headerHeight = $header.outerHeight();
-        var mobileMaxWidth = 991;
-        var offset = 0;
-
-        if (width <= mobileMaxWidth) {
-            offset = headerHeight + 10;
-        }
-
-        // animate scroll
-        $('html, body').animate({
-            scrollTop: $(this.hash).offset().top - offset
-          }, 200, function(){
-        });
-    });
-
-    // wrap tables so we can make responsive
-    $("table.docutils:not(.field-list,.footnote,.citation)")
-        .wrap("<div class='scroll-x'></div>");
-
+    $(document).on('click', "[data-toggle='rst-current-version']", function() {
+      $("[data-toggle='rst-versions']").toggleClass("shift-up");
+    });  
+    // Make tables responsive
+    $("table.docutils:not(.field-list)").wrap("<div class='wy-table-responsive'></div>");
 });
+
+window.SphinxRtdTheme = (function (jquery) {
+    var stickyNav = (function () {
+        var navBar,
+            win,
+            stickyNavCssClass = 'stickynav',
+            applyStickNav = function () {
+                if (navBar.height() <= win.height()) {
+                    navBar.addClass(stickyNavCssClass);
+                } else {
+                    navBar.removeClass(stickyNavCssClass);
+                }
+            },
+            enable = function () {
+                applyStickNav();
+                win.on('resize', applyStickNav);
+            },
+            init = function () {
+                navBar = jquery('nav.wy-nav-side:first');
+                win    = jquery(window);
+            };
+        jquery(init);
+        return {
+            enable : enable
+        };
+    }());
+    return {
+        StickyNav : stickyNav
+    };
+}($));
