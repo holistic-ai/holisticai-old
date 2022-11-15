@@ -49,7 +49,7 @@ templates_path = ["_templates"]
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
 # This pattern also affects html_static_path and html_extra_path.
-exclude_patterns = ["_build", "Thumbs.db", ".DS_Store", "generated/*"]
+exclude_patterns = ["_build", "Thumbs.db", ".DS_Store", "generated/*", ".ipynb_checkpoints"]
 
 html_logo = "holistic_ai.png"
 
@@ -73,7 +73,7 @@ import os
 import shutil
 import sys
 
-#sys.path.insert(0, os.path.abspath(".."))
+sys.path.insert(0, os.path.abspath(".."))
 
 # make copy of notebooks in docs folder, as they must be here for sphinx to
 # pick them up properly.

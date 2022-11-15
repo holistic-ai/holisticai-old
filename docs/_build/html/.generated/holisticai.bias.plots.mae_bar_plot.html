@@ -1,0 +1,244 @@
+
+
+<!DOCTYPE html>
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>holisticai.bias.plots.mae_bar_plot &mdash; holisticai  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../_static/css/theme.min.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/custom.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/theme.min.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/copybutton.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/custom_style.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="holisticai.bias.plots.exposure_diff_plot" href="holisticai.bias.plots.exposure_diff_plot.html" />
+    <link rel="prev" title="holisticai.bias.plots.rmse_bar_plot" href="holisticai.bias.plots.rmse_bar_plot.html" /> 
+
+</head>
+
+<body>
+    <header>
+        <div class="container">
+            <a class="site-nav-toggle hidden-lg-up"><i class="icon-menu"></i></a>
+            <a class="site-title" href="../index.html">
+                holisticai
+            </a>
+        </div>
+    </header>
+
+
+<div class="breadcrumbs-outer hidden-xs-down">
+    <div class="container">
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a></li>
+        
+          <li><a href="../plotting.html">Plotting</a></li>
+        
+      <li>holisticai.bias.plots.mae_bar_plot</li>
+    
+    
+      <li class="breadcrumbs-aside">
+        
+            
+            <a href="../_sources/.generated/holisticai.bias.plots.mae_bar_plot.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+</div>
+    </div>
+</div>
+    <div class="main-outer">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 col-lg-3 site-nav">
+                    
+<div role="search">
+    <form class="search" action="../search.html" method="get">
+        <div class="icon-input">
+            <input type="text" name="q" placeholder="Search" />
+            <span class="icon-search"></span>
+        </div>
+        <input type="submit" value="Go" class="d-hidden" />
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+                    <div class="site-nav-tree">
+                        
+                            
+                            
+                                <p class="caption" role="heading"><span class="caption-text">Documentation</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../metrics.html">Metrics</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../metrics.html#binary-classification">Binary Classification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../metrics.html#multiclass-classification">Multiclass Classification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../metrics.html#regression">Regression</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../metrics.html#clustering">Clustering</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../metrics.html#recommender">Recommender</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../mitigation.html">Mitigation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../mitigation.html#pre-processing">Pre-processing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../mitigation.html#in-processing">In-processing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../mitigation.html#post-processing">Post-processing</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="reference internal" href="../plotting.html">Plotting</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../plotting.html#plotters">Plotters</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../datasets.html">Datasets</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../datasets.html#data-loaders">Data loaders</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../pipeline.html">Pipeline</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../pipeline.html#id1">Pipeline</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../utils.html">Utils</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../utils.html#formatting">Formatting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../utils.html#plotting">Plotting</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../measuring_bias.html">Measuring bias</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../tutorials/measuring_bias_tutorials/measuring_bias_classification.html"><strong>Measuring Bias in classification</strong></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorials/measuring_bias_tutorials/measuring_bias_regression.html"><strong>Measuring Bias in regression</strong></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorials/measuring_bias_tutorials/measuring_bias_recommender.html"><strong>Measuring Bias in recommender systems</strong></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorials/measuring_bias_tutorials/measuring_bias_clustering.html"><strong>Measuring Bias in clustering</strong></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorials/measuring_bias_tutorials/measuring_bias_multiclass.html"><strong>Measuring Bias in multiclass classification</strong></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../mitigating_bias.html">Mitigating bias</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../tutorials/mitigating_bias_tutorials/mitigating_bias_classification.html"><strong>Mitigating Bias in Binary Classification Setting</strong></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorials/mitigating_bias_tutorials/mitigating_bias_classification_pipeline.html"><strong>Mitigating Bias in Binary Classification with holisticai Pipeline</strong></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorials/mitigating_bias_tutorials/mitigation_bias_regression_pipeline.html"><strong>Mitigating Bias in regression setting with holisticai Pipeline</strong></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorials/mitigating_bias_tutorials/mitigation_bias_clustering.html"><strong>Mitigating Bias in clustering</strong></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorials/mitigating_bias_tutorials/mitigation_bias_multiclass.html"><strong>Mitigating Bias in multiclass classification</strong></a></li>
+</ul>
+</li>
+</ul>
+
+                            
+                        
+                    </div>
+                </div>
+                <div class="col-12 col-lg-9">
+                    <div class="document">
+                        
+                            
+  <div class="section" id="holisticai-bias-plots-mae-bar-plot">
+<h1>holisticai.bias.plots.mae_bar_plot<a class="headerlink" href="#holisticai-bias-plots-mae-bar-plot" title="Permalink to this headline">¶</a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="holisticai.bias.plots.mae_bar_plot">
+<span class="sig-prename descclassname"><span class="pre">holisticai.bias.plots.</span></span><span class="sig-name descname"><span class="pre">mae_bar_plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p_attr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_pred</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_true</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#holisticai.bias.plots.mae_bar_plot" title="Permalink to this definition">¶</a></dt>
+<dd><p>MAE Bar Plot</p>
+<p class="rubric">Description</p>
+<p>This function plots the MAE for each group
+as a bar plot.</p>
+<p class="rubric">Parameters</p>
+<dl class="simple">
+<dt>p_attr<span class="classifier">array-like</span></dt><dd><p>Protected attribute vector</p>
+</dd>
+<dt>y_pred<span class="classifier">array-like</span></dt><dd><p>Predictions vector (regression)</p>
+</dd>
+<dt>y_true<span class="classifier">array-like</span></dt><dd><p>Target vector (regression)</p>
+</dd>
+<dt>ax (optional)<span class="classifier">matplotlib axes</span></dt><dd><p>Pre-existing axes for the plot</p>
+</dd>
+<dt>size (optional)<span class="classifier">(int, int)</span></dt><dd><p>Size of the figure</p>
+</dd>
+<dt>title (optional)<span class="classifier">str</span></dt><dd><p>Title of the figure</p>
+</dd>
+</dl>
+<p class="rubric">Returns</p>
+<p>matplotlib ax</p>
+</dd></dl>
+
+</div>
+
+
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>    
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+    <script type="text/javascript" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/clipboard.min.js"></script>
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+    <div class="footer" role="contentinfo">
+        <div class="container">
+            &#169; Copyright 2022, Holistic AI.
+        Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.5.0.
+        </div>
+    </div>  
+
+</body>
+</html>
