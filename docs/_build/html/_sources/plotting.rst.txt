@@ -3,10 +3,13 @@
 Plotting
 ========
 
-`holisticai.bias.plots` is a python module plotting *bias* related plots.
+`holisticai.bias.plots` is a python module for quickly producing *bias* related plots.
+
+Plotters
+--------
 
 .. autosummary::
-    :toctree: generated/
+    :toctree: .generated/
 
     holisticai.bias.plots.abroca_plot
     holisticai.bias.plots.success_rate_curve
