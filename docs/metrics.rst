@@ -1,7 +1,7 @@
 Metrics
 =======
 
-`holisticai.bias.metrics` is a python module measuring *bias* in algorithms. Metrics are included for *classification*, *regression*, *clustering*, *recommender* and *multiclass* models as well as :ref:`plotting` functions.
+`holisticai.bias.metrics` is a python module measuring *bias* in algorithms. Metrics are included for *classification*, *regression*, *clustering*, *recommender* and *multiclass* tasks.
 
 .. _binary classification:
 
@@ -9,7 +9,7 @@ Binary Classification
 ----------------------
 
 .. autosummary::
-    :toctree: generated/
+    :toctree: .generated/
 
     holisticai.bias.metrics.abroca
     holisticai.bias.metrics.accuracy_diff
@@ -23,14 +23,17 @@ Binary Classification
     holisticai.bias.metrics.four_fifths
     holisticai.bias.metrics.statistical_parity
     holisticai.bias.metrics.true_negative_rate_diff
+    holisticai.bias.metrics.z_test_diff
+    holisticai.bias.metrics.z_test_ratio
 
 
 .. _multiclass classification:
 
 Multiclass Classification
 -------------------------
+
 .. autosummary::
-    :toctree: generated/
+    :toctree: .generated/
 
     holisticai.bias.metrics.accuracy_matrix
     holisticai.bias.metrics.confusion_matrix
@@ -50,7 +53,7 @@ Regression
 ----------
 
 .. autosummary::
-    :toctree: generated/
+    :toctree: .generated/
 
     holisticai.bias.metrics.avg_score_diff
     holisticai.bias.metrics.correlation_diff
@@ -68,8 +71,9 @@ Regression
 
 Clustering
 ----------
+
 .. autosummary::
-    :toctree: generated/
+    :toctree: .generated/
 
     holisticai.bias.metrics.cluster_balance
     holisticai.bias.metrics.cluster_dist_entropy
@@ -86,7 +90,7 @@ Recommender
 -----------
 
 .. autosummary::
-    :toctree: generated/
+    :toctree: .generated/
 
     holisticai.bias.metrics.aggregate_diversity
     holisticai.bias.metrics.avg_f1_ratio

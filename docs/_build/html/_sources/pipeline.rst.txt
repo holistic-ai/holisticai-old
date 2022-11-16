@@ -1,9 +1,12 @@
 Pipeline
 ========
 
-`holisticai.pipeline` is a python module...
+`holisticai.pipeline` is a python module for creating Pipeline objects.
+
+Pipeline
+---------------
 
 .. autosummary::
-    :toctree: generated/
+    :toctree: .generated/
     
     holisticai.pipeline.Pipeline
