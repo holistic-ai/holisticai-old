@@ -85,8 +85,8 @@ def test_avg_score_diff():
 
 
 def test_avg_score_ratio():
-    """test avg_score_diff"""
-    a = avg_score_diff(group_a, group_b, y_pred_r)
+    """test avg_score_ratio"""
+    a = avg_score_ratio(group_a, group_b, y_pred_r)
     b = 1.016129032
     assert_approx_equal(a, b)
 
