@@ -4,12 +4,16 @@ The :mod:`holisticai.bias.mitigation` module includes preprocessing, inprocessin
 
 # inprocessing algorithm classes
 from .inprocessing import (
+    BlindSpotAwareMF,
+    DebiasingLearningMF,
     ExponentiatedGradientReduction,
     FairKCenterClustering,
     FairKmedianClustering,
     FairletClustering,
     GridSearchReduction,
     MetaFairClassifier,
+    NonNegativeMF,
+    PopularityPropensityMF,
     PrejudiceRemover,
     VariationalFairClustering,
 )
@@ -56,6 +60,10 @@ __all__ = [
     "FairletClusteringPreprocessing",
     "FairKCenterClustering",
     "FairKmedianClustering",
+    "BlindSpotAwareMF",
+    "DebiasingLearningMF",
+    "NonNegativeMF",
+    "PopularityPropensityMF",
 ]
 
 import importlib
