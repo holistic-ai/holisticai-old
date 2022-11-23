@@ -17,7 +17,7 @@ def calculate_popularity_model(ratings):
     return temp
 
 
-def errros(P_s, Q_s, R_s, W_s, lamda, beta):
+def erros(P_s, Q_s, R_s, W_s, lamda, beta):
     eR_s = np.sum(P_s * Q_s.T, axis=1)
     et = np.sum(pow(R_s - eR_s, 2))
     e_s = (lamda / 2) * (pow(P_s, 2) + pow(Q_s.T, 2)) + (beta / 2) * (
