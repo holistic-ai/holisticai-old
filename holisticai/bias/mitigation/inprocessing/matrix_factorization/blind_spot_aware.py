@@ -3,10 +3,11 @@ from typing import Optional
 import numpy as np
 from tqdm import trange
 
+from holisticai.utils.models.recommender._rsbase import RecommenderSystemBase
 from holisticai.utils.transformers.bias import BMInprocessing as BMImp
 
 
-class BlindSpotAwareMF(BMImp):
+class BlindSpotAwareMF(BMImp, RecommenderSystemBase):
     """
     A blind spot aware Matrix Factorization takes into account the blind spot
     inherent in the learning phase of the RS. The blind spot size is the
