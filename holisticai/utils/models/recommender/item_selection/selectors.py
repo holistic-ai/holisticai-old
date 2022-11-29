@@ -1,5 +1,6 @@
 import numpy as np
 
+
 class ActiveLearningItemsSelection:
     def __init__(self, top_n=10, theta=3):
         self.top_n = top_n

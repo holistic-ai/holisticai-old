@@ -1,13 +1,15 @@
 from scipy.stats import binom
+
 from . import mtable_generator
 
 EPS = 0.0000000000000001
 
+
 class RecursiveNumericFailProbabilityCalculator:
-    """ Recursive calculation of fail probability """
-    
+    """Recursive calculation of fail probability"""
+
     def __init__(self, k, p, alpha):
-        self. k = k
+        self.k = k
         self.p = p
         self.alpha = alpha
         self.pmf_cache = {}
@@ -22,7 +24,10 @@ class RecursiveNumericFailProbabilityCalculator:
         maxb = self._compute_boundary(a_max)
         midb = self._compute_boundary(a_mid)
 
-        while minb.mass_of_mtable() < maxb.mass_of_mtable() and midb.fail_prob != self.alpha:
+        while (
+            minb.mass_of_mtable() < maxb.mass_of_mtable()
+            and midb.fail_prob != self.alpha
+        ):
             if midb.fail_prob < self.alpha:
                 a_min = a_mid
                 minb = self._compute_boundary(a_min)
@@ -65,8 +70,8 @@ class RecursiveNumericFailProbabilityCalculator:
         Analytically calculates the fail probability of the mtable
         """
         aux_mtable = mtable_generator.compute_aux_mtable(mtable)
-        max_protected = aux_mtable['block'].sum()
-        block_sizes = aux_mtable['block'].tolist()#[1:]
+        max_protected = aux_mtable["block"].sum()
+        block_sizes = aux_mtable["block"].tolist()  # [1:]
         success_prob = self._find_legal_assignments(max_protected, block_sizes)
         return 0 if success_prob == 0 else (1 - success_prob)
 
@@ -75,20 +80,27 @@ class RecursiveNumericFailProbabilityCalculator:
         if not key in self.pmf_cache:
             self.pmf_cache[key] = binom.pmf(k=successes, n=trials, p=self.p)
         return self.pmf_cache[key]
-    
+
     def _compute_boundary(self, alpha):
         """
         Returns a tuple of (k, p, alpha, fail_prob, mtable)
         """
-        mtable = mtable_generator.MTableGenerator(self.k, self.p, alpha).mtable_as_dataframe()
+        mtable = mtable_generator.MTableGenerator(
+            self.k, self.p, alpha
+        ).mtable_as_dataframe()
         fail_prob = self.calculate_fail_probability(mtable)
         return MTableFailProbPair(self.k, self.p, alpha, fail_prob, mtable)
 
     def _find_legal_assignments(self, number_of_candidates, block_sizes):
         return self._find_legal_assignments_aux(number_of_candidates, block_sizes, 1, 0)
 
-    def _find_legal_assignments_aux(self, number_of_candidates, block_sizes,
-                                    current_block_number, candidates_assigned_so_far):
+    def _find_legal_assignments_aux(
+        self,
+        number_of_candidates,
+        block_sizes,
+        current_block_number,
+        candidates_assigned_so_far,
+    ):
         if len(block_sizes) == 0:
             return 1
 
@@ -100,34 +112,62 @@ class RecursiveNumericFailProbabilityCalculator:
 
         assignments = 0
         new_remaining_block_sizes = block_sizes[1:]
-        for items_this_block in range(min_needed_this_block, max_possible_this_block + 1):
+        for items_this_block in range(
+            min_needed_this_block, max_possible_this_block + 1
+        ):
             new_remaining_candidates = number_of_candidates - items_this_block
 
-            suffixes = self._calculate_legal_assignments_aux(new_remaining_candidates, new_remaining_block_sizes,
-                                                             current_block_number + 1,
-                                                             candidates_assigned_so_far + items_this_block)
+            suffixes = self._calculate_legal_assignments_aux(
+                new_remaining_candidates,
+                new_remaining_block_sizes,
+                current_block_number + 1,
+                candidates_assigned_so_far + items_this_block,
+            )
 
-            assignments += self.get_from_pmf_cache(max_possible_this_block, items_this_block) * suffixes
+            assignments += (
+                self.get_from_pmf_cache(max_possible_this_block, items_this_block)
+                * suffixes
+            )
 
         return assignments
 
-    def _calculate_legal_assignments_aux(self, remaining_candidates, remaining_block_sizes,
-                                         current_block_number, candidates_assigned_so_far):
-        key = LegalAssignmentKey(remaining_candidates, remaining_block_sizes,
-                                 current_block_number, candidates_assigned_so_far)
+    def _calculate_legal_assignments_aux(
+        self,
+        remaining_candidates,
+        remaining_block_sizes,
+        current_block_number,
+        candidates_assigned_so_far,
+    ):
+        key = LegalAssignmentKey(
+            remaining_candidates,
+            remaining_block_sizes,
+            current_block_number,
+            candidates_assigned_so_far,
+        )
 
         if not key.__hash__ in self.legal_assignment_cache:
-            self.legal_assignment_cache[key.__hash__] = self._find_legal_assignments_aux(remaining_candidates,
-                                                                                remaining_block_sizes,
-                                                                                current_block_number,
-                                                                                candidates_assigned_so_far)
+            self.legal_assignment_cache[
+                key.__hash__
+            ] = self._find_legal_assignments_aux(
+                remaining_candidates,
+                remaining_block_sizes,
+                current_block_number,
+                candidates_assigned_so_far,
+            )
 
         return self.legal_assignment_cache[key.__hash__]
 
+
 class LegalAssignmentKey:
-    """ Utility class for the recursive fail prob """
-    
-    def __init__(self, remaining_candidates, remaining_block_sizes, current_block_number, candidates_assigned_so_far):
+    """Utility class for the recursive fail prob"""
+
+    def __init__(
+        self,
+        remaining_candidates,
+        remaining_block_sizes,
+        current_block_number,
+        candidates_assigned_so_far,
+    ):
         self.remaining_candidates = remaining_candidates
         self.remaining_block_sizes = remaining_block_sizes
         self.current_block_number = current_block_number
@@ -145,13 +185,18 @@ class LegalAssignmentKey:
         return True
 
     def __hash__(self):
-        return (self.remaining_candidates + len(self.remaining_block_sizes) << 16) \
-               + self.current_block_number + self.candidates_assigned_so_far
+        return (
+            (self.remaining_candidates + len(self.remaining_block_sizes) << 16)
+            + self.current_block_number
+            + self.candidates_assigned_so_far
+        )
+
 
 class MTableFailProbPair:
     """
     Encapsulation of all parameters for the interim mtables
     """
+
     def __init__(self, k, p, alpha, fail_prob, mtable):
         self.k = k
         self.p = p
@@ -160,4 +205,4 @@ class MTableFailProbPair:
         self.mtable = mtable
 
     def mass_of_mtable(self):
-        return self.mtable['m'].sum()
+        return self.mtable["m"].sum()

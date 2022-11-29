@@ -2,8 +2,10 @@ from typing import Optional
 
 import numpy as np
 from sklearn.decomposition import NMF
+
 from holisticai.utils.models.recommender._rsbase import RecommenderSystemBase
-    
+
+
 class NonNegativeMF(RecommenderSystemBase):
     """
     This model is trained using conventional matrix factorization (Eq.1 [1] with Pu,i = 1),

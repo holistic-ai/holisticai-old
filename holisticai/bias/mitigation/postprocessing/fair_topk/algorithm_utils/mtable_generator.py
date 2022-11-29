@@ -1,8 +1,8 @@
 import pandas as pd
 import scipy.stats as stats
 
-class MTableGenerator:
 
+class MTableGenerator:
     def __init__(self, k, p, alpha):
         # assign parameters
         self.k = k
@@ -26,8 +26,8 @@ class MTableGenerator:
         return 0 if result < 0 else result
 
     def _compute_mtable(self):
-        """ Computes a table containing the minimum number of protected elements
-            required at each position
+        """Computes a table containing the minimum number of protected elements
+        required at each position
         """
         mtable = pd.DataFrame(columns=["m"])
         for i in range(1, self.k + 1):

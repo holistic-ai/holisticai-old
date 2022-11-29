@@ -1,5 +1,6 @@
 import numpy as np
 
+
 def load_data():
     """
     Simulates a completed rating matrix ground truth, feedback matrix time and split test data.
