@@ -1,23 +1,14 @@
 import pandas as pd
 import scipy.stats as stats
-from . import fail_prob
 
 class MTableGenerator:
 
-    def __init__(self, k, p, alpha, adjust_alpha):
+    def __init__(self, k, p, alpha):
         # assign parameters
         self.k = k
         self.p = p
         self.alpha = alpha
-        self.adjust_alpha = adjust_alpha
-
-        if self.adjust_alpha:
-            fail_prob_pair = fail_prob.RecursiveNumericFailProbabilityCalculator(k, p, alpha).adjust_alpha()
-            self.adjusted_alpha = fail_prob_pair.alpha
-            self._mtable = fail_prob_pair.mtable
-        else:
-            self.adjusted_alpha = alpha
-            self._mtable = self._compute_mtable()
+        self._mtable = self._compute_mtable()
 
     def mtable_as_list(self):
         return [int(i) for i in self._mtable.m.tolist()]
@@ -31,7 +22,7 @@ class MTableGenerator:
         elif k > self.k:
             raise ValueError("Parameter k must be at most {0}".format(self.k))
 
-        result = stats.binom.ppf(self.adjusted_alpha if self.adjust_alpha else self.alpha, k, self.p)
+        result = stats.binom.ppf(self.alpha, k, self.p)
         return 0 if result < 0 else result
 
     def _compute_mtable(self):

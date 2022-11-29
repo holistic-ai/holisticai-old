@@ -1,40 +1,16 @@
-import abc
 from scipy.stats import binom
 from . import mtable_generator
 
 EPS = 0.0000000000000001
 
-class FailProbabilityCalculator(abc.ABC):
-    """
-    Base class for the fail probability calculation
-    """
-
+class RecursiveNumericFailProbabilityCalculator:
+    """ Recursive calculation of fail probability """
+    
     def __init__(self, k, p, alpha):
         self. k = k
         self.p = p
         self.alpha = alpha
-
         self.pmf_cache = {}
-
-    @abc.abstractmethod
-    def calculate_fail_probability(self, mtable):
-        raise NotImplementedError("This is an abstract method. Implement it!")
-
-    def get_from_pmf_cache(self, trials, successes):
-        key = (trials, successes)
-        if not key in self.pmf_cache:
-            # TODO: Check the documentation if this is fine
-            self.pmf_cache[key] = binom.pmf(k=successes, n=trials, p=self.p)
-        return self.pmf_cache[key]
-
-
-class RecursiveNumericFailProbabilityCalculator(FailProbabilityCalculator):
-    """
-    Recursive calculation of fail probability
-    """
-    def __init__(self, k, p, alpha):
-        super().__init__(k, p, alpha)
-
         self.legal_assignment_cache = {}
 
     def adjust_alpha(self):
@@ -94,11 +70,17 @@ class RecursiveNumericFailProbabilityCalculator(FailProbabilityCalculator):
         success_prob = self._find_legal_assignments(max_protected, block_sizes)
         return 0 if success_prob == 0 else (1 - success_prob)
 
+    def get_from_pmf_cache(self, trials, successes):
+        key = (trials, successes)
+        if not key in self.pmf_cache:
+            self.pmf_cache[key] = binom.pmf(k=successes, n=trials, p=self.p)
+        return self.pmf_cache[key]
+    
     def _compute_boundary(self, alpha):
         """
         Returns a tuple of (k, p, alpha, fail_prob, mtable)
         """
-        mtable = mtable_generator.MTableGenerator(self.k, self.p, alpha, False).mtable_as_dataframe()
+        mtable = mtable_generator.MTableGenerator(self.k, self.p, alpha).mtable_as_dataframe()
         fail_prob = self.calculate_fail_probability(mtable)
         return MTableFailProbPair(self.k, self.p, alpha, fail_prob, mtable)
 
@@ -142,12 +124,9 @@ class RecursiveNumericFailProbabilityCalculator(FailProbabilityCalculator):
 
         return self.legal_assignment_cache[key.__hash__]
 
-
 class LegalAssignmentKey:
-    """
-    Utility class for the recursive fail prob
-    """
-
+    """ Utility class for the recursive fail prob """
+    
     def __init__(self, remaining_candidates, remaining_block_sizes, current_block_number, candidates_assigned_so_far):
         self.remaining_candidates = remaining_candidates
         self.remaining_block_sizes = remaining_block_sizes
@@ -168,7 +147,6 @@ class LegalAssignmentKey:
     def __hash__(self):
         return (self.remaining_candidates + len(self.remaining_block_sizes) << 16) \
                + self.current_block_number + self.candidates_assigned_so_far
-
 
 class MTableFailProbPair:
     """
