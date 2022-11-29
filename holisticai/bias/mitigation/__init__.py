@@ -12,7 +12,6 @@ from .inprocessing import (
     FairletClustering,
     GridSearchReduction,
     MetaFairClassifier,
-    NonNegativeMF,
     PopularityPropensityMF,
     PrejudiceRemover,
     VariationalFairClustering,
@@ -62,7 +61,6 @@ __all__ = [
     "FairKmedianClustering",
     "BlindSpotAwareMF",
     "DebiasingLearningMF",
-    "NonNegativeMF",
     "PopularityPropensityMF",
 ]
 
