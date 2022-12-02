@@ -10,12 +10,12 @@ from .inprocessing import (
     FairKCenterClustering,
     FairKmedianClustering,
     FairletClustering,
+    FairRec,
     GridSearchReduction,
     MetaFairClassifier,
     PopularityPropensityMF,
     PrejudiceRemover,
     VariationalFairClustering,
-    FairRec,
 )
 
 # postprocessing algorithm classes

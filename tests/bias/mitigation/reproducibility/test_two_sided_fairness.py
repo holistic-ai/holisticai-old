@@ -31,7 +31,7 @@ def test_two_sided_fairness():
     # size of recommendation
     rec_size = 10
 
-    for alpha in np.arange(0,1,0.1):
+    for alpha in np.arange(0, 1, 0.1):
         recommender = FairRec(rec_size, alpha)
         res = recommender.fit(data_matrix)
         assert len(res.keys()) == numUsers
