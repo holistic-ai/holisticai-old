@@ -28,7 +28,7 @@ class FairRec(BMImp):
         """
         self.rec_size = int(rec_size)
         self.MMS_fraction = float(MMS_fraction)
-    
+
     def fit(self, X):
         """
         Fit model
@@ -44,6 +44,7 @@ class FairRec(BMImp):
         self.model_ = FairRecAlg(rec_size=self.rec_size, MMS_fraction=self.MMS_fraction)
         recommendation = self.model_.fit(X)
         return recommendation
+
     def transform_estimator(self, estimator):
         self.estimator = estimator
         return self

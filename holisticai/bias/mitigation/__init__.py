@@ -16,7 +16,6 @@ from .inprocessing import (
     PopularityPropensityMF,
     PrejudiceRemover,
     VariationalFairClustering,
-    FairRec,
 )
 
 # postprocessing algorithm classes

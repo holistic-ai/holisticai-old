@@ -20,15 +20,15 @@ class FairRecAlg:
             F[u] = P[:]
     
         l = int(self.MMS_fraction * self.m * self.rec_size / (self.n + 0.0))
-        R = int(math.ceil((l * self.n) / (self.m + 0.0)))  
+        R = int(math.ceil((l * self.n) / (self.m + 0.0)))
         T = l * self.n
-        [B, F1] =self._greedy_round_robin(R, l, T, X, U[:], F.copy())
+        [B, F1] = self._greedy_round_robin(R, l, T, X, U[:], F.copy())
         F = {}
         F = F1.copy()
         print("GRR done")
-        for u in U:        
+        for u in U:
             A[u] = A[u][:] + B[u][:]
-        u_less = [] 
+        u_less = []
         for u in A:
             if len(A[u]) < self.rec_size:
                 u_less.append(u)
@@ -43,7 +43,7 @@ class FairRecAlg:
 
         return A
 
-    def _greedy_round_robin(self, R, l, T, V, U, F): 
+    def _greedy_round_robin(self, R, l, T, V, U, F):
         """greedy round robin allocation based on a specific ordering of
         customers (assuming the ordering is done in the relevance scoring
         matrix before passing it here)"""
@@ -61,14 +61,14 @@ class FairRecAlg:
                 if T == 0:
                     return B, F
                 u = U[i]
-                possible = [(Z[p] > 0) * (p in F[u]) * V[u, p] for p in range(self.n)] 
-                p_ = np.argmax(possible) 
+                possible = [(Z[p] > 0) * (p in F[u]) * V[u, p] for p in range(self.n)]
+                p_ = np.argmax(possible)
                 
                 if (Z[p_] > 0) and (p_ in F[u]) and len(F[u]) > 0:
                     F[u] = list(F[u])
                     B[u].append(p_)
                     F[u].remove(p_)
-                    Z[p_] = Z[p_]-1
+                    Z[p_] = Z[p_] - 1
                     T = T - 1
                 else:
                     return B, F
