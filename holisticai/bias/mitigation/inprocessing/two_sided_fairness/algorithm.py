@@ -1,4 +1,5 @@
 import math
+
 import numpy as np
 
 
@@ -18,7 +19,6 @@ class FairRecAlg:
         F = {}
         for u in U:
             F[u] = P[:]
-    
         l = int(self.MMS_fraction * self.m * self.rec_size / (self.n + 0.0))
         R = int(math.ceil((l * self.n) / (self.m + 0.0)))
         T = l * self.n
@@ -47,7 +47,7 @@ class FairRecAlg:
         """greedy round robin allocation based on a specific ordering of
         customers (assuming the ordering is done in the relevance scoring
         matrix before passing it here)"""
-        
+
         B = {}
         for u in U:
             B[u] = []
@@ -63,7 +63,6 @@ class FairRecAlg:
                 u = U[i]
                 possible = [(Z[p] > 0) * (p in F[u]) * V[u, p] for p in range(self.n)]
                 p_ = np.argmax(possible)
-                
                 if (Z[p_] > 0) and (p_ in F[u]) and len(F[u]) > 0:
                     F[u] = list(F[u])
                     B[u].append(p_)
