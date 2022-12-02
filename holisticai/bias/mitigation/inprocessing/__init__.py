@@ -10,6 +10,7 @@ from .matrix_factorization.popularity_propensity import PopularityPropensityMF
 from .meta_fair_classifier.transformer import MetaFairClassifier
 from .prejudice_remover.transformer import PrejudiceRemover
 from .variational_fair_clustering.transformer import VariationalFairClustering
+from .two_sided_fairness.transformer import FairRec
 
 __all__ = [
     "ExponentiatedGradientReduction",
@@ -23,6 +24,7 @@ __all__ = [
     "BlindSpotAwareMF",
     "DebiasingLearningMF",
     "PopularityPropensityMF",
+    "FairRec",
 ]
 
 

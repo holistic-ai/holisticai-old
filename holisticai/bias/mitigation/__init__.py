@@ -15,6 +15,7 @@ from .inprocessing import (
     PopularityPropensityMF,
     PrejudiceRemover,
     VariationalFairClustering,
+    FairRec,
 )
 
 # postprocessing algorithm classes
@@ -62,6 +63,7 @@ __all__ = [
     "BlindSpotAwareMF",
     "DebiasingLearningMF",
     "PopularityPropensityMF",
+    "FairRec",
 ]
 
 import importlib
