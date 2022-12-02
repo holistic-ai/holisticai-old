@@ -3,10 +3,10 @@ from typing import Optional
 import numpy as np
 from sklearn.decomposition import NMF
 
-from holisticai.utils.transformers.bias import BMInprocessing as BMImp
+from holisticai.utils.models.recommender._rsbase import RecommenderSystemBase
 
 
-class NonNegativeMF(BMImp):
+class NonNegativeMF(RecommenderSystemBase):
     """
     This model is trained using conventional matrix factorization (Eq.1 [1] with Pu,i = 1),
     and the system always selects the top predicted item for each user, and adds

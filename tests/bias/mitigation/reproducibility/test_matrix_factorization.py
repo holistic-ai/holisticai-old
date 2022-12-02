@@ -25,7 +25,9 @@ def test_running_matrix_factorization_strategies():
     )
     data_matrix = df_pivot.fillna(0).to_numpy()
     numUsers, numItems = data_matrix.shape
-    from holisticai.bias.mitigation import NonNegativeMF
+    from holisticai.utils.models.recommender.matrix_factorization.non_negative import (
+        NonNegativeMF,
+    )
 
     mf = NonNegativeMF(K=10)
     mf.fit(data_matrix)

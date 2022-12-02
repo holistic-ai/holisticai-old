@@ -3,12 +3,13 @@ from typing import Optional
 import numpy as np
 import scipy
 
+from holisticai.utils.models.recommender._rsbase import RecommenderSystemBase
 from holisticai.utils.transformers.bias import BMInprocessing as BMImp
 
 from .algorithm import DebiasingLearningAlgorithm
 
 
-class DebiasingLearningMF(BMImp):
+class DebiasingLearningMF(BMImp, RecommenderSystemBase):
     """
     Debiasing Learning Matrix Factorization handles selection biases by adapting
     models and estimation techniques from causal inference. The strategy leads to
@@ -121,7 +122,8 @@ class DebiasingLearningMF(BMImp):
         )
         numUsers, numItems = np.shape(partial_observations)
         numUsers = completeRatings.shape[0]
-        ncv = (numUsers + self.K) // 2
+        ncv = (min(numUsers, numItems) + self.K) // 2
+
         u, s, vt = scipy.sparse.linalg.svds(
             completeRatings,
             k=self.K,

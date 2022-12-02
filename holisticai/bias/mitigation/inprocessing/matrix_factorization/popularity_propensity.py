@@ -3,13 +3,14 @@ from typing import Optional
 import numpy as np
 from tqdm import tqdm
 
+from holisticai.utils.models.recommender._rsbase import RecommenderSystemBase
 from holisticai.utils.transformers.bias import BMInprocessing as BMImp
 
 from .common_utils.propensity_utils import popularity_model_propensity
 from .common_utils.utils import updateP, updateQ
 
 
-class PopularityPropensityMF(BMImp):
+class PopularityPropensityMF(BMImp, RecommenderSystemBase):
     """
     Popularity Propensity Matrix Factorization can be used for Recommender Systems.
     This model is trained with propensity matrix factorization defined in (Eq. 1) [1]. Here the propensity P(u,i)
