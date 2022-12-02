@@ -11,6 +11,7 @@ from .meta_fair_classifier.transformer import MetaFairClassifier
 from .prejudice_remover.transformer import PrejudiceRemover
 from .two_sided_fairness.transformer import FairRec
 from .variational_fair_clustering.transformer import VariationalFairClustering
+from .two_sided_fairness.transformer import FairRec
 
 __all__ = [
     "ExponentiatedGradientReduction",
