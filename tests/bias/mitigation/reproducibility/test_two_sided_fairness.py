@@ -33,8 +33,8 @@ def test_two_sided_fairness():
 
     for alpha in np.arange(0, 1, 0.1):
         recommender = FairRec(rec_size, alpha)
-        res = recommender.fit(data_matrix)
-        assert len(res.keys()) == numUsers
+        recommender.fit(data_matrix)
+        assert len(recommender.recommendation.keys()) == numUsers
 
-        for key in res.keys():
-            assert len(res[key]) == rec_size
+        for key in recommender.recommendation.keys():
+            assert len(recommender.recommendation[key]) == rec_size

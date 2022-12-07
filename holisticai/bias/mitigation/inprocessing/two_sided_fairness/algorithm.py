@@ -1,4 +1,5 @@
 import math
+
 import numpy as np
 from tqdm import tqdm
 
@@ -8,21 +9,21 @@ class FairRecAlg:
         self.rec_size = rec_size
         self.MMS_fraction = MMS_fraction
         self.verbose = verbose
-    
+
     def rank(self, X):
         self.m = X.shape[0]
         self.n = X.shape[1]
         U = list(range(self.m))
         P = list(range(self.n))
-        A = {u:[] for u in U}
-        F = {u:P[:] for u in U}
+        A = {u: [] for u in U}
+        F = {u: P[:] for u in U}
         l = int(self.MMS_fraction * self.m * self.rec_size / (self.n + 0.0))
         R = int(math.ceil((l * self.n) / (self.m + 0.0)))
         T = l * self.n
         [B, F1] = self._greedy_round_robin(R, l, T, X, U[:], F.copy())
-        
+
         F = F1.copy()
-        
+
         for u in U:
             A[u] = A[u][:] + B[u][:]
         u_less = []
@@ -49,7 +50,7 @@ class FairRecAlg:
         matrix before passing it here)
         """
 
-        B = {u:[] for u in U}
+        B = {u: [] for u in U}
         Z = {}
         P = list(range(self.n))
         for p in P:
