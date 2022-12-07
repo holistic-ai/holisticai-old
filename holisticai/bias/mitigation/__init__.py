@@ -20,7 +20,9 @@ from .inprocessing import (
 # postprocessing algorithm classes
 from .postprocessing import (
     CalibratedEqualizedOdds,
+    DebiasingExposure,
     EqualizedOdds,
+    FairTopK,
     LPDebiaserBinary,
     LPDebiaserMulticlass,
     MLDebiaser,
@@ -62,6 +64,8 @@ __all__ = [
     "BlindSpotAwareMF",
     "DebiasingLearningMF",
     "PopularityPropensityMF",
+    "DebiasingExposure",
+    "FairTopK",
 ]
 
 import importlib
@@ -70,3 +74,10 @@ torch_spec = importlib.util.find_spec("torch")
 if torch_spec is not None:
     from .inprocessing import AdversarialDebiasing
 __all__ += ["AdversarialDebiasing"]
+
+networkx_spec = importlib.util.find_spec("networkx")
+if networkx_spec is not None:
+    from .postprocessing import DisparateImpactRemoverRS
+    from .preprocessing import DisparateImpactRemover
+
+__all__ += ["DisparateImpactRemoverRS", "DisparateImpactRemover"]
