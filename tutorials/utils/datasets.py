@@ -2,7 +2,7 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 
 
-def preprocessed_dataset(dataset="adult"):
+def preprocessed_dataset(dataset="adult", splitted=True):
     if dataset == "adult":
         from holisticai.datasets import load_adult
 
@@ -24,6 +24,9 @@ def preprocessed_dataset(dataset="adult"):
 
         # Train test split
         dataset = train_test_split(*data, test_size=0.2, shuffle=True)
-        train_data = dataset[::2]
-        test_data = dataset[1::2]
-        return train_data, test_data
+        if splitted:
+            train_data = dataset[::2]
+            test_data = dataset[1::2]
+            return train_data, test_data
+        else:
+            return data

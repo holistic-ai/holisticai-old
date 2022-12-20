@@ -87,8 +87,10 @@ class PipelineHelper:
 
         """
         self.params_hdl = PipelineParametersHandler()
-        self.utransformers_hdl = UTransformersHandler(steps, self.params_hdl)
         self.estimator_hdl = EstimatorHandler(self.params_hdl)
+        self.utransformers_hdl = UTransformersHandler(
+            steps, self.params_hdl, self.estimator_hdl
+        )
 
         steps = self.utransformers_hdl.drop_post_processing_steps(steps)
         steps = self.estimator_hdl.wrap_and_link_estimator_step(steps)
@@ -150,7 +152,7 @@ class PipelineHelper:
         output_kargs = self.estimator_hdl.run_predictions(Xt)
         self.utransformers_hdl.fit_postprocessing(Xt, y, **output_kargs)
 
-    def _transform_post_estimator_transformers(self, Xt):
+    def _transform_post_estimator_transformers(self, Xt, **params):
         """
         call transform for post-estimator transformers.
 
@@ -170,6 +172,9 @@ class PipelineHelper:
         """
 
         output_kargs = self.estimator_hdl.run_predictions(Xt)
+        transform_kargs = {k[4:]: v for k, v in params.items() if k.startswith("bm__")}
+        transform_kargs["X"] = Xt
+        output_kargs.update(transform_kargs)
         return self.utransformers_hdl.transform_postprocessing(**output_kargs)
 
     def _transform_without_final(self, X):

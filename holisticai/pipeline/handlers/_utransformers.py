@@ -9,7 +9,7 @@ from holisticai.utils.transformers.bias import (
 
 
 class UTransformersHandler:
-    def __init__(self, steps, params_hdl):
+    def __init__(self, steps, params_hdl, estimator_hdl):
         """
         Initialize step groups and apply some validations.
 
@@ -33,7 +33,7 @@ class UTransformersHandler:
         }
         for tag, steps in self.steps_groups.items():
             for step in steps:
-                step[1].link_parameters(params_hdl)
+                step[1].link_parameters(params_hdl, estimator_hdl)
 
     def bias_mitigators_validation(self, steps):
         """Validate stem words and bias mitigator position in the pipeline"""
