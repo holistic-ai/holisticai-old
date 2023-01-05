@@ -3,6 +3,7 @@ import pandas as pd
 from pandas.api.types import is_numeric_dtype
 from sklearn.metrics import accuracy_score, balanced_accuracy_score
 
+
 def get_indexes_from_names(df, names):
     indexes = []
     for item in names:
@@ -13,7 +14,7 @@ def get_indexes_from_names(df, names):
 def process_y(y):
     """
     Converts from one-hot encoding to a list of labels
-    
+
     @y : the labels matrix (np.array)
     returns y_processed(list of labels)
     """
@@ -50,13 +51,12 @@ def get_initial_solution(y):
 
 
 def remove_inconcsistency(x, y):
-    
     """
     Remove the inconsistencies
 
     @x : The dataset features (np.array)
     @y : The dataset labels (np.array)
-    
+
     return the dataset withtout the inconsistencies
     """
 
@@ -159,7 +159,6 @@ def predict(x, l_lists):
 
 
 def format_labels(y):
-    
     y_formatted = []
 
     for labels in y:
@@ -169,30 +168,29 @@ def format_labels(y):
 
     return y_formatted
 
+
 def get_accuracy(x, y, l_lists):  
     """
     Compute accuracy for the scoring systems : 
-    
+
     @x_test the test set
     @y_test labels of the test set
     @l the matrix of coefficients lambda that represents the scoring systems
-    
+
     return accuracy
     """
-    
     y_pred = predict(x, l_lists)
     y = format_labels(y)
     y_pred = format_labels(y_pred)
     accuracy = accuracy_score(y, y_pred)
-                
+
     return accuracy
 
 
 def get_balanced_accuracy(x, y, l_lists):
-
     y_pred = predict(x, l_lists)
     y = format_labels(y)
     y_pred = format_labels(y_pred)
     balanced_accuracy = balanced_accuracy_score(y, y_pred)
-                
+
     return balanced_accuracy

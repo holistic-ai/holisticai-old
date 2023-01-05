@@ -6,8 +6,8 @@ from .utils import *
 
 class FairScoreClassifierAlgorithm:
     """
-    Generates a classification model that integrates fairness constraints for multiclass classification. This algorithm 
-    returns a matrix of lambda coefficients that scores a given input vector. The higher the score, the higher the probability 
+    Generates a classification model that integrates fairness constraints for multiclass classification. This algorithm
+    returns a matrix of lambda coefficients that scores a given input vector. The higher the score, the higher the probability
     of the input vector to be classified as the majority class.
 
     References:
@@ -72,7 +72,7 @@ class FairScoreClassifierAlgorithm:
         gamma = 0.01
         M = self.lambda_bound * D + 1
 
-        l = cp.Variable((L, D))        
+        l = cp.Variable((L, D))
         constraints = [l <= self.lambda_bound, l >= -self.lambda_bound]
 
         for g in self.fairness_groups:
@@ -104,8 +104,8 @@ class FairScoreClassifierAlgorithm:
                         - gamma * ((y_idx[i] + offset) % L))
 
         if "s" in self.constraints:
-            constraints.append(-self.lambda_bound*alpha <= l)
-            constraints.append(l <= self.lambda_bound*alpha)
+            constraints.append(-self.lambda_bound * alpha <= l)
+            constraints.append(l <= self.lambda_bound * alpha)
 
         if (
             "omr" in self.constraints
@@ -122,7 +122,7 @@ class FairScoreClassifierAlgorithm:
                             <= cp.sum(l[index, :] @ X[i, :])
                             - gamma * index
                             - cp.sum(l[(index + offset) % L, :] @ X[i, :])
-                            - gamma*((index + offset)%L)
+                            - gamma * ((index + offset) % L)
                         )
                 constraints.append(cp.sum(pos[i, :]) == 1)
 
@@ -150,7 +150,7 @@ class FairScoreClassifierAlgorithm:
 
                 if N_g == 0 or N_g_bar == 0:
                     print(
-                            "[WARNING] At least one of the protected groups is empty, skipping fairness constraints"
+                           "[WARNING] At least one of the protected groups is empty, skipping fairness constraints"
                     )
                     break
 
@@ -204,7 +204,7 @@ class FairScoreClassifierAlgorithm:
                         (1 / N_g_pos) * cp.sum(pos[i_g_pos, index])
                         - (1 / N_g_bar_pos) * cp.sum(pos[i_g_bar_pos, index])
                         <= self.constraints["eo"]
-                    )  
+                    )
 
                 if (
                     "eod" in self.constraints
@@ -234,7 +234,6 @@ class FairScoreClassifierAlgorithm:
                         <= self.constraints["eod"]
                     )
 
-
         if "a" in self.objectives and not ("s" in self.constraints):
             cost = (1 / N) * cp.sum(z)
 
@@ -243,7 +242,6 @@ class FairScoreClassifierAlgorithm:
             for i, indexes in enumerate(class_indexes):
                 cost += cp.sum(z[indexes]) / N_class[i]
             cost /= len(N_class)
-
 
         if "a" in self.objectives and "s" in self.constraints:
             cost = (1 / N) * cp.sum(z) + (1 / (self.constraints["s"] * L * N)) * cp.sum(

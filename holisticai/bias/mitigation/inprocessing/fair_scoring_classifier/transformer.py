@@ -1,6 +1,8 @@
 import numpy as np
 from sklearn.base import BaseEstimator
+
 from holisticai.utils.transformers.bias import BMInprocessing as BMImp
+
 from .algorithm import FairScoreClassifierAlgorithm
 
 
@@ -17,7 +19,7 @@ def remove_inconcsistency(x, y):
 
     @x : The dataset features (np.array)
     @y : The dataset labels (np.array)
-    
+
     return the dataset withtout the inconsistencies
     """
     x = x.tolist()
@@ -48,10 +50,11 @@ def get_max_y(cur_x, x, y):
 
     return counts.index(max(counts))
 
+
 class FairScoreClassifier(BaseEstimator, BMImp):
     """
-    Generates a classification model that integrates fairness constraints for multiclass classification. This algorithm 
-    returns a matrix of lambda coefficients that scores a given input vector. The higher the score, the higher the probability 
+    Generates a classification model that integrates fairness constraints for multiclass classification. This algorithm
+    returns a matrix of lambda coefficients that scores a given input vector. The higher the score, the higher the probability
     of the input vector to be classified as the majority class.
 
     References:
@@ -59,6 +62,7 @@ class FairScoreClassifier(BaseEstimator, BMImp):
         Class Classification. ICTAI 2022 - The 34th IEEE International Conference on Tools with Artificial
         Intelligence, Oct 2022, Virtual, United States. ￿
     """
+
     def __init__(
         self,
         objectives: dict,
@@ -120,7 +124,7 @@ class FairScoreClassifier(BaseEstimator, BMImp):
             fairness_labels,
             self.constraints,
             self.lambda_bound,
-            self.time_limit
+            self.time_limit,
         )
         self.model_.fit(X, y)
         return self
@@ -140,7 +144,7 @@ class FairScoreClassifier(BaseEstimator, BMImp):
         x_df.insert(0, "starts with", np.ones(len(x_df.index)))
         sgroup_indexes = get_indexes_from_names(x_df, protected_groups)
         slabels_indexes = get_indexes_from_names(y_df, protected_labels)
-        
+
         x = x_df.to_numpy()
         y = y_df.to_numpy()
         # optional
