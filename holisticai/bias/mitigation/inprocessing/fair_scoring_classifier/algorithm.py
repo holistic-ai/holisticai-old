@@ -15,7 +15,7 @@ class FairScoreClassifierAlgorithm:
         Class Classification. ICTAI 2022 - The 34th IEEE International Conference on Tools with Artificial
         Intelligence, Oct 2022, Virtual, United States.
     """
-    
+
     def __init__(
         self,
         objectives: dict,
