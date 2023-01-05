@@ -169,9 +169,9 @@ def format_labels(y):
     return y_formatted
 
 
-def get_accuracy(x, y, l_lists):  
+def get_accuracy(x, y, l_lists):
     """
-    Compute accuracy for the scoring systems : 
+    Compute accuracy for the scoring systems:
 
     @x_test the test set
     @y_test labels of the test set

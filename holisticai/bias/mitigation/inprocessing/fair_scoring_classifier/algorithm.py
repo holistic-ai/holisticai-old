@@ -101,7 +101,8 @@ class FairScoreClassifierAlgorithm:
                         <= cp.sum(l[y_idx[i], :] @ X[i, :])
                         - gamma * y_idx[i]
                         - cp.sum(l[(y_idx[i] + offset) % L, :] @ X[i, :])
-                        - gamma * ((y_idx[i] + offset) % L))
+                        - gamma * ((y_idx[i] + offset) % L)
+                    )
 
         if "s" in self.constraints:
             constraints.append(-self.lambda_bound * alpha <= l)
