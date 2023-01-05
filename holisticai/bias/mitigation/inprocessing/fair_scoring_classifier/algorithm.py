@@ -1,5 +1,6 @@
 import cvxpy as cp
 import numpy as np
+
 from .utils import *
 
 
@@ -12,7 +13,7 @@ class FairScoreClassifierAlgorithm:
     References:
         Julien Rouzot, Julien Ferry, Marie-José Huguet. Learning Optimal Fair Scoring Systems for Multi-
         Class Classification. ICTAI 2022 - The 34th IEEE International Conference on Tools with Artificial
-        Intelligence, Oct 2022, Virtual, United States. ￿
+        Intelligence, Oct 2022, Virtual, United States.
     """
     def __init__(
         self,
@@ -71,8 +72,7 @@ class FairScoreClassifierAlgorithm:
         gamma = 0.01
         M = self.lambda_bound * D + 1
 
-        l = cp.Variable((L, D))
-        
+        l = cp.Variable((L, D))        
         constraints = [l <= self.lambda_bound, l >= -self.lambda_bound]
 
         for g in self.fairness_groups:
