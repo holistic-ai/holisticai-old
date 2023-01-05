@@ -151,7 +151,7 @@ class FairScoreClassifierAlgorithm:
 
                 if N_g == 0 or N_g_bar == 0:
                     print(
-                           "[WARNING] At least one of the protected groups is empty, skipping fairness constraints"
+                           "At least one of the protected groups is empty, skipping fairness constraints"
                     )
                     break
 
