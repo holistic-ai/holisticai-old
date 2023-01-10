@@ -74,7 +74,7 @@ class FairScoreClassifier(BaseEstimator, BMImp):
         """
         sensgroup = SensitiveGroups()
         p_attr = sensgroup.fit_transform(
-            np.stack([group_a,group_b], axis=1), convert_numeric=True
+            np.stack([group_a, group_b], axis=1), convert_numeric=True
         )
         Xtrain = np.hstack([np.ones((X.shape[0], 1)), X, p_attr.values.reshape(-1, 1)])
         fairness_groups = [Xtrain.shape[1] - 1]
@@ -94,7 +94,7 @@ class FairScoreClassifier(BaseEstimator, BMImp):
     def predict(self, X, group_a, group_b):
         sensgroup = SensitiveGroups()
         p_attr = sensgroup.fit_transform(
-            np.stack([group_a,group_b], axis=1), convert_numeric=True
+            np.stack([group_a, group_b], axis=1), convert_numeric=True
         )
         X_ = np.hstack([np.ones((X.shape[0], 1)), X, p_attr.values.reshape(-1, 1)])
         preds = self.model_.predict(X_)
