@@ -54,7 +54,7 @@ class FairScoreClassifierAlgorithm:
 
     def fit(self, X, y):
         print("Start fitting")
-        X, y = remove_inconcsistency(X, y)
+#         X, y = remove_inconcsistency(X, y)
 
         N_class = get_class_count(y)
         class_indexes = get_class_indexes(y)

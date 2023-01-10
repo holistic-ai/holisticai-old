@@ -1,54 +1,11 @@
 import numpy as np
+import pandas as pd
 from sklearn.base import BaseEstimator
 
 from holisticai.utils.transformers.bias import BMInprocessing as BMImp
+from holisticai.utils.transformers.bias import SensitiveGroups
 
 from .algorithm import FairScoreClassifierAlgorithm
-
-
-def get_indexes_from_names(df, names):
-    indexes = []
-    for item in names:
-        indexes.append(df.columns.get_loc(item))
-    return indexes
-
-
-def remove_inconcsistency(x, y):
-    """
-    Remove the inconsistencies
-
-    @x : The dataset features (np.array)
-    @y : The dataset labels (np.array)
-
-    return the dataset withtout the inconsistencies
-    """
-    x = x.tolist()
-    y = y.tolist()
-
-    new_x = []
-    new_y = []
-
-    for i in range(len(x)):
-        target = get_max_y(x[i], x, y)
-        if y[i][target] == 1:
-            new_x.append(x[i])
-            new_y.append(y[i])
-
-    return np.array(new_x), np.array(new_y)
-
-
-def get_max_y(cur_x, x, y):
-    y = [y[i] for i, x in enumerate(x) if x == cur_x]
-
-    counts = [0 for i in range(len(y[0]))]
-
-    for i in range(len(y)):
-        y[i] = y[i].index(1)
-
-    for i in range(len(y)):
-        counts[y[i]] += 1
-
-    return counts.index(max(counts))
 
 
 class FairScoreClassifier(BaseEstimator, BMImp):
@@ -89,7 +46,7 @@ class FairScoreClassifier(BaseEstimator, BMImp):
         self.lambda_bound = lambda_bound
         self.time_limit = time_limit
 
-    def fit(self, X, y, protected_groups, protected_labels=[]):
+    def fit(self, X, y, group_a, group_b):
         """
         Fit model using Grid Search Algorithm.
 
@@ -115,9 +72,13 @@ class FairScoreClassifier(BaseEstimator, BMImp):
         -------
         the same object
         """
-        X, y, fairness_groups, fairness_labels = self.format_dataframe(
-            X, y, protected_groups, protected_labels
-        )
+        sensgroup = SensitiveGroups()
+        p_attr = sensgroup.fit_transform(np.stack([group_a,group_b], axis=1), convert_numeric=True)
+        Xtrain = np.hstack([np.ones((X.shape[0],1)), X, p_attr.values.reshape(-1,1)])
+        fairness_groups = [Xtrain.shape[1]-1]
+        fairness_labels = np.arange(y.shape[1]).tolist()
+
+#         print(fairness_groups, fairness_labels)
         self.model_ = FairScoreClassifierAlgorithm(
             self.objectives,
             fairness_groups,
@@ -126,27 +87,17 @@ class FairScoreClassifier(BaseEstimator, BMImp):
             self.lambda_bound,
             self.time_limit,
         )
-        self.model_.fit(X, y)
+        self.model_.fit(Xtrain, y)
         return self
 
-    def predict(self, X):
-        X_ = X.copy()
-        X_.insert(0, "starts with", np.ones(len(X_.index)))
-        X_ = X_.to_numpy()
-        return self.model_.predict(X_)
+    def predict(self, X, group_a, group_b):
+        sensgroup = SensitiveGroups()
+        p_attr = sensgroup.fit_transform(np.stack([group_a,group_b], axis=1), convert_numeric=True)
+        X_ = np.hstack([np.ones((X.shape[0],1)), X, p_attr.values.reshape(-1,1)])
+        preds = self.model_.predict(X_)
+        y_pred = pd.DataFrame(preds, columns=np.arange(preds.shape[1]))
+        return y_pred.idxmax(axis=1).values
 
     def transform_estimator(self, estimator):
         self.estimator = estimator
         return self
-
-    def format_dataframe(self, X_df, y_df, protected_groups, protected_labels):
-        x_df = X_df.copy()
-        x_df.insert(0, "starts with", np.ones(len(x_df.index)))
-        sgroup_indexes = get_indexes_from_names(x_df, protected_groups)
-        slabels_indexes = get_indexes_from_names(y_df, protected_labels)
-
-        x = x_df.to_numpy()
-        y = y_df.to_numpy()
-        # optional
-        x, y = remove_inconcsistency(x, y)
-        return x, y, sgroup_indexes, slabels_indexes
