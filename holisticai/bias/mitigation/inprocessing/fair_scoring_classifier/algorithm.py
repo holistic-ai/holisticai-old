@@ -265,8 +265,7 @@ class FairScoreClassifierAlgorithm:
         """
         Returns the predictions of the set of scoring systems for the given entries
 
-        @x : The input features matrix
-        @l_lists : The set of scoring systems
+        X : The input features matrix
         """
 
         y = []

@@ -1,10 +1,23 @@
 import numpy as np
 import pandas as pd
-from pandas.api.types import is_numeric_dtype
 from sklearn.metrics import accuracy_score, balanced_accuracy_score
 
 
 def get_indexes_from_names(df, names):
+    """
+    Description
+    -----------
+    Gets the indexes from the columns
+
+    Parameters
+    ----------
+    df : pandas dataframe
+        the complete dataframe
+
+    Returns
+    -------
+    list : list of index
+    """
     indexes = []
     for item in names:
         indexes.append(df.columns.get_loc(item))
@@ -13,10 +26,18 @@ def get_indexes_from_names(df, names):
 
 def process_y(y):
     """
+    Description
+    -----------
     Converts from one-hot encoding to a list of labels
 
-    @y : the labels matrix (np.array)
-    returns y_processed(list of labels)
+    Parameters
+    ----------
+    y : numpy array
+        the labels matrix
+
+    Returns
+    -------
+    y_processed (list of labels)
     """
     y_processed = []
     for line in y:
@@ -28,10 +49,18 @@ def process_y(y):
 
 def get_majority_class(y):
     """
-    Returns the majority class and its accuracy
-    params:
-        y : the list of labels (list)
-        returns : most_common_item (int), acc (float)
+    Description
+    -----------
+    Converts from one-hot encoding to a list of labels
+
+    Parameters
+    ----------
+    y : list
+        list of labels
+
+    Returns
+    -------
+    The majority class and its accuracy
     """
     y = np.array(y).flatten()
     most_common_item = max(y, key=y.tolist().count)
@@ -41,10 +70,18 @@ def get_majority_class(y):
 
 def get_initial_solution(y):
     """
+    Description
+    -----------
     Calculates the accuracy of the majority class
 
-    @y : the labels matrix (np.array)
-    returns (most_common_item (int), acc (float)) (tuple)
+    Parameters
+    ----------
+    y : numpy array
+        the labels matrix
+
+    Returns
+    -------
+    The majority class and its accuracy
     """
     y_processed = process_y(y)
     return get_majority_class(y_processed)
@@ -52,14 +89,21 @@ def get_initial_solution(y):
 
 def remove_inconcsistency(x, y):
     """
+    Description
+    -----------
     Remove the inconsistencies
 
-    @x : The dataset features (np.array)
-    @y : The dataset labels (np.array)
+    Parameters
+    ----------
+    x : numpy array
+        Dataset features
+    y : numpy array
+        Dataset labels
 
-    return the dataset withtout the inconsistencies
+    Returns
+    -------
+    The dataset withtout the inconsistencies
     """
-
     x = x.tolist()
     y = y.tolist()
 
@@ -90,13 +134,20 @@ def get_max_y(cur_x, x, y):
 
 
 def get_class_count(y):
-
     """
+    Description
+    -----------
     Get the count for each class in the labels
 
-    return the count of each class
-    """
+    Parameters
+    ----------
+    y : numpy array
+        Dataset labels
 
+    Returns
+    -------
+    The count of each class
+    """
     count = []
 
     for i in range(len(y[0])):
@@ -111,14 +162,20 @@ def get_class_count(y):
 
 
 def get_class_indexes(y):
-
     """
+    Description
+    -----------
     Get the indexes of each class in the labels
-    params:
-    y : the labels matrix (np.array)
-    return the indexes of each class (list of list)
-    """
 
+    Parameters
+    ----------
+    y : numpy array
+        Dataset labels
+
+    Returns
+    -------
+    The indexes of each class
+    """
     indexes = []
 
     for i in range(len(y[0])):
@@ -133,14 +190,23 @@ def get_class_indexes(y):
 
 
 def predict(x, l_lists):
-
     """
-    Returns the predictions of the set of scoring systems for the given entries
+    Description
+    -----------
+    Get the indexes of each class in the labels
 
-    @x : The input features matrix
-    @l_lists : The set of scoring systems
+    Parameters
+    ----------
+    x : numpy array
+        Dataset features
+
+    l_lists : list
+        set of scoring systems
+
+    Returns
+    -------
+    The predictions of the set of scoring systems for the given entries
     """
-
     y = []
 
     for index, sample in enumerate(x):
@@ -171,13 +237,24 @@ def format_labels(y):
 
 def get_accuracy(x, y, l_lists):
     """
-    Compute accuracy for the scoring systems:
+    Description
+    -----------
+    Compute accuracy for the scoring systems
 
-    @x_test the test set
-    @y_test labels of the test set
-    @l the matrix of coefficients lambda that represents the scoring systems
+    Parameters
+    ----------
+    x : numpy array
+        Dataset features
 
-    return accuracy
+    y : numpy array
+        Dataset labels
+
+    l_lists : list
+        set of scoring systems
+
+    Returns
+    -------
+    The accuracy of the predictions
     """
     y_pred = predict(x, l_lists)
     y = format_labels(y)
