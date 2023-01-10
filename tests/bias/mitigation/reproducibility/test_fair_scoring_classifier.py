@@ -7,7 +7,7 @@ from tests.testing_utils._tests_data_utils import load_preprocessed_us_crime
 
 
 def test_fair_scoring_classifier():
-    train_data , test_data = load_preprocessed_us_crime(nb_classes=5)
+    train_data, test_data = load_preprocessed_us_crime(nb_classes=5)
     X, y, group_a, group_b = train_data
     X_test, y_test, group_a_test, group_b_test = test_data
     y = pd.get_dummies(y).values

@@ -73,12 +73,13 @@ class FairScoreClassifier(BaseEstimator, BMImp):
         the same object
         """
         sensgroup = SensitiveGroups()
-        p_attr = sensgroup.fit_transform(np.stack([group_a,group_b], axis=1), convert_numeric=True)
-        Xtrain = np.hstack([np.ones((X.shape[0],1)), X, p_attr.values.reshape(-1,1)])
-        fairness_groups = [Xtrain.shape[1]-1]
+        p_attr = sensgroup.fit_transform(
+            np.stack([group_a,group_b], axis=1), convert_numeric=True
+        )
+        Xtrain = np.hstack([np.ones((X.shape[0], 1)), X, p_attr.values.reshape(-1, 1)])
+        fairness_groups = [Xtrain.shape[1] - 1]
         fairness_labels = np.arange(y.shape[1]).tolist()
 
-#         print(fairness_groups, fairness_labels)
         self.model_ = FairScoreClassifierAlgorithm(
             self.objectives,
             fairness_groups,
@@ -92,8 +93,10 @@ class FairScoreClassifier(BaseEstimator, BMImp):
 
     def predict(self, X, group_a, group_b):
         sensgroup = SensitiveGroups()
-        p_attr = sensgroup.fit_transform(np.stack([group_a,group_b], axis=1), convert_numeric=True)
-        X_ = np.hstack([np.ones((X.shape[0],1)), X, p_attr.values.reshape(-1,1)])
+        p_attr = sensgroup.fit_transform(
+            np.stack([group_a,group_b], axis=1), convert_numeric=True
+        )
+        X_ = np.hstack([np.ones((X.shape[0], 1)), X, p_attr.values.reshape(-1, 1)])
         preds = self.model_.predict(X_)
         y_pred = pd.DataFrame(preds, columns=np.arange(preds.shape[1]))
         return y_pred.idxmax(axis=1).values
