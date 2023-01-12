@@ -49,7 +49,13 @@ templates_path = ["_templates"]
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
 # This pattern also affects html_static_path and html_extra_path.
-exclude_patterns = ["_build", "Thumbs.db", ".DS_Store", "generated/*"]
+exclude_patterns = [
+    "_build",
+    "Thumbs.db",
+    ".DS_Store",
+    "generated/*",
+    ".ipynb_checkpoints",
+]
 
 html_logo = "holistic_ai.png"
 
@@ -64,9 +70,7 @@ html_theme = "sphinx_rtd_theme"
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ["_static"]
 # Theme options
-# html_theme_options = {
-#    'includehidden': True,
-# }
+# html_theme_options = {'logo_only': True,'display_version': True}
 
 
 import os
@@ -79,6 +83,7 @@ sys.path.insert(0, os.path.abspath(".."))
 # pick them up properly.
 
 # Uncomment when tutorials folder is present
+"""
 NOTEBOOKS_DIR = os.path.abspath("tutorials")
 if os.path.exists(NOTEBOOKS_DIR):
     import warnings
@@ -91,7 +96,7 @@ shutil.copytree(
 )
 if os.path.exists(NOTEBOOKS_DIR + "/local_scratch"):
     shutil.rmtree(NOTEBOOKS_DIR + "/local_scratch")
-
+"""
 
 # Custom css
 html_css_files = [

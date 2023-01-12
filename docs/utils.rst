@@ -1,13 +1,13 @@
 Utils
 =====
 
-`holisticai.utils` is a python module which contains utility functions for plotting, formatting, efficacy and validation.
+`holisticai.utils` is a python module which contains utility functions for plotting and formatting.
 
 Formatting
 ----------
 
 .. autosummary::
-    :toctree: generated/
+    :toctree: .generated/
     
     holisticai.utils.extract_columns
     holisticai.utils.extract_group_vectors
@@ -19,6 +19,6 @@ Plotting
 --------
 
 .. autosummary::
-    :toctree: generated/
+    :toctree: .generated/
 
     holisticai.utils.get_colors

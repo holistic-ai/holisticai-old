@@ -67,6 +67,7 @@ from ._recommender import (
 # Regression
 from ._regression import (
     avg_score_diff,
+    avg_score_ratio,
     correlation_diff,
     disparate_impact_regression,
     mae_ratio,
@@ -93,6 +94,7 @@ __all__ = [
     "disparate_impact_regression",
     "no_disparate_impact_level",
     "avg_score_diff",
+    "avg_score_ratio",
     "zscore_diff",
     "max_statistical_parity",
     "statistical_parity_auc",

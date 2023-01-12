@@ -82,6 +82,7 @@ class EstimatorHandler:
 
     def run_predictions(self, Xt):
         kargs = {}
+
         y_pred = self.estimator.predict(Xt)
         kargs["y_pred"] = y_pred
 

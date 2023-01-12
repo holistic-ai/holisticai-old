@@ -10,12 +10,12 @@ Welcome to the Holistic AI library! This is an open-source tool to assess and im
 
     metrics
     mitigation
+    plotting
 
 .. toctree::
     :maxdepth: 1
     :hidden:
 
-    plotting
     datasets
     pipeline
     utils
@@ -27,8 +27,6 @@ Welcome to the Holistic AI library! This is an open-source tool to assess and im
 
     measuring_bias
     mitigating_bias
-
-We also provide functions for :ref:`plotting` bias-related plots. 
 
 Our long-term goal is to offer a set of techniques to easily measure and mitigate AI risks across five  areas: Bias, Efficacy, Robustness, Privacy and Explainability. This will allow a holistic assessment of AI systems. 
 

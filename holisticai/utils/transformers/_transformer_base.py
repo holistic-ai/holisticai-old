@@ -12,8 +12,9 @@ class TransformerBase:
     def has_param_handler(self):
         return hasattr(self, "params_hdl")
 
-    def link_parameters(self, params_hdl):
+    def link_parameters(self, params_hdl, estimator_hdl):
         self.params_hdl = params_hdl
+        self.estimator_hdl = estimator_hdl
 
     def get_bias_param(self, param_name, default=None):
         if param_name in self.params_hdl.bias_mitigator:
