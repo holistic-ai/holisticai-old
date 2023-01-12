@@ -1,3 +1,26 @@
+## 0.3.0 (2023-01-12)
+
+### Feat
+
+- Added pre-processing bias mitigation techniques:
+    - Disparate Impact Remover (Clustering - Regression - Recommender - Classification)
+- Added in-processing bias mitigation techniques:
+    - Two side fairness (Recommender)
+    - Fair Score Classification (Multiclass)
+- Added post-processing bias mitigation techniques:
+    - MCMF Clustering (Clustering)
+    - Debiasing Exposure (Recommender)
+    - Popularity Propensity (Recommender)
+    - Blind Spot Aware (Recommender)
+    - Fair Top-K (Recommender)
+- Added Recommender model
+    - Non Negative Matrix Factorization
+- Add Recommender Utils
+    - Item Selectors
+- Added Dataset
+    - Recruitment (Synthetic)
+- Tutorials
+
 ## 0.2.0 (2022-11-09)
 
 ### Feat
