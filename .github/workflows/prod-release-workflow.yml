@@ -16,7 +16,7 @@ jobs:
       - name: Create New Tag
         id: tag
         run: |
-          new_version=$(eval echo $(head pyproject.toml | grep version | cut -d'"' -f 2))
+          new_version=$(eval echo $(cat pyproject.toml | grep version | cut -d'"' -f 2))
           git tag $new_version
           git push origin $new_version
           echo ::set-output name=new_version::$new_version
